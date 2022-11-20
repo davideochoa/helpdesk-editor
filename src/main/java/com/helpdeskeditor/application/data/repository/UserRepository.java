@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.data.service;
+package com.helpdeskeditor.application.data.repository;
 
 import com.helpdeskeditor.application.data.entity.User;
 import java.util.UUID;

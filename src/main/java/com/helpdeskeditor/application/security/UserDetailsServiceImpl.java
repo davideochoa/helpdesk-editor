@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.security;
 
 import com.helpdeskeditor.application.data.entity.User;
-import com.helpdeskeditor.application.data.service.UserRepository;
+import com.helpdeskeditor.application.data.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;

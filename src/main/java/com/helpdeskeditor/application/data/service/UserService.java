@@ -3,6 +3,8 @@ package com.helpdeskeditor.application.data.service;
 import com.helpdeskeditor.application.data.entity.User;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.helpdeskeditor.application.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

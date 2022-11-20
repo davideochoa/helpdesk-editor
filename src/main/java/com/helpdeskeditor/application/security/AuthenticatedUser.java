@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.security;
 
 import com.helpdeskeditor.application.data.entity.User;
-import com.helpdeskeditor.application.data.service.UserRepository;
+import com.helpdeskeditor.application.data.repository.UserRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import java.util.Optional;
