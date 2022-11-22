@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.views.login;
+package com.helpdeskeditor.application.views;
 
 import com.helpdeskeditor.application.security.AuthenticatedUser;
 import com.vaadin.flow.component.login.LoginI18n;

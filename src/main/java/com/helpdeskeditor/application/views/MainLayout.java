@@ -4,10 +4,6 @@ import com.helpdeskeditor.application.components.appnav.AppNav;
 import com.helpdeskeditor.application.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.data.entity.User;
 import com.helpdeskeditor.application.security.AuthenticatedUser;
-import com.helpdeskeditor.application.views.acercade.AcercaDeView;
-import com.helpdeskeditor.application.views.autorizacion.AutorizacionView;
-import com.helpdeskeditor.application.views.estatus.EstatusView;
-import com.helpdeskeditor.application.views.folios.FoliosView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -74,6 +70,10 @@ public class MainLayout extends AppLayout {
 
         if (accessChecker.hasAccess(FoliosView.class)) {
             nav.addItem(new AppNavItem("Folios", FoliosView.class, "la la-globe"));
+
+        }
+        if (accessChecker.hasAccess(FoliossView.class)) {
+            nav.addItem(new AppNavItem("Folioss", FoliossView.class, "la la-globe"));
 
         }
         if (accessChecker.hasAccess(EstatusView.class)) {

@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.views.autorizacion;
+package com.helpdeskeditor.application.views;
 
 import com.helpdeskeditor.application.data.entity.SampleAddress;
 import com.helpdeskeditor.application.data.service.SampleAddressService;

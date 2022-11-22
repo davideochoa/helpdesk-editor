@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.views.folios;
+package com.helpdeskeditor.application.views;
 
 import com.helpdeskeditor.application.views.MainLayout;
 import com.vaadin.flow.component.Key;

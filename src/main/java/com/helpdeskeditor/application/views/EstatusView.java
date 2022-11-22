@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.views.estatus;
+package com.helpdeskeditor.application.views;
 
 import com.helpdeskeditor.application.data.entity.SamplePerson;
 import com.helpdeskeditor.application.data.service.SamplePersonService;
