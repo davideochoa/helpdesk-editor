@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioReporta {
+public class Marca {
     Integer id;
     String nombre;
-    Integer idArea;
+    Integer idBien;
 }

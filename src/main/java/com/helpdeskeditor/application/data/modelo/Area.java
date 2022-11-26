@@ -8,4 +8,5 @@ import lombok.Setter;
 public class Area {
     Integer id;
     String nombre;
+    Integer idUnidad;
 }

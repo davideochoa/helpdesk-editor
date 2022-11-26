@@ -1,11 +1,8 @@
 package com.helpdeskeditor.application.views;
 
-import com.helpdeskeditor.application.data.modelo.Area;
-import com.helpdeskeditor.application.data.modelo.TipoIncidencia;
-import com.helpdeskeditor.application.data.modelo.Unidad;
-import com.helpdeskeditor.application.data.modelo.UsuarioReporta;
+import com.helpdeskeditor.application.data.modelo.*;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,7 +14,7 @@ import javax.annotation.security.RolesAllowed;
 @PageTitle("Folioss")
 @Route(value = "folioss", layout = MainLayout.class)
 @RolesAllowed("USER")
-public class FoliossView extends HorizontalLayout {
+public class FoliossView extends FormLayout {
     VerticalLayout VL_Unidad = new VerticalLayout();
     VerticalLayout VL_Objeto = new VerticalLayout();
 
@@ -31,18 +28,41 @@ public class FoliossView extends HorizontalLayout {
     TextField TF_ReferenciaDocumental = new TextField();
 
 
-    ComboBox<TipoIncidencia> CB_TipoIncidencia = new ComboBox<TipoIncidencia>("Tipo Incidencia");
+    ComboBox<Incidencia> CB_Incidencia = new ComboBox<Incidencia>("Incidencia");
+
+    ComboBox<Bien> CB_Bien = new ComboBox<Bien>("Bien");
+
+    ComboBox<Marca> CB_Marca = new ComboBox<Marca>("Marca");
+
+    ComboBox<Modelo> CB_Modelo = new ComboBox<Modelo>("Modelo");
+
+    TextField TF_NumeroSerie = new TextField("Numero Serie");
+
+    TextField TF_NumeroInventario = new TextField("Numero Inventario");
+
     public FoliossView() {
         layoutUnidad();
         layoutObjeto();
+
+        this.setResponsiveSteps(
+                // Use one column by default
+                new ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new ResponsiveStep("500px", 2));
+
 
         this.add(VL_Unidad,VL_Objeto);
     }
 
     private void layoutObjeto(){
-        CB_TipoIncidencia.setItemLabelGenerator(TipoIncidencia::getNombre);
+        CB_Incidencia.setItemLabelGenerator(Incidencia::getNombre);
 
-        VL_Objeto.add(CB_TipoIncidencia);
+        VL_Objeto.add(CB_Incidencia);
+        VL_Objeto.add(CB_Bien);
+        VL_Objeto.add(CB_Marca);
+        VL_Objeto.add(CB_Modelo);
+        VL_Objeto.add(TF_NumeroSerie);
+        VL_Objeto.add(TF_NumeroInventario);
     }
 
     private void layoutUnidad(){
