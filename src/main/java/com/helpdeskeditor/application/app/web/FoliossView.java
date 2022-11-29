@@ -1,6 +1,7 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.domain.entity.Unidad;
+import com.helpdeskeditor.application.app.service.UnidadesService;
 import com.helpdeskeditor.application.app.web.modelo.*;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -11,6 +12,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @PageTitle("Folioss")
 @Route(value = "folioss", layout = MainLayout.class)
@@ -41,7 +43,10 @@ public class FoliossView extends FormLayout {
 
     TextField TF_NumeroInventario = new TextField("Numero Inventario");
 
-    public FoliossView() {
+    private UnidadesService unidadesService;
+
+    public FoliossView(UnidadesService unidadesService) {
+        this.unidadesService = unidadesService;
         layoutUnidad();
         layoutObjeto();
 
@@ -73,6 +78,10 @@ public class FoliossView extends FormLayout {
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
         TF_Telefono.setLabel("Numero Telefonico");
         TF_Telefono.setWidth("240px");
+
+        List<Unidad> listadoUnidades=  unidadesService.getAllUnidades();
+
+        CB_Unidad.setItems(listadoUnidades);
 
         CB_Unidad.setItemLabelGenerator(Unidad::getNombre);
         CB_Area.setItemLabelGenerator(Area::getNombre);

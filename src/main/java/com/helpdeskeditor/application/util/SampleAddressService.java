@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.service;
+package com.helpdeskeditor.application.util;
 
 import com.helpdeskeditor.application.util.SampleAddress;
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.util.SamplePerson;
-import com.helpdeskeditor.application.app.service.SamplePersonService;
+import com.helpdeskeditor.application.util.SamplePersonService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
