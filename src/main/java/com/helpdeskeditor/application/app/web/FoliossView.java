@@ -6,6 +6,8 @@ import com.helpdeskeditor.application.app.web.modelo.*;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -56,8 +58,23 @@ public class FoliossView extends FormLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 2));
 
+        Tabs tabs = new Tabs();
 
-        this.add(VL_Unidad,VL_Objeto);
+        tabs.addSelectedChangeListener(event ->
+                setContent(event.getSelectedTab())
+        );
+
+        Tab tabUnidad = new Tab("UNIDAD");
+        tabUnidad.add(VL_Unidad);
+
+        Tab tabObjeto = new Tab("Objeto");
+        tabUnidad.add(VL_Objeto);
+
+        tabs.add(tabUnidad);
+        tabs.add(tabObjeto);
+
+        //tabs.add(new Tab("All"), new Tab("Open"), new Tab("Completed"),new Tab("Cancelled"));
+        this.add(tabs);
     }
 
     private void layoutObjeto(){
@@ -79,7 +96,7 @@ public class FoliossView extends FormLayout {
         TF_Telefono.setLabel("Numero Telefonico");
         TF_Telefono.setWidth("240px");
 
-        List<Unidad> listadoUnidades=  unidadesService.getAllUnidades();
+        List<Unidad> listadoUnidades = unidadesService.getAllUnidades();
 
         CB_Unidad.setItems(listadoUnidades);
 
@@ -89,6 +106,8 @@ public class FoliossView extends FormLayout {
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
+
+        VL_Unidad.setSpacing(false);
 
         VL_Unidad.add(IF_Folio);
         VL_Unidad.add(CB_Unidad);
