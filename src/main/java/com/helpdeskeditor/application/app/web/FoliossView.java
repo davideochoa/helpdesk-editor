@@ -47,6 +47,8 @@ public class FoliossView extends FormLayout {
 
     private UnidadesService unidadesService;
 
+    VerticalLayout content;
+    Tab details;
     public FoliossView(UnidadesService unidadesService) {
         this.unidadesService = unidadesService;
         layoutUnidad();
