@@ -48,7 +48,8 @@ public class FoliossView extends FormLayout {
     private UnidadesService unidadesService;
 
     VerticalLayout content;
-    Tab details;
+    Tab tabUnidad;
+    Tab tabObjeto;
     public FoliossView(UnidadesService unidadesService) {
         this.unidadesService = unidadesService;
         layoutUnidad();
@@ -60,37 +61,31 @@ public class FoliossView extends FormLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 2));
 
-        Tabs tabs = new Tabs();
+        tabUnidad = new Tab("UNIDAD");
+        tabObjeto = new Tab("Objeto");
+
+        Tabs tabs = new Tabs(tabUnidad,tabObjeto);
 
         tabs.addSelectedChangeListener(event ->
                 setContent(event.getSelectedTab())
         );
 
-        Tab tabUnidad = new Tab("UNIDAD");
-        tabUnidad.add(VL_Unidad);
+        content = new VerticalLayout();
+        content.setSpacing(false);
+        setContent(tabs.getSelectedTab());
 
-        Tab tabObjeto = new Tab("Objeto");
-        tabUnidad.add(VL_Objeto);
-
-        tabs.add(tabUnidad);
-        tabs.add(tabObjeto);
-
-        //tabs.add(new Tab("All"), new Tab("Open"), new Tab("Completed"),new Tab("Cancelled"));
         this.add(tabs);
+
+
     }
     private void setContent(Tab tab) {
         content.removeAll();
-
-        if (tab.equals(details)) {
-            content.add(new Paragraph("This is the Details tab"));
+        System.out.println(tabUnidad+":"+tabUnidad.toString());
+        if (tab.equals(tabUnidad)) {
+            content.add(VL_Unidad);
         }
         else
-            if (tab.equals(payment)) {
-                content.add(new Paragraph("This is the Payment tab"));
-            }
-            else {
-                content.add(new Paragraph("This is the Shipping tab"));
-            }
+                content.add(VL_Objeto);
     }
 
 
