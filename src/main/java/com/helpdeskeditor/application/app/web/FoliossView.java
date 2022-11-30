@@ -76,6 +76,22 @@ public class FoliossView extends FormLayout {
         //tabs.add(new Tab("All"), new Tab("Open"), new Tab("Completed"),new Tab("Cancelled"));
         this.add(tabs);
     }
+    private void setContent(Tab tab) {
+        content.removeAll();
+
+        if (tab.equals(details)) {
+            content.add(new Paragraph("This is the Details tab"));
+        }
+        else
+            if (tab.equals(payment)) {
+                content.add(new Paragraph("This is the Payment tab"));
+            }
+            else {
+                content.add(new Paragraph("This is the Shipping tab"));
+            }
+    }
+
+
 
     private void layoutObjeto(){
         CB_Incidencia.setItemLabelGenerator(Incidencia::getNombre);
