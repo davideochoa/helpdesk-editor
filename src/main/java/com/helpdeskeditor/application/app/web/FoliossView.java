@@ -53,7 +53,6 @@ public class FoliossView extends VerticalLayout {
     Tab tabUnidad;
     Tab tabObjeto;
 
-    VerticalLayout all;
     public FoliossView(UnidadesService unidadesService) {
         this.unidadesService = unidadesService;
 
