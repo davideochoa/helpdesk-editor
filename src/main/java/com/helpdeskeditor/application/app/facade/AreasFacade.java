@@ -1,9 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.domain.entity.Area;
-import com.helpdeskeditor.application.app.domain.entity.Unidad;
 import com.helpdeskeditor.application.app.domain.repository.AreasRepository;
-import com.helpdeskeditor.application.app.domain.repository.UnidadesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +18,7 @@ public class AreasFacade {
         this.areasRepository = areasRepository;
     }
 
-    public List<Area> getAllUnidades(){
+    public List<Area> getAllAreas(){
         return areasRepository.findAll();
     }
 }

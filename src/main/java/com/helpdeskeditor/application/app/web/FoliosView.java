@@ -2,6 +2,7 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.domain.entity.Area;
 import com.helpdeskeditor.application.app.domain.entity.Unidad;
+import com.helpdeskeditor.application.app.service.AreasService;
 import com.helpdeskeditor.application.app.service.UnidadesService;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloArea;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloBien;
@@ -51,16 +52,19 @@ public class FoliosView extends VerticalLayout {
 
     VerticalLayout VL_Objeto = new VerticalLayout();
 
-    private UnidadesService unidadesService;
-
     VerticalLayout content;
 
     Tabs tabs;
     Tab tabUnidad;
     Tab tabObjeto;
 
-    public FoliosView(UnidadesService unidadesService) {
+    private UnidadesService unidadesService;
+
+    private AreasService areasService;
+
+    public FoliosView(UnidadesService unidadesService, AreasService areasService) {
         this.unidadesService = unidadesService;
+        this.areasService = areasService;
 
         layoutUnidad();
         layoutIncidencia();
@@ -83,9 +87,8 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.setLabel("Numero Telefonico");
         TF_Telefono.setWidth("240px");
 
-        List<Unidad> listadoUnidades = unidadesService.getAllUnidades();
-
-        CB_Unidad.setItems(listadoUnidades);
+        CB_Unidad.setItems(unidadesService.getAllUnidades());
+        CB_Area.setItems(areasService.getAllAreas());
 
         CB_Unidad.setItemLabelGenerator(Unidad::getNombre);
         CB_Area.setItemLabelGenerator(Area::getNombre);
