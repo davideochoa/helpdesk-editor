@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.antigua;
 
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.vaadin.flow.component.html.H2;

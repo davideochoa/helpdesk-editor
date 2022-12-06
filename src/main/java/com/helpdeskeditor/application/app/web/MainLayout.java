@@ -1,5 +1,9 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.web.antigua.AcercaDeView;
+import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
+import com.helpdeskeditor.application.app.web.antigua.EstatusView;
+import com.helpdeskeditor.application.app.web.antigua.FoliosView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.util.User;
@@ -18,10 +22,9 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import java.io.ByteArrayInputStream;
+
 import java.util.Optional;
 
 /**

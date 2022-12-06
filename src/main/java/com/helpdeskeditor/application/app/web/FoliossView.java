@@ -2,7 +2,7 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.domain.entity.Unidad;
 import com.helpdeskeditor.application.app.service.UnidadesService;
-import com.helpdeskeditor.application.app.web.modelo.*;
+import com.helpdeskeditor.application.app.web.antigua.modelo.*;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
