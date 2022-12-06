@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Area {
+public class ModeloArea {
     Integer id;
     String nombre;
     Integer idUnidad;

@@ -1,8 +1,14 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.domain.entity.Area;
 import com.helpdeskeditor.application.app.domain.entity.Unidad;
 import com.helpdeskeditor.application.app.service.UnidadesService;
-import com.helpdeskeditor.application.app.web.antigua.modelo.*;
+import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloArea;
+import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloBien;
+import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloIncidencia;
+import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloMarca;
+import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloModelo;
+import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloUsuarioReporta;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -12,36 +18,36 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
-@PageTitle("Folioss")
-@Route(value = "folioss", layout = MainLayout.class)
+@PageTitle("Folios")
+@Route(value = "folios", layout = MainLayout.class)
+@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("USER")
 @Slf4j
-public class FoliossView extends VerticalLayout {
+public class FoliosView extends VerticalLayout {
 
     VerticalLayout VL_Unidad = new VerticalLayout();
     IntegerField IF_Folio = new IntegerField();
         FormLayout FL_Unidad = new FormLayout();
             ComboBox<Unidad> CB_Unidad = new ComboBox<Unidad>("Unidad");
             ComboBox<Area> CB_Area = new ComboBox<Area>("Area");
-            ComboBox<UsuarioReporta> CB_UsuarioReporta = new ComboBox<UsuarioReporta>("Usuario Reporta");
+            ComboBox<ModeloUsuarioReporta> CB_UsuarioReporta = new ComboBox<ModeloUsuarioReporta>("Usuario Reporta");
             TextField TF_Telefono = new TextField();
             TextField TF_ReferenciaDocumental = new TextField();
 
 
     FormLayout FL_Incidencia = new FormLayout();
-        ComboBox<Incidencia> CB_Incidencia = new ComboBox<Incidencia>("Incidencia");
-        ComboBox<Bien> CB_Bien = new ComboBox<Bien>("Bien");
-        ComboBox<Marca> CB_Marca = new ComboBox<Marca>("Marca");
-        ComboBox<Modelo> CB_Modelo = new ComboBox<Modelo>("Modelo");
+        ComboBox<ModeloIncidencia> CB_Incidencia = new ComboBox<ModeloIncidencia>("Incidencia");
+        ComboBox<ModeloBien> CB_Bien = new ComboBox<ModeloBien>("Bien");
+        ComboBox<ModeloMarca> CB_Marca = new ComboBox<ModeloMarca>("Marca");
+        ComboBox<ModeloModelo> CB_Modelo = new ComboBox<ModeloModelo>("Modelo");
         TextField TF_NumeroSerie = new TextField("Numero Serie");
         TextField TF_NumeroInventario = new TextField("Numero Inventario");
-
-
 
     VerticalLayout VL_Objeto = new VerticalLayout();
 
@@ -53,7 +59,7 @@ public class FoliossView extends VerticalLayout {
     Tab tabUnidad;
     Tab tabObjeto;
 
-    public FoliossView(UnidadesService unidadesService) {
+    public FoliosView(UnidadesService unidadesService) {
         this.unidadesService = unidadesService;
 
         layoutUnidad();
@@ -83,7 +89,7 @@ public class FoliossView extends VerticalLayout {
 
         CB_Unidad.setItemLabelGenerator(Unidad::getNombre);
         CB_Area.setItemLabelGenerator(Area::getNombre);
-        CB_UsuarioReporta.setItemLabelGenerator(UsuarioReporta::getNombre);
+        CB_UsuarioReporta.setItemLabelGenerator(ModeloUsuarioReporta::getNombre);
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
@@ -105,7 +111,7 @@ public class FoliossView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_Incidencia.setItemLabelGenerator(Incidencia::getNombre);
+        CB_Incidencia.setItemLabelGenerator(ModeloIncidencia::getNombre);
 
         FL_Incidencia.add(CB_Incidencia);
         FL_Incidencia.add(CB_Bien);

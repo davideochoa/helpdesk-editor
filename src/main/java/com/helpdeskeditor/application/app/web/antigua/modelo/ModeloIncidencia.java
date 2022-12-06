@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Marca {
+public class ModeloIncidencia {
     Integer id;
     String nombre;
-    Integer idBien;
 }

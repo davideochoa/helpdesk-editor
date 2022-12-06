@@ -8,19 +8,19 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+
 import javax.annotation.security.RolesAllowed;
 
-@PageTitle("Folios")
-@Route(value = "folios", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
+@PageTitle("Folios Anterior")
+@Route(value = "foliosAnterior", layout = MainLayout.class)
+//@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("USER")
-public class FoliosView extends HorizontalLayout {
+public class FoliosViewAnterior extends HorizontalLayout {
 
     private TextField name;
     private Button sayHello;
 
-    public FoliosView() {
+    public FoliosViewAnterior() {
         name = new TextField("Your name");
         sayHello = new Button("Say hello");
         sayHello.addClickListener(e -> {

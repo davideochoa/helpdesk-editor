@@ -16,6 +16,9 @@ public class Area {
     @Column(name = "Id")
     private Integer id;
 
+    @Column(name = "IdUnidad")
+    private Integer idUnidad;
+
     @Column(name = "Nombre")
     private String nombre;
 }
