@@ -1,10 +1,11 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.domain.entity.Area;
+import com.helpdeskeditor.application.app.domain.entity.ConcentradoFolioIncidencia;
 import com.helpdeskeditor.application.app.domain.entity.Unidad;
 import com.helpdeskeditor.application.app.service.AreasService;
+import com.helpdeskeditor.application.app.service.ConcentradoFoliosIncidenciasService;
 import com.helpdeskeditor.application.app.service.UnidadesService;
-import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloArea;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloBien;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloIncidencia;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloMarca;
@@ -23,7 +24,6 @@ import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.List;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -37,7 +37,7 @@ public class FoliosView extends VerticalLayout {
         FormLayout FL_Unidad = new FormLayout();
             ComboBox<Unidad> CB_Unidad = new ComboBox<Unidad>("Unidad");
             ComboBox<Area> CB_Area = new ComboBox<Area>("Area");
-            ComboBox<ModeloUsuarioReporta> CB_UsuarioReporta = new ComboBox<ModeloUsuarioReporta>("Usuario Reporta");
+            ComboBox<ConcentradoFolioIncidencia> CB_UsuarioReporta = new ComboBox<ConcentradoFolioIncidencia>("Usuario Reporta");
             TextField TF_Telefono = new TextField();
             TextField TF_ReferenciaDocumental = new TextField();
 
@@ -59,12 +59,14 @@ public class FoliosView extends VerticalLayout {
     Tab tabObjeto;
 
     private UnidadesService unidadesService;
-
     private AreasService areasService;
+    ConcentradoFoliosIncidenciasService concentradoFoliosIncidenciasService;
 
-    public FoliosView(UnidadesService unidadesService, AreasService areasService) {
+    public FoliosView(UnidadesService unidadesService, AreasService areasService,
+                      ConcentradoFoliosIncidenciasService concentradoFoliosIncidenciasService) {
         this.unidadesService = unidadesService;
         this.areasService = areasService;
+        this.concentradoFoliosIncidenciasService = concentradoFoliosIncidenciasService;
 
         layoutUnidad();
         layoutIncidencia();
@@ -89,10 +91,11 @@ public class FoliosView extends VerticalLayout {
 
         CB_Unidad.setItems(unidadesService.getAllUnidades());
         CB_Area.setItems(areasService.getAllAreas());
+        CB_UsuarioReporta.setItems(concentradoFoliosIncidenciasService.findusuarioReporta());
 
         CB_Unidad.setItemLabelGenerator(Unidad::getNombre);
         CB_Area.setItemLabelGenerator(Area::getNombre);
-        CB_UsuarioReporta.setItemLabelGenerator(ModeloUsuarioReporta::getNombre);
+        CB_UsuarioReporta.setItemLabelGenerator(ConcentradoFolioIncidencia::getUsuarioReporta);
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
