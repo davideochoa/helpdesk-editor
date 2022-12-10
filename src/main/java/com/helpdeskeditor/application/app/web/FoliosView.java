@@ -37,7 +37,7 @@ public class FoliosView extends VerticalLayout {
         FormLayout FL_Unidad = new FormLayout();
             ComboBox<Unidad> CB_Unidad = new ComboBox<Unidad>("Unidad");
             ComboBox<Area> CB_Area = new ComboBox<Area>("Area");
-            ComboBox<ConcentradoFolioIncidencia> CB_UsuarioReporta = new ComboBox<ConcentradoFolioIncidencia>("Usuario Reporta");
+            ComboBox<String> CB_UsuarioReporta = new ComboBox<String>("Usuario Reporta");
             TextField TF_Telefono = new TextField();
             TextField TF_ReferenciaDocumental = new TextField();
 
@@ -95,7 +95,7 @@ public class FoliosView extends VerticalLayout {
 
         CB_Unidad.setItemLabelGenerator(Unidad::getNombre);
         CB_Area.setItemLabelGenerator(Area::getNombre);
-        CB_UsuarioReporta.setItemLabelGenerator(ConcentradoFolioIncidencia::getUsuarioReporta);
+        //CB_UsuarioReporta.setItemLabelGenerator(ConcentradoFolioIncidencia::getUsuarioReporta);
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");

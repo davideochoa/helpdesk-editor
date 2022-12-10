@@ -18,7 +18,7 @@ public class ConcentradoFoliosIncidenciasFacade {
         this.concentradoFoliosIncidenciasRepository = concentradoFoliosIncidenciasRepository;
     }
 
-    public List<ConcentradoFolioIncidencia> findusuarioReporta(){
+    public List<String> findusuarioReporta(){
         return  concentradoFoliosIncidenciasRepository.findByUsuarioReporta();
     }
 }

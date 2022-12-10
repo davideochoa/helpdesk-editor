@@ -13,7 +13,7 @@ public class ConcentradoFoliosIncidenciasService {
         this.concentradoFoliosIncidenciasFacade = concentradoFoliosIncidenciasFacade;
     }
 
-    public List<ConcentradoFolioIncidencia> findusuarioReporta(){
+    public List<String> findusuarioReporta(){
         return concentradoFoliosIncidenciasFacade.findusuarioReporta();
     }
 }
