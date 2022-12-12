@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.domain.entity.AreaEntity;
-import com.helpdeskeditor.application.app.domain.repository.AreaRepository;
+import com.helpdeskeditor.application.app.datos.entity.AreaEntity;
+import com.helpdeskeditor.application.app.datos.repository.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

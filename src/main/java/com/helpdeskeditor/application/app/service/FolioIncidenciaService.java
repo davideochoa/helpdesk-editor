@@ -13,9 +13,16 @@ public class FolioIncidenciaService {
         this.folioIncidenciaFacade = folioIncidenciaFacade;
     }
 
-    public List<String> getUsuarioReporta(){
-        return folioIncidenciaFacade.getUsuarioReporta();
+    public List<String> getAllUsuarioReporta(){
+        return folioIncidenciaFacade.getAllUsuarioReporta();
     }
 
+    public List<String> getAllMarca(){
+        return folioIncidenciaFacade.getAllMarca();
+    }
+
+    public List<String> getAllModelo(){
+        return folioIncidenciaFacade.getAllModelo();
+    }
 
 }

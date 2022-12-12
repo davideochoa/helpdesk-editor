@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.domain.entity;
+package com.helpdeskeditor.application.app.datos.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +22,9 @@ public class FolioIncidenciaEntity {
 
     @Column(name = "UsuarioReporta")
     private String usuarioReporta;
+
+    @Column(name = "Marca")
+    private String marca;
+    @Column(name = "Modelo")
+    private String modelo;
 }

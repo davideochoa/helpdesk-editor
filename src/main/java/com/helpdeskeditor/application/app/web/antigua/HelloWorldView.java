@@ -15,12 +15,12 @@ import javax.annotation.security.RolesAllowed;
 @Route(value = "foliosAnterior", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("USER")
-public class FoliosViewAnterior extends HorizontalLayout {
+public class HelloWorldView extends HorizontalLayout {
 
     private TextField name;
     private Button sayHello;
 
-    public FoliosViewAnterior() {
+    public HelloWorldView() {
         name = new TextField("Your name");
         sayHello = new Button("Say hello");
         sayHello.addClickListener(e -> {

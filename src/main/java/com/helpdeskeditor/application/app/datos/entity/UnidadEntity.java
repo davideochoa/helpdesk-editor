@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.domain.entity;
+package com.helpdeskeditor.application.app.datos.entity;
 
 import lombok.Getter;
 import lombok.Setter;

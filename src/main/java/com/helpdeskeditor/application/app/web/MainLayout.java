@@ -3,7 +3,7 @@ package com.helpdeskeditor.application.app.web;
 import com.helpdeskeditor.application.app.web.antigua.AcercaDeView;
 import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
 import com.helpdeskeditor.application.app.web.antigua.EstatusView;
-import com.helpdeskeditor.application.app.web.antigua.FoliosViewAnterior;
+import com.helpdeskeditor.application.app.web.antigua.HelloWorldView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.util.User;
@@ -76,8 +76,8 @@ public class MainLayout extends AppLayout {
             nav.addItem(new AppNavItem("Folios", FoliosView.class, "la la-globe"));
 
         }
-        if (accessChecker.hasAccess(FoliosViewAnterior.class)) {
-            nav.addItem(new AppNavItem("Folios Anterior", FoliosViewAnterior.class, "la la-globe"));
+        if (accessChecker.hasAccess(HelloWorldView.class)) {
+            nav.addItem(new AppNavItem("Hello World", HelloWorldView.class, "la la-globe"));
 
         }
         if (accessChecker.hasAccess(EstatusView.class)) {

@@ -1,9 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.domain.entity.IncidenciaEntity;
-import com.helpdeskeditor.application.app.domain.entity.UnidadEntity;
-import com.helpdeskeditor.application.app.domain.repository.IncidenciaRepository;
-import com.helpdeskeditor.application.app.domain.repository.UnidadRepository;
+import com.helpdeskeditor.application.app.datos.entity.IncidenciaEntity;
+import com.helpdeskeditor.application.app.datos.repository.IncidenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

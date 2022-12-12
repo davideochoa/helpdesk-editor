@@ -1,27 +1,30 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.domain.entity.AreaEntity;
-import com.helpdeskeditor.application.app.domain.entity.BiendEntity;
-import com.helpdeskeditor.application.app.domain.entity.IncidenciaEntity;
-import com.helpdeskeditor.application.app.domain.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.datos.entity.AreaEntity;
+import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
+import com.helpdeskeditor.application.app.datos.entity.IncidenciaEntity;
+import com.helpdeskeditor.application.app.datos.entity.PrioridadEntity;
+import com.helpdeskeditor.application.app.datos.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.service.AreaService;
 import com.helpdeskeditor.application.app.service.BienService;
 import com.helpdeskeditor.application.app.service.FolioIncidenciaService;
 import com.helpdeskeditor.application.app.service.IncidenciaService;
+import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
-import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloMarca;
-import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloModelo;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -33,7 +36,7 @@ import javax.annotation.security.RolesAllowed;
 public class FoliosView extends VerticalLayout {
 
     VerticalLayout VL_Unidad = new VerticalLayout();
-    IntegerField IF_Folio = new IntegerField();
+        IntegerField IF_Folio = new IntegerField();
         FormLayout FL_Unidad = new FormLayout();
             ComboBox<UnidadEntity> CB_Unidad = new ComboBox<UnidadEntity>("Unidad");
             ComboBox<AreaEntity> CB_Area = new ComboBox<AreaEntity>("Area");
@@ -45,16 +48,19 @@ public class FoliosView extends VerticalLayout {
     FormLayout FL_Incidencia = new FormLayout();
         ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
         ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
-        ComboBox<ModeloMarca> CB_Marca = new ComboBox<ModeloMarca>("Marca");
-        ComboBox<ModeloModelo> CB_Modelo = new ComboBox<ModeloModelo>("Modelo");
+        ComboBox<String> CB_Marca = new ComboBox<String>("Marca");
+        ComboBox<String> CB_Modelo = new ComboBox<String>("Modelo");
         TextField TF_NumeroSerie = new TextField("Numero Serie");
         TextField TF_NumeroInventario = new TextField("Numero Inventario");
 
-    FormLayout FL_Motivo = new FormLayout();
+    VerticalLayout VL_Motivo = new VerticalLayout();
+        FormLayout FL_Motivo = new FormLayout();
+            TextArea TA_MotivoReporte = new TextArea();
+        ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
 
     VerticalLayout VL_Objeto = new VerticalLayout();
 
-    VerticalLayout content;
+    VerticalLayout contenidoTab;
 
     Tabs tabs;
     Tab tabUnidad;
@@ -64,28 +70,38 @@ public class FoliosView extends VerticalLayout {
     private UnidadService unidadService;
     private AreaService areaService;
     private FolioIncidenciaService folioIncidenciaService;
-    IncidenciaService incidenciaService;
+    private IncidenciaService incidenciaService;
+    private BienService bienService;
+    PrioridadService prioridadService;
 
-    BienService bienService;
+    @Value("${charLimit}")
+    private int charLimit;
+
     public FoliosView(UnidadService unidadService,
                       AreaService areaService,
                       FolioIncidenciaService folioIncidenciaService,
                       IncidenciaService incidenciaService,
-                      BienService bienService) {
+                      BienService bienService,
+                      PrioridadService prioridadService) {
         this.unidadService = unidadService;
         this.areaService = areaService;
         this.folioIncidenciaService = folioIncidenciaService;
         this.incidenciaService = incidenciaService;
         this.bienService = bienService;
+        this.prioridadService = prioridadService;
 
         layoutUnidad();
         layoutIncidencia();
+        layoutMotivo();
+
         layoutTabs();
 
-        this.add(tabs,content);
+        this.add(tabs, contenidoTab);
     }
 
     private void layoutUnidad(){
+
+
         FL_Unidad.setResponsiveSteps(
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
@@ -101,7 +117,7 @@ public class FoliosView extends VerticalLayout {
 
         CB_Unidad.setItems(unidadService.getAllUnidades());
         CB_Area.setItems(areaService.getAllAreas());
-        CB_UsuarioReporta.setItems(folioIncidenciaService.getUsuarioReporta());
+        CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
 
         CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);
         CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
@@ -127,11 +143,15 @@ public class FoliosView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_Incidencia.setItems(incidenciaService.incidenciaFacade());
+        CB_Incidencia.setItems(incidenciaService.getAllIncidencias());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
 
         CB_Bien.setItems(bienService.getAllBienes());
         CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
+
+        CB_Marca.setItems(folioIncidenciaService.getAllMarca());
+
+        CB_Modelo.setItems(folioIncidenciaService.getAllModelo());
 
         FL_Incidencia.add(CB_Incidencia);
         FL_Incidencia.add(CB_Bien);
@@ -139,6 +159,32 @@ public class FoliosView extends VerticalLayout {
         FL_Incidencia.add(CB_Modelo);
         FL_Incidencia.add(TF_NumeroSerie);
         FL_Incidencia.add(TF_NumeroInventario);
+    }
+
+    private void layoutMotivo(){
+
+        FL_Motivo.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 1));
+
+        //TA_MotivoReporte.setWidthFull();
+        TA_MotivoReporte.setLabel("Description");
+        TA_MotivoReporte.setMaxLength(charLimit);
+        TA_MotivoReporte.setValueChangeMode(ValueChangeMode.EAGER);
+        TA_MotivoReporte.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + charLimit);
+        });
+
+        CB_Prioridad.setItems(prioridadService.findAll());
+        CB_Prioridad.setItemLabelGenerator(PrioridadEntity::getNombre);
+
+        FL_Motivo.add(TA_MotivoReporte);
+
+        VL_Motivo.add(FL_Motivo,CB_Prioridad);
+
     }
 
     private void layoutTabs(){
@@ -150,22 +196,22 @@ public class FoliosView extends VerticalLayout {
 
         tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
-        content = new VerticalLayout();
-        content.setSpacing(false);
+        contenidoTab = new VerticalLayout();
+        contenidoTab.setSpacing(false);
         setContent(tabs.getSelectedTab());
     }
 
     private void setContent(Tab tab) {
-        content.removeAll();
+        contenidoTab.removeAll();
 
         if (tab.equals(tabUnidad))
-            content.add(VL_Unidad);
-
-        if (tab.equals(tabIncidencia))
-            content.add(FL_Incidencia);
-
-        if (tab.equals(tabMotivo))
-            content.add(FL_Motivo);
+            contenidoTab.add(VL_Unidad);
+        else
+            if (tab.equals(tabIncidencia))
+                contenidoTab.add(FL_Incidencia);
+            else
+                if (tab.equals(tabMotivo))
+                    contenidoTab.add(VL_Motivo);
     }
 
 }

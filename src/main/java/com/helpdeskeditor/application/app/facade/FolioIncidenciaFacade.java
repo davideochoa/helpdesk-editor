@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.helpdeskeditor.application.app.domain.repository.FolioIncidenciaRepository;
+import com.helpdeskeditor.application.app.datos.repository.FolioIncidenciaRepository;
 
 import java.util.List;
 
@@ -18,8 +18,16 @@ public class FolioIncidenciaFacade {
         this.folioIncidenciaRepository = folioIncidenciaRepository;
     }
 
-    public List<String> getUsuarioReporta(){
-        return  folioIncidenciaRepository.getUsuarioReporta();
+    public List<String> getAllUsuarioReporta(){
+        return  folioIncidenciaRepository.getAllUsuarioReporta();
+    }
+
+    public List<String> getAllMarca(){
+        return  folioIncidenciaRepository.getAllMarca();
+    }
+
+    public List<String> getAllModelo(){
+        return  folioIncidenciaRepository.getAllModelo();
     }
 
 }

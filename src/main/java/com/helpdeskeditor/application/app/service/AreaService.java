@@ -1,6 +1,6 @@
 package com.helpdeskeditor.application.app.service;
 
-import com.helpdeskeditor.application.app.domain.entity.AreaEntity;
+import com.helpdeskeditor.application.app.datos.entity.AreaEntity;
 import com.helpdeskeditor.application.app.facade.AreaFacade;
 import org.springframework.stereotype.Service;
 
