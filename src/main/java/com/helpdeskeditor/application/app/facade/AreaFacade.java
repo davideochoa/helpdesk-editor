@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.domain.entity.Area;
-import com.helpdeskeditor.application.app.domain.repository.AreasRepository;
+import com.helpdeskeditor.application.app.domain.entity.AreaEntity;
+import com.helpdeskeditor.application.app.domain.repository.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,15 +10,15 @@ import java.util.List;
 
 @Component
 @Transactional(readOnly = true)
-public class AreasFacade {
-    private AreasRepository areasRepository;
+public class AreaFacade {
+    private AreaRepository areasRepository;
 
     @Autowired
-    public AreasFacade(AreasRepository areasRepository) {
+    public AreaFacade(AreaRepository areasRepository) {
         this.areasRepository = areasRepository;
     }
 
-    public List<Area> getAllAreas(){
+    public List<AreaEntity> getAllAreas(){
         return areasRepository.findAll();
     }
 }

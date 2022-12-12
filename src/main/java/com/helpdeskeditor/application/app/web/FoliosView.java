@@ -1,16 +1,14 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.domain.entity.Area;
-import com.helpdeskeditor.application.app.domain.entity.ConcentradoFolioIncidencia;
-import com.helpdeskeditor.application.app.domain.entity.Unidad;
-import com.helpdeskeditor.application.app.service.AreasService;
-import com.helpdeskeditor.application.app.service.ConcentradoFoliosIncidenciasService;
-import com.helpdeskeditor.application.app.service.UnidadesService;
+import com.helpdeskeditor.application.app.domain.entity.AreaEntity;
+import com.helpdeskeditor.application.app.domain.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.service.AreaService;
+import com.helpdeskeditor.application.app.service.FolioIncidenciaService;
+import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloBien;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloIncidencia;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloMarca;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloModelo;
-import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloUsuarioReporta;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -35,8 +33,8 @@ public class FoliosView extends VerticalLayout {
     VerticalLayout VL_Unidad = new VerticalLayout();
     IntegerField IF_Folio = new IntegerField();
         FormLayout FL_Unidad = new FormLayout();
-            ComboBox<Unidad> CB_Unidad = new ComboBox<Unidad>("Unidad");
-            ComboBox<Area> CB_Area = new ComboBox<Area>("Area");
+            ComboBox<UnidadEntity> CB_Unidad = new ComboBox<UnidadEntity>("Unidad");
+            ComboBox<AreaEntity> CB_Area = new ComboBox<AreaEntity>("Area");
             ComboBox<String> CB_UsuarioReporta = new ComboBox<String>("Usuario Reporta");
             TextField TF_Telefono = new TextField();
             TextField TF_ReferenciaDocumental = new TextField();
@@ -58,15 +56,15 @@ public class FoliosView extends VerticalLayout {
     Tab tabUnidad;
     Tab tabObjeto;
 
-    private UnidadesService unidadesService;
-    private AreasService areasService;
-    ConcentradoFoliosIncidenciasService concentradoFoliosIncidenciasService;
+    private UnidadService unidadService;
+    private AreaService areaService;
+    private FolioIncidenciaService folioIncidenciaService;
 
-    public FoliosView(UnidadesService unidadesService, AreasService areasService,
-                      ConcentradoFoliosIncidenciasService concentradoFoliosIncidenciasService) {
-        this.unidadesService = unidadesService;
-        this.areasService = areasService;
-        this.concentradoFoliosIncidenciasService = concentradoFoliosIncidenciasService;
+    public FoliosView(UnidadService unidadService, AreaService areaService,
+                      FolioIncidenciaService folioIncidenciaService) {
+        this.unidadService = unidadService;
+        this.areaService = areaService;
+        this.folioIncidenciaService = folioIncidenciaService;
 
         layoutUnidad();
         layoutIncidencia();
@@ -89,12 +87,12 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.setLabel("Numero Telefonico");
         TF_Telefono.setWidth("240px");
 
-        CB_Unidad.setItems(unidadesService.getAllUnidades());
-        CB_Area.setItems(areasService.getAllAreas());
-        CB_UsuarioReporta.setItems(concentradoFoliosIncidenciasService.findusuarioReporta());
+        CB_Unidad.setItems(unidadService.getAllUnidades());
+        CB_Area.setItems(areaService.getAllAreas());
+        CB_UsuarioReporta.setItems(folioIncidenciaService.getUsuarioReporta());
 
-        CB_Unidad.setItemLabelGenerator(Unidad::getNombre);
-        CB_Area.setItemLabelGenerator(Area::getNombre);
+        CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);
+        CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
         //CB_UsuarioReporta.setItemLabelGenerator(ConcentradoFolioIncidencia::getUsuarioReporta);
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
