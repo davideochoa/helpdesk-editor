@@ -13,14 +13,13 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "catalogo_unidades")
-public class UsuarioReportaEntity {
-
-    @Id
+@Table(name = "catalogo_tipo_incidencias")
+public class IncidenciaEntity {
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Integer id;
+    Integer Id;
 
     @Column(name = "Nombre")
-    private String nombre;
+    String nombre;
 }
