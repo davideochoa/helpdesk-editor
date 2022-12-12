@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface IncidenciaRepository extends JpaRepository<IncidenciaEntity, Integer> {
 
-    @Override
-    List<IncidenciaEntity> findAll();
+    //@Override
+    //List<IncidenciaEntity> findAll();
 
 }

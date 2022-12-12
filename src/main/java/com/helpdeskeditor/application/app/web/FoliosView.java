@@ -1,12 +1,14 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.domain.entity.AreaEntity;
+import com.helpdeskeditor.application.app.domain.entity.BiendEntity;
+import com.helpdeskeditor.application.app.domain.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.domain.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.service.AreaService;
+import com.helpdeskeditor.application.app.service.BienService;
 import com.helpdeskeditor.application.app.service.FolioIncidenciaService;
+import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.UnidadService;
-import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloBien;
-import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloIncidencia;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloMarca;
 import com.helpdeskeditor.application.app.web.antigua.modelo.ModeloModelo;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -41,12 +43,14 @@ public class FoliosView extends VerticalLayout {
 
 
     FormLayout FL_Incidencia = new FormLayout();
-        ComboBox<ModeloIncidencia> CB_Incidencia = new ComboBox<ModeloIncidencia>("Incidencia");
-        ComboBox<ModeloBien> CB_Bien = new ComboBox<ModeloBien>("Bien");
+        ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
+        ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
         ComboBox<ModeloMarca> CB_Marca = new ComboBox<ModeloMarca>("Marca");
         ComboBox<ModeloModelo> CB_Modelo = new ComboBox<ModeloModelo>("Modelo");
         TextField TF_NumeroSerie = new TextField("Numero Serie");
         TextField TF_NumeroInventario = new TextField("Numero Inventario");
+
+    FormLayout FL_Motivo = new FormLayout();
 
     VerticalLayout VL_Objeto = new VerticalLayout();
 
@@ -54,17 +58,25 @@ public class FoliosView extends VerticalLayout {
 
     Tabs tabs;
     Tab tabUnidad;
-    Tab tabObjeto;
+    Tab tabIncidencia;
+    Tab tabMotivo;
 
     private UnidadService unidadService;
     private AreaService areaService;
     private FolioIncidenciaService folioIncidenciaService;
+    IncidenciaService incidenciaService;
 
-    public FoliosView(UnidadService unidadService, AreaService areaService,
-                      FolioIncidenciaService folioIncidenciaService) {
+    BienService bienService;
+    public FoliosView(UnidadService unidadService,
+                      AreaService areaService,
+                      FolioIncidenciaService folioIncidenciaService,
+                      IncidenciaService incidenciaService,
+                      BienService bienService) {
         this.unidadService = unidadService;
         this.areaService = areaService;
         this.folioIncidenciaService = folioIncidenciaService;
+        this.incidenciaService = incidenciaService;
+        this.bienService = bienService;
 
         layoutUnidad();
         layoutIncidencia();
@@ -115,7 +127,11 @@ public class FoliosView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_Incidencia.setItemLabelGenerator(ModeloIncidencia::getNombre);
+        CB_Incidencia.setItems(incidenciaService.incidenciaFacade());
+        CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
+
+        CB_Bien.setItems(bienService.getAllBienes());
+        CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
 
         FL_Incidencia.add(CB_Incidencia);
         FL_Incidencia.add(CB_Bien);
@@ -127,9 +143,10 @@ public class FoliosView extends VerticalLayout {
 
     private void layoutTabs(){
         tabUnidad = new Tab("UNIDAD");
-        tabObjeto = new Tab("INCIDENCIA");
+        tabIncidencia = new Tab("INCIDENCIA");
+        tabMotivo = new Tab("MOTIVO");
 
-        tabs = new Tabs(tabUnidad,tabObjeto);
+        tabs = new Tabs(tabUnidad, tabIncidencia,tabMotivo);
 
         tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
@@ -143,8 +160,12 @@ public class FoliosView extends VerticalLayout {
 
         if (tab.equals(tabUnidad))
             content.add(VL_Unidad);
-        else
+
+        if (tab.equals(tabIncidencia))
             content.add(FL_Incidencia);
+
+        if (tab.equals(tabMotivo))
+            content.add(FL_Motivo);
     }
 
 }

@@ -9,7 +9,4 @@ import java.util.List;
 @Repository
 public interface UnidadRepository extends JpaRepository<UnidadEntity, Integer> {
 
-    @Override
-    List<UnidadEntity> findAll();
-
 }

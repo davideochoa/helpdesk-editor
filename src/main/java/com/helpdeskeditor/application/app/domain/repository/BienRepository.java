@@ -1,15 +1,12 @@
 package com.helpdeskeditor.application.app.domain.repository;
 
-import com.helpdeskeditor.application.app.domain.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.domain.entity.BiendEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface UsuarioReportaRepository extends JpaRepository<UnidadEntity, Integer> {
-
-    @Override
-    List<UnidadEntity> findAll();
+public interface BienRepository extends JpaRepository<BiendEntity, Integer> {
 
 }

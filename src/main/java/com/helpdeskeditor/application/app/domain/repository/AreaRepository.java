@@ -9,7 +9,4 @@ import java.util.List;
 @Repository
 public interface AreaRepository extends JpaRepository<AreaEntity, Integer> {
 
-    @Override
-    List<AreaEntity> findAll();
-
 }
