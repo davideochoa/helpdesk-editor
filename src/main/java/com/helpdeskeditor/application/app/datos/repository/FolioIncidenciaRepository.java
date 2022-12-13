@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.datos.repository;
 
+import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
 import com.helpdeskeditor.application.app.datos.entity.FolioIncidenciaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,11 @@ public interface FolioIncidenciaRepository extends JpaRepository<FolioIncidencia
             "FROM FolioIncidenciaEntity CFI "+
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> getAllModelo();
+
+    @Query("SELECT CFI.modelo "+
+            "FROM FolioIncidenciaEntity CFI "+
+            "WHERE CFI.marca = ?1"+
+            "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
+    List<String> findModeloByMarca(String marca);
 
 }

@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.facade;
 
+import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,4 +31,7 @@ public class FolioIncidenciaFacade {
         return  folioIncidenciaRepository.getAllModelo();
     }
 
+    public List<String> findModeloByMarca(String marca){
+        return  folioIncidenciaRepository.findModeloByMarca(marca);
+    }
 }

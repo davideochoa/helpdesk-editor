@@ -158,8 +158,12 @@ public class FoliosView extends VerticalLayout {
         CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
 
         CB_Marca.setItems(folioIncidenciaService.getAllMarca());
+        CB_Marca.addValueChangeListener(e -> {
+            String seleccion = e.getValue();
+            CB_Modelo.setItems(folioIncidenciaService.findModeloByMarca(seleccion));
+        });
 
-        CB_Modelo.setItems(folioIncidenciaService.getAllModelo());
+        //CB_Modelo.setItems(folioIncidenciaService.getAllModelo());
 
         FL_Incidencia.add(CB_Incidencia);
         FL_Incidencia.add(CB_Bien);
