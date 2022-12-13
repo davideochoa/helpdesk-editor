@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.stream.Collectors;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -116,7 +117,12 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.setWidth("240px");
 
         CB_Unidad.setItems(unidadService.getAllUnidades());
-        CB_Area.setItems(areaService.getAllAreas());
+        CB_Unidad.addValueChangeListener(e -> {
+            UnidadEntity seleccion = e.getValue();
+            CB_Area.setItems(areaService.findByidUnidad(seleccion.getId()));
+        });
+
+        //CB_Area.setItems(areaService.getAllAreas());
         CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
 
         CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);

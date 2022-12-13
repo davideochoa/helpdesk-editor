@@ -21,4 +21,8 @@ public class AreaFacade {
     public List<AreaEntity> getAllAreas(){
         return areasRepository.findAll();
     }
+
+    public List<AreaEntity> findByidUnidad(int idUnidad){
+        return areasRepository.findByidUnidad(idUnidad);
+    }
 }

@@ -16,4 +16,8 @@ public class AreaService {
     public List<AreaEntity> getAllAreas(){
         return areaFacade.getAllAreas();
     }
+
+    public List<AreaEntity> findByidUnidad(int idUnidad){
+        return areaFacade.findByidUnidad(idUnidad);
+    }
 }
