@@ -101,8 +101,6 @@ public class FoliosView extends VerticalLayout {
     }
 
     private void layoutUnidad(){
-
-
         FL_Unidad.setResponsiveSteps(
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
@@ -151,8 +149,12 @@ public class FoliosView extends VerticalLayout {
 
         CB_Incidencia.setItems(incidenciaService.getAllIncidencias());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
+        CB_Incidencia.addValueChangeListener(e -> {
+            IncidenciaEntity seleccion = e.getValue();
+            CB_Bien.setItems(bienService.findByidTipoIncidencia(seleccion.getId()));
+        });
 
-        CB_Bien.setItems(bienService.getAllBienes());
+        //CB_Bien.setItems(bienService.getAllBienes());
         CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
 
         CB_Marca.setItems(folioIncidenciaService.getAllMarca());

@@ -17,4 +17,8 @@ public class BienService {
     public List<BiendEntity> getAllBienes(){
         return bienFacade.getAllBienes();
     }
+
+    public List<BiendEntity> findByidTipoIncidencia(int idTipoIncidencia){
+        return bienFacade.findByidTipoIncidencia(idTipoIncidencia);
+    }
 }
