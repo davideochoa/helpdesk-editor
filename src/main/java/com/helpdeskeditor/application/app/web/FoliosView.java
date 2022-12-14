@@ -59,21 +59,19 @@ public class FoliosView extends VerticalLayout {
             TextArea TA_MotivoReporte = new TextArea();
         ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
 
-    VerticalLayout VL_Objeto = new VerticalLayout();
-
-    VerticalLayout contenidoTab;
-
     Tabs tabs;
-    Tab tabUnidad;
-    Tab tabIncidencia;
-    Tab tabMotivo;
+        Tab tabUnidad;
+        Tab tabIncidencia;
+        Tab tabMotivo;
+        VerticalLayout contenidoTab;
+
 
     private UnidadService unidadService;
     private AreaService areaService;
     private FolioIncidenciaService folioIncidenciaService;
     private IncidenciaService incidenciaService;
     private BienService bienService;
-    PrioridadService prioridadService;
+    private PrioridadService prioridadService;
 
     @Value("${charLimit}")
     private int charLimit;

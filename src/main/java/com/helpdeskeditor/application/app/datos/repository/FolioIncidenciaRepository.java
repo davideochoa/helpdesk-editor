@@ -26,7 +26,7 @@ public interface FolioIncidenciaRepository extends JpaRepository<FolioIncidencia
 
     @Query("SELECT CFI.modelo "+
             "FROM FolioIncidenciaEntity CFI "+
-            "WHERE CFI.marca = ?1"+
+            "WHERE CFI.marca = :marca "+
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByMarca(String marca);
 
