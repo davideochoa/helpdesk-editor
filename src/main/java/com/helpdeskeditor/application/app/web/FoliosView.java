@@ -7,6 +7,7 @@ import com.helpdeskeditor.application.app.datos.entity.PrioridadEntity;
 import com.helpdeskeditor.application.app.datos.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.service.AreaService;
 import com.helpdeskeditor.application.app.service.BienService;
+import com.helpdeskeditor.application.app.service.EstatusService;
 import com.helpdeskeditor.application.app.service.FolioIncidenciaService;
 import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
@@ -45,7 +46,6 @@ public class FoliosView extends VerticalLayout {
             TextField TF_Telefono = new TextField();
             TextField TF_ReferenciaDocumental = new TextField();
 
-
     FormLayout FL_Incidencia = new FormLayout();
         ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
         ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
@@ -59,12 +59,20 @@ public class FoliosView extends VerticalLayout {
             TextArea TA_MotivoReporte = new TextArea();
         ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
 
+    FormLayout FL_Estatus = new FormLayout();
+        ComboBox<String> CB_Estaus = new ComboBox<String>("Estatus");
+        TextArea TA_Anotacion = new TextArea("Anotacion");
+        ComboBox<String> CB_SoporteAsignado = new ComboBox<String>("Soporte Asignado");
+        ComboBox<String> CB_TipoIncidenciaFinal = new ComboBox<String>("Incidencia Final");
+
+
+
     Tabs tabs;
         Tab tabUnidad;
         Tab tabIncidencia;
         Tab tabMotivo;
+        Tab tabEstatus;
         VerticalLayout contenidoTab;
-
 
     private UnidadService unidadService;
     private AreaService areaService;
@@ -72,6 +80,7 @@ public class FoliosView extends VerticalLayout {
     private IncidenciaService incidenciaService;
     private BienService bienService;
     private PrioridadService prioridadService;
+    EstatusService estatusService;
 
     @Value("${charLimit}")
     private int charLimit;
@@ -81,17 +90,20 @@ public class FoliosView extends VerticalLayout {
                       FolioIncidenciaService folioIncidenciaService,
                       IncidenciaService incidenciaService,
                       BienService bienService,
-                      PrioridadService prioridadService) {
+                      PrioridadService prioridadService,
+                      EstatusService estatusService) {
         this.unidadService = unidadService;
         this.areaService = areaService;
         this.folioIncidenciaService = folioIncidenciaService;
         this.incidenciaService = incidenciaService;
         this.bienService = bienService;
         this.prioridadService = prioridadService;
+        this.estatusService = estatusService;
 
         layoutUnidad();
         layoutIncidencia();
         layoutMotivo();
+        layoutEstatus();
 
         layoutTabs();
 
@@ -177,7 +189,7 @@ public class FoliosView extends VerticalLayout {
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
-                new FormLayout.ResponsiveStep("500px", 1));
+                new FormLayout.ResponsiveStep("500px", 2));
 
         //TA_MotivoReporte.setWidthFull();
         TA_MotivoReporte.setLabel("Description");
@@ -197,12 +209,32 @@ public class FoliosView extends VerticalLayout {
 
     }
 
+    private void layoutEstatus(){
+        FL_Estatus.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+
+        TA_Anotacion.setLabel("Anotacion");
+        TA_Anotacion.setMaxLength(charLimit);
+        TA_Anotacion.setValueChangeMode(ValueChangeMode.EAGER);
+        TA_Anotacion.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + charLimit);
+        });
+
+        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal);
+    }
+
     private void layoutTabs(){
         tabUnidad = new Tab("UNIDAD");
         tabIncidencia = new Tab("INCIDENCIA");
         tabMotivo = new Tab("MOTIVO");
+        tabEstatus = new Tab("ESTATUS");
 
-        tabs = new Tabs(tabUnidad, tabIncidencia,tabMotivo);
+        tabs = new Tabs(tabUnidad, tabIncidencia,tabMotivo,tabEstatus);
 
         tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
@@ -222,6 +254,10 @@ public class FoliosView extends VerticalLayout {
             else
                 if (tab.equals(tabMotivo))
                     contenidoTab.add(VL_Motivo);
+                else
+                    if (tab.equals(tabEstatus))
+                        contenidoTab.add(FL_Estatus);
+
     }
 
 }
