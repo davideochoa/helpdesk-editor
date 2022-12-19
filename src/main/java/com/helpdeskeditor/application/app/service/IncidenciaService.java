@@ -13,7 +13,7 @@ public class IncidenciaService {
         this.incidenciaFacade = incidenciaFacade;
     }
 
-    public List<IncidenciaEntity> getAllIncidencias(){
-        return incidenciaFacade.getAllIncidencias();
+    public List<IncidenciaEntity> findAll(){
+        return incidenciaFacade.findAll();
     }
 }

@@ -14,8 +14,8 @@ public class BienService {
         this.bienFacade = bienFacade;
     }
 
-    public List<BiendEntity> getAllBienes(){
-        return bienFacade.getAllBienes();
+    public List<BiendEntity> findAll(){
+        return bienFacade.findAll();
     }
 
     public List<BiendEntity> findByidTipoIncidencia(int idTipoIncidencia){

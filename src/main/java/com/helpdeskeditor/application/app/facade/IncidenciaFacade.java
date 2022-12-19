@@ -18,7 +18,7 @@ public class IncidenciaFacade {
         this.incidenciaRepository = incidenciaRepository;
     }
 
-    public List<IncidenciaEntity> getAllIncidencias(){
+    public List<IncidenciaEntity> findAll(){
         return incidenciaRepository.findAll();
     }
 }

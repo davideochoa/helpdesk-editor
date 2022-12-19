@@ -18,7 +18,7 @@ public class UnidadFacade {
         this.unidadRepository = unidadRepository;
     }
 
-    public List<UnidadEntity> getAllUnidades(){
+    public List<UnidadEntity> findAll(){
         return unidadRepository.findAll();
     }
 }

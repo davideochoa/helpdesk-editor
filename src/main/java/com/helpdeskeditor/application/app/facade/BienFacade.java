@@ -18,7 +18,7 @@ public class BienFacade {
         this.bienRepository = bienRepository;
     }
 
-    public List<BiendEntity> getAllBienes(){
+    public List<BiendEntity> findAll(){
         return bienRepository.findAll();
     }
 

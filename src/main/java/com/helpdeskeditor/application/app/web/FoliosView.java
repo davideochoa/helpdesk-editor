@@ -2,11 +2,14 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.datos.entity.AreaEntity;
 import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
+import com.helpdeskeditor.application.app.datos.entity.CatalogoEstatusEntity;
+import com.helpdeskeditor.application.app.datos.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.datos.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.datos.entity.PrioridadEntity;
 import com.helpdeskeditor.application.app.datos.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.service.AreaService;
 import com.helpdeskeditor.application.app.service.BienService;
+import com.helpdeskeditor.application.app.service.CatalogoEstatusService;
 import com.helpdeskeditor.application.app.service.EstatusService;
 import com.helpdeskeditor.application.app.service.FolioIncidenciaService;
 import com.helpdeskeditor.application.app.service.IncidenciaService;
@@ -14,6 +17,8 @@ import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -28,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.stream.Collectors;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -60,12 +64,12 @@ public class FoliosView extends VerticalLayout {
         ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
 
     FormLayout FL_Estatus = new FormLayout();
-        ComboBox<String> CB_Estaus = new ComboBox<String>("Estatus");
+        ComboBox<CatalogoEstatusEntity> CB_Estaus = new ComboBox<CatalogoEstatusEntity>("Estatus");
         TextArea TA_Anotacion = new TextArea("Anotacion");
         ComboBox<String> CB_SoporteAsignado = new ComboBox<String>("Soporte Asignado");
         ComboBox<String> CB_TipoIncidenciaFinal = new ComboBox<String>("Incidencia Final");
 
-
+        Grid<EstatusEntity> GridEstatus = new Grid<>(EstatusEntity.class, false);
 
     Tabs tabs;
         Tab tabUnidad;
@@ -80,7 +84,8 @@ public class FoliosView extends VerticalLayout {
     private IncidenciaService incidenciaService;
     private BienService bienService;
     private PrioridadService prioridadService;
-    EstatusService estatusService;
+    private EstatusService estatusService;
+    private CatalogoEstatusService catalogoEstatusService;
 
     @Value("${charLimit}")
     private int charLimit;
@@ -91,7 +96,8 @@ public class FoliosView extends VerticalLayout {
                       IncidenciaService incidenciaService,
                       BienService bienService,
                       PrioridadService prioridadService,
-                      EstatusService estatusService) {
+                      EstatusService estatusService,
+                      CatalogoEstatusService catalogoEstatusService) {
         this.unidadService = unidadService;
         this.areaService = areaService;
         this.folioIncidenciaService = folioIncidenciaService;
@@ -99,6 +105,7 @@ public class FoliosView extends VerticalLayout {
         this.bienService = bienService;
         this.prioridadService = prioridadService;
         this.estatusService = estatusService;
+        this.catalogoEstatusService = catalogoEstatusService;
 
         layoutUnidad();
         layoutIncidencia();
@@ -124,7 +131,7 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.setLabel("Numero Telefonico");
         TF_Telefono.setWidth("240px");
 
-        CB_Unidad.setItems(unidadService.getAllUnidades());
+        CB_Unidad.setItems(unidadService.findAll());
         CB_Unidad.addValueChangeListener(e -> {
             UnidadEntity seleccion = e.getValue();
             CB_Area.setItems(areaService.findByidUnidad(seleccion.getId()));
@@ -157,7 +164,7 @@ public class FoliosView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_Incidencia.setItems(incidenciaService.getAllIncidencias());
+        CB_Incidencia.setItems(incidenciaService.findAll());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             IncidenciaEntity seleccion = e.getValue();
@@ -216,6 +223,8 @@ public class FoliosView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
+        CB_Estaus.setItems(catalogoEstatusService.findAll());
+        CB_Estaus.setItemLabelGenerator(CatalogoEstatusEntity::getNombre);
 
         TA_Anotacion.setLabel("Anotacion");
         TA_Anotacion.setMaxLength(charLimit);
@@ -225,7 +234,15 @@ public class FoliosView extends VerticalLayout {
                     .setHelperText(e.getValue().length() + "/" + charLimit);
         });
 
-        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal);
+        GridEstatus.addColumn(EstatusEntity::getId).setHeader("Id");
+        GridEstatus.addColumn(EstatusEntity::getFolio).setHeader("Folio");
+        GridEstatus.addColumn(EstatusEntity::getIdEstatus).setHeader("IdEstatus");
+        GridEstatus.addColumn(EstatusEntity::getAnotacion).setHeader("Anotacion");
+        GridEstatus.addColumn(EstatusEntity::getIdUsuario).setHeader("IdUsuario");
+        GridEstatus.addColumn(EstatusEntity::getFecha).setHeader("Fecha");
+        GridEstatus.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+
+        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,GridEstatus);
     }
 
     private void layoutTabs(){

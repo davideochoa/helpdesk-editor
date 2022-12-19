@@ -13,8 +13,8 @@ public class AreaService {
         this.areaFacade = areaFacade;
     }
 
-    public List<AreaEntity> getAllAreas(){
-        return areaFacade.getAllAreas();
+    public List<AreaEntity> findAll(){
+        return areaFacade.findAll();
     }
 
     public List<AreaEntity> findByidUnidad(int idUnidad){

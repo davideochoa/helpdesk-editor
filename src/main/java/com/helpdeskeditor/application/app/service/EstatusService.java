@@ -1,9 +1,7 @@
 package com.helpdeskeditor.application.app.service;
 
 import com.helpdeskeditor.application.app.datos.entity.EstatusEntity;
-import com.helpdeskeditor.application.app.datos.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.facade.EstatusFacade;
-import com.helpdeskeditor.application.app.facade.UnidadFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +13,7 @@ public class EstatusService {
         this.estatusFacade = estatusFacade;
     }
 
-    public List<EstatusEntity> getAllEstatus(){
-        return estatusFacade.getAllEstatus();
+    public List<EstatusEntity> findAll(){
+        return estatusFacade.findAll();
     }
 }

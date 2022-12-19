@@ -18,7 +18,7 @@ public class AreaFacade {
         this.areasRepository = areasRepository;
     }
 
-    public List<AreaEntity> getAllAreas(){
+    public List<AreaEntity> findAll(){
         return areasRepository.findAll();
     }
 

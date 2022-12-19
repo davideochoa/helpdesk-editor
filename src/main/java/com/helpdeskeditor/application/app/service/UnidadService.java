@@ -13,7 +13,7 @@ public class UnidadService {
         this.unidadFacade = unidadFacade;
     }
 
-    public List<UnidadEntity> getAllUnidades(){
-        return unidadFacade.getAllUnidades();
+    public List<UnidadEntity> findAll(){
+        return unidadFacade.findAll();
     }
 }
