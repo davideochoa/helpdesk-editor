@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
-import com.helpdeskeditor.application.app.datos.repository.BienRepository;
+import com.helpdeskeditor.application.app.data.entity.BiendEntity;
+import com.helpdeskeditor.application.app.data.repository.BienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

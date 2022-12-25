@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.datos.entity;
+package com.helpdeskeditor.application.app.data.entity;
 
 import lombok.Getter;
 import lombok.Setter;

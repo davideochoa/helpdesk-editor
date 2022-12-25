@@ -1,12 +1,13 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.datos.entity.AreaEntity;
-import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
-import com.helpdeskeditor.application.app.datos.entity.CatalogoEstatusEntity;
-import com.helpdeskeditor.application.app.datos.entity.EstatusEntity;
-import com.helpdeskeditor.application.app.datos.entity.IncidenciaEntity;
-import com.helpdeskeditor.application.app.datos.entity.PrioridadEntity;
-import com.helpdeskeditor.application.app.datos.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.data.entity.AreaEntity;
+import com.helpdeskeditor.application.app.data.entity.BiendEntity;
+import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
+import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
+import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
+import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
+import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.AreaService;
 import com.helpdeskeditor.application.app.service.BienService;
 import com.helpdeskeditor.application.app.service.CatalogoEstatusService;
@@ -15,6 +16,7 @@ import com.helpdeskeditor.application.app.service.FolioIncidenciaService;
 import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
+import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -41,35 +43,34 @@ import javax.annotation.security.RolesAllowed;
 @Slf4j
 public class FoliosView extends VerticalLayout {
 
-    VerticalLayout VL_Unidad = new VerticalLayout();
-        IntegerField IF_Folio = new IntegerField();
-        FormLayout FL_Unidad = new FormLayout();
-            ComboBox<UnidadEntity> CB_Unidad = new ComboBox<UnidadEntity>("Unidad");
-            ComboBox<AreaEntity> CB_Area = new ComboBox<AreaEntity>("Area");
-            ComboBox<String> CB_UsuarioReporta = new ComboBox<String>("Usuario Reporta");
-            TextField TF_Telefono = new TextField();
-            TextField TF_ReferenciaDocumental = new TextField();
+    private VerticalLayout VL_Unidad = new VerticalLayout();
+        private IntegerField IF_Folio = new IntegerField();
+        private FormLayout FL_Unidad = new FormLayout();
+            private ComboBox<UnidadEntity> CB_Unidad = new ComboBox<UnidadEntity>("Unidad");
+            private ComboBox<AreaEntity> CB_Area = new ComboBox<AreaEntity>("Area");
+            private ComboBox<String> CB_UsuarioReporta = new ComboBox<String>("Usuario Reporta");
+            private TextField TF_Telefono = new TextField();
+            private TextField TF_ReferenciaDocumental = new TextField();
 
-    FormLayout FL_Incidencia = new FormLayout();
-        ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
-        ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
-        ComboBox<String> CB_Marca = new ComboBox<String>("Marca");
-        ComboBox<String> CB_Modelo = new ComboBox<String>("Modelo");
-        TextField TF_NumeroSerie = new TextField("Numero Serie");
-        TextField TF_NumeroInventario = new TextField("Numero Inventario");
+    private FormLayout FL_Incidencia = new FormLayout();
+        private ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
+        private ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
+        private ComboBox<String> CB_Marca = new ComboBox<String>("Marca");
+        private ComboBox<String> CB_Modelo = new ComboBox<String>("Modelo");
+        private TextField TF_NumeroSerie = new TextField("Numero Serie");
+        private TextField TF_NumeroInventario = new TextField("Numero Inventario");
 
-    VerticalLayout VL_Motivo = new VerticalLayout();
-        FormLayout FL_Motivo = new FormLayout();
-            TextArea TA_MotivoReporte = new TextArea();
-        ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
+    private VerticalLayout VL_Motivo = new VerticalLayout();
+        private FormLayout FL_Motivo = new FormLayout();
+            private TextArea TA_MotivoReporte = new TextArea();
+        private ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
 
-    FormLayout FL_Estatus = new FormLayout();
-        ComboBox<CatalogoEstatusEntity> CB_Estaus = new ComboBox<CatalogoEstatusEntity>("Estatus");
-        TextArea TA_Anotacion = new TextArea("Anotacion");
-        ComboBox<String> CB_SoporteAsignado = new ComboBox<String>("Soporte Asignado");
-        ComboBox<String> CB_TipoIncidenciaFinal = new ComboBox<String>("Incidencia Final");
-
-        Grid<EstatusEntity> GridEstatus = new Grid<>(EstatusEntity.class, false);
+    private FormLayout FL_Estatus = new FormLayout();
+        private ComboBox<CatalogoEstatusEntity> CB_Estaus = new ComboBox<CatalogoEstatusEntity>("Estatus");
+        private TextArea TA_Anotacion = new TextArea("Anotacion");
+        private ComboBox<UsuarioSoporteEntity> CB_SoporteAsignado = new ComboBox<UsuarioSoporteEntity>("Soporte Asignado");
+        private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
+        private Grid<EstatusEntity> GridEstatus = new Grid<>(EstatusEntity.class, false);
 
     Tabs tabs;
         Tab tabUnidad;
@@ -82,10 +83,13 @@ public class FoliosView extends VerticalLayout {
     private AreaService areaService;
     private FolioIncidenciaService folioIncidenciaService;
     private IncidenciaService incidenciaService;
+
+    private IncidenciaService incidenciaServiceFinal;
     private BienService bienService;
     private PrioridadService prioridadService;
     private EstatusService estatusService;
     private CatalogoEstatusService catalogoEstatusService;
+    UsuarioSoporteService usuarioSoporteService;
 
     @Value("${charLimit}")
     private int charLimit;
@@ -97,7 +101,10 @@ public class FoliosView extends VerticalLayout {
                       BienService bienService,
                       PrioridadService prioridadService,
                       EstatusService estatusService,
-                      CatalogoEstatusService catalogoEstatusService) {
+                      CatalogoEstatusService catalogoEstatusService,
+                      UsuarioSoporteService usuarioSoporteService,
+                      IncidenciaService incidenciaServiceFinal) {
+
         this.unidadService = unidadService;
         this.areaService = areaService;
         this.folioIncidenciaService = folioIncidenciaService;
@@ -106,6 +113,9 @@ public class FoliosView extends VerticalLayout {
         this.prioridadService = prioridadService;
         this.estatusService = estatusService;
         this.catalogoEstatusService = catalogoEstatusService;
+        this.usuarioSoporteService = usuarioSoporteService;
+
+        this.incidenciaServiceFinal = incidenciaServiceFinal;
 
         layoutUnidad();
         layoutIncidencia();
@@ -225,6 +235,12 @@ public class FoliosView extends VerticalLayout {
 
         CB_Estaus.setItems(catalogoEstatusService.findAll());
         CB_Estaus.setItemLabelGenerator(CatalogoEstatusEntity::getNombre);
+
+        CB_SoporteAsignado.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
+        CB_SoporteAsignado.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
+
+        CB_TipoIncidenciaFinal.setItems(incidenciaServiceFinal.findAll());
+        CB_TipoIncidenciaFinal.setItemLabelGenerator(IncidenciaEntity::getNombre);
 
         TA_Anotacion.setLabel("Anotacion");
         TA_Anotacion.setMaxLength(charLimit);

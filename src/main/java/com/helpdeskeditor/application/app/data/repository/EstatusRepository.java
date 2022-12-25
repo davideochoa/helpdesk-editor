@@ -1,7 +1,6 @@
-package com.helpdeskeditor.application.app.datos.repository;
+package com.helpdeskeditor.application.app.data.repository;
 
-import com.helpdeskeditor.application.app.datos.entity.EstatusEntity;
-import com.helpdeskeditor.application.app.datos.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

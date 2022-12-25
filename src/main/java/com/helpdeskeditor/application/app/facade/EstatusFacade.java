@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.datos.entity.EstatusEntity;
-import com.helpdeskeditor.application.app.datos.repository.EstatusRepository;
+import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
+import com.helpdeskeditor.application.app.data.repository.EstatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

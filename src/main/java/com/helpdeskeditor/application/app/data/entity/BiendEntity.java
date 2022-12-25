@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.datos.entity;
+package com.helpdeskeditor.application.app.data.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,18 +7,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "catalogo_tipo_incidencias")
-public class IncidenciaEntity {
-    @javax.persistence.Id
+@Table(name = "catalogo_bien")
+public class BiendEntity {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    Integer id;
+    private Integer id;
 
     @Column(name = "Nombre")
-    String nombre;
+    private String nombre;
+
+    @Column(name = "IdTipoIncidencia")
+    private Integer idTipoIncidencia;
 }

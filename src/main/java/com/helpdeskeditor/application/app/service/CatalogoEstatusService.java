@@ -1,6 +1,6 @@
 package com.helpdeskeditor.application.app.service;
 
-import com.helpdeskeditor.application.app.datos.entity.CatalogoEstatusEntity;
+import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
 import com.helpdeskeditor.application.app.facade.CatalogoEstatusFacade;
 import org.springframework.stereotype.Service;
 

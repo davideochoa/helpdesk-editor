@@ -1,6 +1,5 @@
 package com.helpdeskeditor.application.app.service;
 
-import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
 import com.helpdeskeditor.application.app.facade.FolioIncidenciaFacade;
 import org.springframework.stereotype.Service;
 

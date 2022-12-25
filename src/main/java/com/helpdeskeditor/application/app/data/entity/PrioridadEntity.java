@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.datos.entity;
+package com.helpdeskeditor.application.app.data.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,18 +13,14 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "concentrado_folios_incidencias")
-public class FolioIncidenciaEntity {
+@Table(name = "catalogo_prioridad")
+public class PrioridadEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Folio")
+    @Column(name = "Id")
     private Integer id;
 
-    @Column(name = "UsuarioReporta")
-    private String usuarioReporta;
-
-    @Column(name = "Marca")
-    private String marca;
-    @Column(name = "Modelo")
-    private String modelo;
+    @Column(name = "Nombre")
+    private String nombre;
 }

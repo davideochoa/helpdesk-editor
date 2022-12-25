@@ -1,6 +1,6 @@
 package com.helpdeskeditor.application.app.service;
 
-import com.helpdeskeditor.application.app.datos.entity.BiendEntity;
+import com.helpdeskeditor.application.app.data.entity.BiendEntity;
 import com.helpdeskeditor.application.app.facade.BienFacade;
 import org.springframework.stereotype.Service;
 
