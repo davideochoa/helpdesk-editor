@@ -4,6 +4,7 @@ import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BiendEntity;
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
+import com.helpdeskeditor.application.app.data.entity.FolioIncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
@@ -17,10 +18,14 @@ import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -35,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.Optional;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -72,27 +78,28 @@ public class FoliosView extends VerticalLayout {
         private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
         private Grid<EstatusEntity> GridEstatus = new Grid<>(EstatusEntity.class, false);
 
-    Tabs tabs;
-        Tab tabUnidad;
-        Tab tabIncidencia;
-        Tab tabMotivo;
-        Tab tabEstatus;
-        VerticalLayout contenidoTab;
+    private Tabs tabs;
+        private Tab tabUnidad;
+        private Tab tabIncidencia;
+        private Tab tabMotivo;
+        private Tab tabEstatus;
+        private VerticalLayout contenidoTab;
 
     private UnidadService unidadService;
     private AreaService areaService;
     private FolioIncidenciaService folioIncidenciaService;
     private IncidenciaService incidenciaService;
-
     private IncidenciaService incidenciaServiceFinal;
     private BienService bienService;
     private PrioridadService prioridadService;
     private EstatusService estatusService;
     private CatalogoEstatusService catalogoEstatusService;
-    UsuarioSoporteService usuarioSoporteService;
+    private UsuarioSoporteService usuarioSoporteService;
 
     @Value("${charLimit}")
     private int charLimit;
+
+    UnidadEntity unidadEntity = new UnidadEntity();
 
     public FoliosView(UnidadService unidadService,
                       AreaService areaService,
@@ -114,7 +121,6 @@ public class FoliosView extends VerticalLayout {
         this.estatusService = estatusService;
         this.catalogoEstatusService = catalogoEstatusService;
         this.usuarioSoporteService = usuarioSoporteService;
-
         this.incidenciaServiceFinal = incidenciaServiceFinal;
 
         layoutUnidad();
@@ -134,7 +140,27 @@ public class FoliosView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        IF_Folio.setLabel("Numero Folio");
+        HorizontalLayout HL_Folio_BotnoCargar = new HorizontalLayout();
+
+        IF_Folio.setLabel("Folio");
+        IF_Folio.setHelperText("Numero de folio a cargar");
+
+        Button B_cargar = new Button ("Cargar");
+        B_cargar.addClickListener(e -> {
+            cargarFolio(IF_Folio.getValue());
+        });
+        B_cargar.addClickShortcut(Key.ENTER);
+
+        Button B_borrar = new Button ("Borrar");
+        B_borrar.addClickListener(e -> {
+            Notification.show("B_borrar ");
+        });
+        B_borrar.addClickShortcut(Key.ENTER);
+
+        HL_Folio_BotnoCargar.setMargin(false);
+        HL_Folio_BotnoCargar.setPadding(false);
+        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,B_borrar);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,B_borrar);
 
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
@@ -147,12 +173,10 @@ public class FoliosView extends VerticalLayout {
             CB_Area.setItems(areaService.findByidUnidad(seleccion.getId()));
         });
 
-        //CB_Area.setItems(areaService.getAllAreas());
         CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
 
         CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);
         CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
-        //CB_UsuarioReporta.setItemLabelGenerator(ConcentradoFolioIncidencia::getUsuarioReporta);
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
@@ -164,7 +188,56 @@ public class FoliosView extends VerticalLayout {
         FL_Unidad.add(TF_Telefono);
         FL_Unidad.add(TF_ReferenciaDocumental);
 
-        VL_Unidad.add(IF_Folio,FL_Unidad);
+        VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad);
+    }
+
+    private boolean cargarFolio(Integer folio){
+        FolioIncidenciaEntity incidencia = folioIncidenciaService.findById(folio).get();
+
+        if(incidencia.getId() > 0){
+            UnidadEntity unidadEntity = unidadService.findById(incidencia.getIdUnidad()).get();
+            AreaEntity areaEntity = areaService.findByIdAndIdUnidad(incidencia.getIdArea(),unidadEntity.getId());
+
+
+            CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
+            CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
+
+
+
+            CB_Unidad.setValue(unidadEntity);
+            CB_Area.setValue(areaEntity);
+            CB_UsuarioReporta.setValue(incidencia.getUsuarioReporta());
+
+            String telefono="";
+
+            log.info("incidencia.getTelefonoContacto():"+incidencia.getTelefonoContacto());
+
+            if(incidencia.getTelefonoContacto() == null ||
+                    incidencia.getTelefonoContacto().length() == 0 ||
+                    incidencia.getTelefonoContacto().equals("null") ||
+                    incidencia.getTelefonoContacto().equals("NULL") ||
+                    incidencia.getTelefonoContacto().equals("Null"))
+                telefono = "NO ESPECIFICADO";
+            else
+                telefono = incidencia.getTelefonoContacto();
+
+            TF_Telefono.setValue(telefono);
+
+
+            //CB_Unidad.s
+
+/*
+            log.info(incidencia.getId()+"");
+            log.info(incidencia.getMarca()+"");
+            log.info(incidencia.getModelo()+"");
+            log.info(incidencia.getUsuarioReporta()+"");*/
+
+        }
+
+
+
+
+        return true;
     }
 
     private void layoutIncidencia(){

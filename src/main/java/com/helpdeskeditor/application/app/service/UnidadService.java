@@ -5,6 +5,7 @@ import com.helpdeskeditor.application.app.facade.UnidadFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UnidadService {
@@ -15,5 +16,9 @@ public class UnidadService {
 
     public List<UnidadEntity> findAll(){
         return unidadFacade.findAll();
+    }
+
+    public Optional<UnidadEntity> findById(Integer Id){
+        return unidadFacade.findById(Id);
     }
 }

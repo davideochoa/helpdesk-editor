@@ -20,4 +20,8 @@ public class AreaService {
     public List<AreaEntity> findByidUnidad(int idUnidad){
         return areaFacade.findByidUnidad(idUnidad);
     }
+
+    public AreaEntity findByIdAndIdUnidad(Integer IdUnidad,Integer IdArea){
+        return areaFacade.findByIdAndIdUnidad(IdUnidad,IdArea);
+    }
 }

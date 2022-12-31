@@ -10,4 +10,6 @@ import java.util.List;
 public interface AreaRepository extends JpaRepository<AreaEntity, Integer> {
 
     List<AreaEntity> findByidUnidad(int idUnidad);
+
+    AreaEntity findByIdAndIdUnidad(Integer IdArea,Integer IdUnidad);
 }

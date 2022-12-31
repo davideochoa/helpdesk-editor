@@ -3,10 +3,12 @@ package com.helpdeskeditor.application.app.data.repository;
 import com.helpdeskeditor.application.app.data.entity.FolioIncidenciaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface FolioIncidenciaRepository extends JpaRepository<FolioIncidenciaEntity, Integer> {
+public interface FolioIncidenciaRepository extends CrudRepository<FolioIncidenciaEntity, Integer> {
 
     @Query("SELECT CFI.usuarioReporta "+
             "FROM FolioIncidenciaEntity CFI "+
