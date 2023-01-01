@@ -20,6 +20,7 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -181,6 +182,11 @@ public class FoliosView extends VerticalLayout {
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
 
+        Button Btt_Salvar = new Button("GUARDAR");
+        Btt_Salvar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+
+
         //FL_Unidad.add(IF_Folio);
         FL_Unidad.add(CB_Unidad);
         FL_Unidad.add(CB_Area);
@@ -188,7 +194,7 @@ public class FoliosView extends VerticalLayout {
         FL_Unidad.add(TF_Telefono);
         FL_Unidad.add(TF_ReferenciaDocumental);
 
-        VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad);
+        VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_Salvar);
     }
 
     private boolean cargarFolio(Integer folio){
@@ -202,29 +208,34 @@ public class FoliosView extends VerticalLayout {
             CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
             CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
 
-
-
             CB_Unidad.setValue(unidadEntity);
             CB_Area.setValue(areaEntity);
             CB_UsuarioReporta.setValue(incidencia.getUsuarioReporta());
 
-            String telefono="";
-
-            log.info("incidencia.getTelefonoContacto():"+incidencia.getTelefonoContacto());
+            String cadena="";
 
             if(incidencia.getTelefonoContacto() == null ||
                     incidencia.getTelefonoContacto().length() == 0 ||
                     incidencia.getTelefonoContacto().equals("null") ||
                     incidencia.getTelefonoContacto().equals("NULL") ||
                     incidencia.getTelefonoContacto().equals("Null"))
-                telefono = "NO ESPECIFICADO";
+                cadena = "NO ESPECIFICADO";
             else
-                telefono = incidencia.getTelefonoContacto();
+                cadena = incidencia.getTelefonoContacto();
 
-            TF_Telefono.setValue(telefono);
+            TF_Telefono.setValue(cadena);
 
+            if(incidencia.getReferenciaDocumental() == null ||
+                    incidencia.getReferenciaDocumental().length() == 0 ||
+                    incidencia.getReferenciaDocumental().equals("null") ||
+                    incidencia.getReferenciaDocumental().equals("NULL") ||
+                    incidencia.getReferenciaDocumental().equals("Null"))
+                cadena = "NO ESPECIFICADO";
+            else
+                cadena = incidencia.getReferenciaDocumental();
 
-            //CB_Unidad.s
+            TF_ReferenciaDocumental.setValue(cadena);
+
 
 /*
             log.info(incidencia.getId()+"");
