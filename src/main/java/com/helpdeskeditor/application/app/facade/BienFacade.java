@@ -22,7 +22,12 @@ public class BienFacade {
         return bienRepository.findAll();
     }
 
-    public List<BiendEntity> findByidTipoIncidencia(int idTipoIncidencia){
-        return bienRepository.findByidTipoIncidencia(idTipoIncidencia);
+    public List<BiendEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
+        return bienRepository.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
+
+    public BiendEntity findByIdTipoIncidenciaAndId(Integer IdTipoIncidencia, Integer Id){
+        return bienRepository.findByIdTipoIncidenciaAndId(IdTipoIncidencia,Id);
+    }
+
 }

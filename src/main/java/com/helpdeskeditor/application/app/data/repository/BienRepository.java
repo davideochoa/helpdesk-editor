@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface BienRepository extends JpaRepository<BiendEntity, Integer> {
-    List<BiendEntity> findByidTipoIncidencia(int idTipoIncidencia);
+
+    List<BiendEntity> findByIdTipoIncidenciaOrderByNombreAsc(Integer IdTipoIncidencia);
+
+    public BiendEntity findByIdTipoIncidenciaAndId(Integer IdTipoIncidencia, Integer Id);
 }

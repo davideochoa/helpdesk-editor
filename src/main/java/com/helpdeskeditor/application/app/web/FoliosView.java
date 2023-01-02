@@ -156,7 +156,6 @@ public class FoliosView extends VerticalLayout {
         B_borrar.addClickListener(e -> {
             Notification.show("B_borrar ");
         });
-        B_borrar.addClickShortcut(Key.ENTER);
 
         HL_Folio_BotnoCargar.setMargin(false);
         HL_Folio_BotnoCargar.setPadding(false);
@@ -185,9 +184,6 @@ public class FoliosView extends VerticalLayout {
         Button Btt_Salvar = new Button("GUARDAR");
         Btt_Salvar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-
-
-        //FL_Unidad.add(IF_Folio);
         FL_Unidad.add(CB_Unidad);
         FL_Unidad.add(CB_Area);
         FL_Unidad.add(CB_UsuarioReporta);
@@ -203,50 +199,40 @@ public class FoliosView extends VerticalLayout {
         if(incidencia.getId() > 0){
             UnidadEntity unidadEntity = unidadService.findById(incidencia.getIdUnidad()).get();
             AreaEntity areaEntity = areaService.findByIdAndIdUnidad(incidencia.getIdArea(),unidadEntity.getId());
+            BiendEntity biendEntity = bienService.findByIdTipoIncidenciaAndId(incidencia.getIdTipoIncidencia(),incidencia.getIdBien());
 
 
             CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
             CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
+            CB_Incidencia.setItems(incidenciaService.findAll());
+            CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(incidencia.getIdTipoIncidencia()));
 
             CB_Unidad.setValue(unidadEntity);
             CB_Area.setValue(areaEntity);
             CB_UsuarioReporta.setValue(incidencia.getUsuarioReporta());
 
-            String cadena="";
 
-            if(incidencia.getTelefonoContacto() == null ||
-                    incidencia.getTelefonoContacto().length() == 0 ||
-                    incidencia.getTelefonoContacto().equals("null") ||
-                    incidencia.getTelefonoContacto().equals("NULL") ||
-                    incidencia.getTelefonoContacto().equals("Null"))
+            String cadena = incidencia.getTelefonoContacto();
+            if(cadena == null || cadena.length() == 0 || cadena.equals("null") || cadena.equals("NULL") || cadena.equals("Null"))
                 cadena = "NO ESPECIFICADO";
             else
                 cadena = incidencia.getTelefonoContacto();
 
             TF_Telefono.setValue(cadena);
 
-            if(incidencia.getReferenciaDocumental() == null ||
-                    incidencia.getReferenciaDocumental().length() == 0 ||
-                    incidencia.getReferenciaDocumental().equals("null") ||
-                    incidencia.getReferenciaDocumental().equals("NULL") ||
-                    incidencia.getReferenciaDocumental().equals("Null"))
+            cadena = incidencia.getReferenciaDocumental();
+            if(cadena == null || cadena.length() == 0 || cadena.equals("null") || cadena.equals("NULL") || cadena.equals("Null"))
                 cadena = "NO ESPECIFICADO";
             else
                 cadena = incidencia.getReferenciaDocumental();
 
             TF_ReferenciaDocumental.setValue(cadena);
 
+            CB_Incidencia.setValue(incidenciaService.findById(incidencia.getIdTipoIncidencia()).get());
 
-/*
-            log.info(incidencia.getId()+"");
-            log.info(incidencia.getMarca()+"");
-            log.info(incidencia.getModelo()+"");
-            log.info(incidencia.getUsuarioReporta()+"");*/
+            //CB_Bien.setValue();
 
         }
-
-
-
 
         return true;
     }
@@ -262,7 +248,7 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             IncidenciaEntity seleccion = e.getValue();
-            CB_Bien.setItems(bienService.findByidTipoIncidencia(seleccion.getId()));
+            CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(seleccion.getId()));
         });
 
         //CB_Bien.setItems(bienService.getAllBienes());

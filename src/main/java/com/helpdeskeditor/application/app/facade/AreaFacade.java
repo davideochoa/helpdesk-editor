@@ -3,6 +3,7 @@ package com.helpdeskeditor.application.app.facade;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.repository.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +24,11 @@ public class AreaFacade {
     }
 
     public List<AreaEntity> findByidUnidad(int idUnidad){
-        return areasRepository.findByidUnidad(idUnidad);
+        return areasRepository.findByIdUnidadOrderByNombre(idUnidad);
     }
 
-    public AreaEntity findByIdAndIdUnidad(int IdUnidad, int IdArea){
-        return areasRepository.findByIdAndIdUnidad(IdUnidad,IdArea);
+    public AreaEntity findByIdAndIdUnidad(int IdUnidad, int Id){
+        return areasRepository.findByIdAndIdUnidad(IdUnidad,Id);
     }
 
 }

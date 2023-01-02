@@ -18,7 +18,12 @@ public class BienService {
         return bienFacade.findAll();
     }
 
-    public List<BiendEntity> findByidTipoIncidencia(int idTipoIncidencia){
-        return bienFacade.findByidTipoIncidencia(idTipoIncidencia);
+    public List<BiendEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
+        return bienFacade.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
+
+    public BiendEntity findByIdTipoIncidenciaAndId(Integer IdTipoIncidencia, Integer Id){
+        return bienFacade.findByIdTipoIncidenciaAndId(IdTipoIncidencia,Id);
+    }
+
 }

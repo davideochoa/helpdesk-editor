@@ -4,6 +4,7 @@ import com.helpdeskeditor.application.app.data.entity.FolioIncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.repository.UnidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,7 @@ public class UnidadFacade {
     }
 
     public List<UnidadEntity> findAll(){
-        return unidadRepository.findAll();
+        return unidadRepository.findAll(Sort.by(Sort.Direction.ASC,"Nombre"));
     }
 
     public Optional<UnidadEntity> findById(Integer Id){
