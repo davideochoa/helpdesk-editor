@@ -201,7 +201,6 @@ public class FoliosView extends VerticalLayout {
             AreaEntity areaEntity = areaService.findByIdAndIdUnidad(incidencia.getIdArea(),unidadEntity.getId());
             BiendEntity biendEntity = bienService.findByIdTipoIncidenciaAndId(incidencia.getIdTipoIncidencia(),incidencia.getIdBien());
 
-
             CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
             CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
             CB_Incidencia.setItems(incidenciaService.findAll());
@@ -210,7 +209,6 @@ public class FoliosView extends VerticalLayout {
             CB_Unidad.setValue(unidadEntity);
             CB_Area.setValue(areaEntity);
             CB_UsuarioReporta.setValue(incidencia.getUsuarioReporta());
-
 
             String cadena = incidencia.getTelefonoContacto();
             if(cadena == null || cadena.length() == 0 || cadena.equals("null") || cadena.equals("NULL") || cadena.equals("Null"))
