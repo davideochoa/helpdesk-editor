@@ -22,8 +22,8 @@ public class BienService {
         return bienFacade.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
 
-    public BiendEntity findByIdTipoIncidenciaAndId(Integer IdTipoIncidencia, Integer Id){
-        return bienFacade.findByIdTipoIncidenciaAndId(IdTipoIncidencia,Id);
+    public BiendEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
+        return bienFacade.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
     }
 
 }

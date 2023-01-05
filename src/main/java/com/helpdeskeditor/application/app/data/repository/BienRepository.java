@@ -11,5 +11,5 @@ public interface BienRepository extends JpaRepository<BiendEntity, Integer> {
 
     List<BiendEntity> findByIdTipoIncidenciaOrderByNombreAsc(Integer IdTipoIncidencia);
 
-    public BiendEntity findByIdTipoIncidenciaAndId(Integer IdTipoIncidencia, Integer Id);
+    public BiendEntity findByIdAndIdTipoIncidencia(Integer Id, Integer IdTipoIncidencia);
 }

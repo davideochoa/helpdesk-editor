@@ -26,8 +26,8 @@ public class BienFacade {
         return bienRepository.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
 
-    public BiendEntity findByIdTipoIncidenciaAndId(Integer IdTipoIncidencia, Integer Id){
-        return bienRepository.findByIdTipoIncidenciaAndId(IdTipoIncidencia,Id);
+    public BiendEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
+        return bienRepository.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
     }
 
 }

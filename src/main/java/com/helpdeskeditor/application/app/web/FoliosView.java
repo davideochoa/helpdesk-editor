@@ -199,7 +199,12 @@ public class FoliosView extends VerticalLayout {
         if(incidencia.getId() > 0){
             UnidadEntity unidadEntity = unidadService.findById(incidencia.getIdUnidad()).get();
             AreaEntity areaEntity = areaService.findByIdAndIdUnidad(incidencia.getIdArea(),unidadEntity.getId());
-            BiendEntity biendEntity = bienService.findByIdTipoIncidenciaAndId(incidencia.getIdTipoIncidencia(),incidencia.getIdBien());
+            IncidenciaEntity incidenciaEntity = incidenciaService.findById(incidencia.getIdTipoIncidencia()).get();
+            BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(incidencia.getIdBien(),incidencia.getIdTipoIncidencia());
+            String marca = incidencia.getMarca();
+            String modelo = incidencia.getModelo();
+            String numSerie = incidencia.getModelo();
+            String numInventario = incidencia.getModelo();
 
             CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
             CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
@@ -226,9 +231,17 @@ public class FoliosView extends VerticalLayout {
 
             TF_ReferenciaDocumental.setValue(cadena);
 
-            CB_Incidencia.setValue(incidenciaService.findById(incidencia.getIdTipoIncidencia()).get());
+            CB_Incidencia.setValue(incidenciaEntity);
 
-            //CB_Bien.setValue();
+            CB_Bien.setValue(biendEntity);
+
+            CB_Marca.setValue(marca);
+
+            CB_Modelo.setValue(modelo);
+
+            TF_NumeroSerie.setValue(numSerie);
+
+            TF_NumeroInventario.setValue(numInventario);
 
         }
 
