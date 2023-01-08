@@ -21,4 +21,7 @@ public class EstatusFacade {
     public List<EstatusEntity> findAll(){
         return estatusRepository.findAll();
     }
+    public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio){
+        return estatusRepository.findByFolioOrderByFecha(Folio);
+    }
 }

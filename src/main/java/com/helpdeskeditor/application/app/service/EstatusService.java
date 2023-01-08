@@ -16,4 +16,8 @@ public class EstatusService {
     public List<EstatusEntity> findAll(){
         return estatusFacade.findAll();
     }
+
+    public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio){
+        return estatusFacade.findByFolioOrderByFecha(Folio);
+    }
 }

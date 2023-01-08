@@ -5,6 +5,7 @@ import com.helpdeskeditor.application.app.facade.PrioridadFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PrioridadService {
@@ -15,5 +16,9 @@ public class PrioridadService {
 
     public List<PrioridadEntity> findAll(){
         return prioridadFacade.findAll();
+    }
+
+    public Optional<PrioridadEntity> findById(Integer Id){
+        return prioridadFacade.findById(Id);
     }
 }

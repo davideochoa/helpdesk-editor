@@ -41,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 import java.util.Optional;
 
 @PageTitle("Folios")
@@ -134,7 +135,62 @@ public class FoliosView extends VerticalLayout {
         this.add(tabs, contenidoTab);
     }
 
+    private boolean cargarFolio(Integer folio){
+        FolioIncidenciaEntity incidencia = folioIncidenciaService.findById(folio).get();
+
+        if(incidencia.getId() > 0){
+            UnidadEntity unidadEntity = unidadService.findById(incidencia.getIdUnidad()).get();
+            AreaEntity areaEntity = areaService.findByIdAndIdUnidad(incidencia.getIdArea(),unidadEntity.getId());
+            IncidenciaEntity incidenciaEntity = incidenciaService.findById(incidencia.getIdTipoIncidencia()).get();
+            BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(incidencia.getIdBien(),incidencia.getIdTipoIncidencia());
+            String marca = incidencia.getMarca();
+            String modelo = incidencia.getModelo();
+            String numSerie = incidencia.getModelo();
+            String numInventario = incidencia.getModelo();
+
+            String motivoReporte = incidencia.getMotivoReporte();
+            PrioridadEntity prioridad = prioridadService.findById(incidencia.getIdPrioridad()).get();
+
+            List<EstatusEntity> estatusEntityList = estatusService.findByFolioOrderByFecha(incidencia.getId());
+
+            String telefonoContacto = incidencia.getTelefonoContacto();
+            if(telefonoContacto == null || telefonoContacto.length() == 0 || telefonoContacto.equals("null") || telefonoContacto.equals("NULL") || telefonoContacto.equals("Null"))
+                telefonoContacto = "NO ESPECIFICADO";
+            else
+                telefonoContacto = incidencia.getTelefonoContacto();
+
+            String referenciaDocumental = incidencia.getReferenciaDocumental();
+            if(referenciaDocumental == null || referenciaDocumental.length() == 0 || referenciaDocumental.equals("null") || referenciaDocumental.equals("NULL") || telefonoContacto.equals("Null"))
+                referenciaDocumental = "NO ESPECIFICADO";
+            else
+                referenciaDocumental = incidencia.getReferenciaDocumental();
+
+            CB_Unidad.setValue(unidadEntity);
+            CB_Area.setValue(areaEntity);
+            CB_UsuarioReporta.setValue(incidencia.getUsuarioReporta());
+            TF_Telefono.setValue(telefonoContacto);
+            TF_ReferenciaDocumental.setValue(referenciaDocumental);
+
+            CB_Incidencia.setValue(incidenciaEntity);
+            CB_Bien.setValue(biendEntity);
+            CB_Marca.setValue(marca);
+            CB_Modelo.setValue(modelo);
+            TF_NumeroSerie.setValue(numSerie);
+            TF_NumeroInventario.setValue(numInventario);
+
+            TA_MotivoReporte.setValue(motivoReporte);
+            CB_Prioridad.setValue(prioridad);
+
+            GridEstatus.setItems(estatusEntityList);
+        }
+
+        return true;
+    }
+
     private void layoutUnidad(){
+        VL_Unidad.setMargin(false);
+        VL_Unidad.setPadding(false);
+
         FL_Unidad.setResponsiveSteps(
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
@@ -142,6 +198,8 @@ public class FoliosView extends VerticalLayout {
                 new FormLayout.ResponsiveStep("500px", 2));
 
         HorizontalLayout HL_Folio_BotnoCargar = new HorizontalLayout();
+        HL_Folio_BotnoCargar.setMargin(false);
+        HL_Folio_BotnoCargar.setPadding(false);
 
         IF_Folio.setLabel("Folio");
         IF_Folio.setHelperText("Numero de folio a cargar");
@@ -157,8 +215,6 @@ public class FoliosView extends VerticalLayout {
             Notification.show("B_borrar ");
         });
 
-        HL_Folio_BotnoCargar.setMargin(false);
-        HL_Folio_BotnoCargar.setPadding(false);
         HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,B_borrar);
         HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,B_borrar);
 
@@ -191,61 +247,6 @@ public class FoliosView extends VerticalLayout {
         FL_Unidad.add(TF_ReferenciaDocumental);
 
         VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_Salvar);
-    }
-
-    private boolean cargarFolio(Integer folio){
-        FolioIncidenciaEntity incidencia = folioIncidenciaService.findById(folio).get();
-
-        if(incidencia.getId() > 0){
-            UnidadEntity unidadEntity = unidadService.findById(incidencia.getIdUnidad()).get();
-            AreaEntity areaEntity = areaService.findByIdAndIdUnidad(incidencia.getIdArea(),unidadEntity.getId());
-            IncidenciaEntity incidenciaEntity = incidenciaService.findById(incidencia.getIdTipoIncidencia()).get();
-            BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(incidencia.getIdBien(),incidencia.getIdTipoIncidencia());
-            String marca = incidencia.getMarca();
-            String modelo = incidencia.getModelo();
-            String numSerie = incidencia.getModelo();
-            String numInventario = incidencia.getModelo();
-
-            CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
-            CB_UsuarioReporta.setItems(folioIncidenciaService.getAllUsuarioReporta());
-            CB_Incidencia.setItems(incidenciaService.findAll());
-            CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(incidencia.getIdTipoIncidencia()));
-
-            CB_Unidad.setValue(unidadEntity);
-            CB_Area.setValue(areaEntity);
-            CB_UsuarioReporta.setValue(incidencia.getUsuarioReporta());
-
-            String cadena = incidencia.getTelefonoContacto();
-            if(cadena == null || cadena.length() == 0 || cadena.equals("null") || cadena.equals("NULL") || cadena.equals("Null"))
-                cadena = "NO ESPECIFICADO";
-            else
-                cadena = incidencia.getTelefonoContacto();
-
-            TF_Telefono.setValue(cadena);
-
-            cadena = incidencia.getReferenciaDocumental();
-            if(cadena == null || cadena.length() == 0 || cadena.equals("null") || cadena.equals("NULL") || cadena.equals("Null"))
-                cadena = "NO ESPECIFICADO";
-            else
-                cadena = incidencia.getReferenciaDocumental();
-
-            TF_ReferenciaDocumental.setValue(cadena);
-
-            CB_Incidencia.setValue(incidenciaEntity);
-
-            CB_Bien.setValue(biendEntity);
-
-            CB_Marca.setValue(marca);
-
-            CB_Modelo.setValue(modelo);
-
-            TF_NumeroSerie.setValue(numSerie);
-
-            TF_NumeroInventario.setValue(numInventario);
-
-        }
-
-        return true;
     }
 
     private void layoutIncidencia(){
@@ -282,6 +283,8 @@ public class FoliosView extends VerticalLayout {
     }
 
     private void layoutMotivo(){
+        VL_Motivo.setMargin(false);
+        VL_Motivo.setPadding(false);
 
         FL_Motivo.setResponsiveSteps(
                 // Use one column by default
