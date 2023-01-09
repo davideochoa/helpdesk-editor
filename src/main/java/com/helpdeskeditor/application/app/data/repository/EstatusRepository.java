@@ -12,19 +12,19 @@ import java.util.List;
 public interface EstatusRepository extends JpaRepository<EstatusEntity, Integer> {
     public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio);
 
-    @Query("select " +
-            "e.Id, " +
-            "e.Folio, " +
-            "e.IdEstatus, " +
-            "ce.Nombre," +
-            "e.Anotacion, " +
-            "e.IdUsuario, " +
-            "cs.NombrePropio," +
-            "e.Fecha " +
-            "from estatus e,catalogo_estatus ce, catalogo_usuarios_soporte cs " +
-            "where e.Folio = :folio " +
-            "AND ce.Id = e.IdEstatus " +
-            "AND cs.Id = e.IdUsuario " +
-            "ORDER BY e.Fecha")
+    @Query("SELECT " +
+            "e.id, " +
+            "e.folio, " +
+            "e.idEstatus, " +
+            "ce.nombre," +
+            "e.anotacion, " +
+            "e.idUsuario, " +
+            "cs.nombrePropio," +
+            "e.fecha " +
+            "FROM EstatusEntity e,CatalogoEstatusEntity ce, UsuarioSoporteEntity cs " +
+            "WHERE e.folio = :folio " +
+            "AND ce.id = e.idEstatus " +
+            "AND cs.id = e.idUsuario " +
+            "ORDER BY e.fecha")
     public List<EstatusDAO> findAllDAO(Integer folio);
 }
