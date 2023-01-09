@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BiendEntity;
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
@@ -78,7 +79,7 @@ public class FoliosView extends VerticalLayout {
         private TextArea TA_Anotacion = new TextArea("Anotacion");
         private ComboBox<UsuarioSoporteEntity> CB_SoporteAsignado = new ComboBox<UsuarioSoporteEntity>("Soporte Asignado");
         private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
-        private Grid<EstatusEntity> GridEstatus = new Grid<>(EstatusEntity.class, false);
+        private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
 
     private Tabs tabs;
         private Tab tabUnidad;
@@ -151,7 +152,7 @@ public class FoliosView extends VerticalLayout {
             String motivoReporte = incidencia.getMotivoReporte();
             PrioridadEntity prioridad = prioridadService.findById(incidencia.getIdPrioridad()).get();
 
-            List<EstatusEntity> estatusEntityList = estatusService.findByFolioOrderByFecha(incidencia.getId());
+            List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(incidencia.getId());
 
             String telefonoContacto = incidencia.getTelefonoContacto();
             if(telefonoContacto == null || telefonoContacto.length() == 0 || telefonoContacto.equals("null") || telefonoContacto.equals("NULL") || telefonoContacto.equals("Null"))
@@ -334,12 +335,14 @@ public class FoliosView extends VerticalLayout {
                     .setHelperText(e.getValue().length() + "/" + charLimit);
         });
 
-        GridEstatus.addColumn(EstatusEntity::getId).setHeader("Id");
-        GridEstatus.addColumn(EstatusEntity::getFolio).setHeader("Folio");
-        GridEstatus.addColumn(EstatusEntity::getIdEstatus).setHeader("IdEstatus");
-        GridEstatus.addColumn(EstatusEntity::getAnotacion).setHeader("Anotacion");
-        GridEstatus.addColumn(EstatusEntity::getIdUsuario).setHeader("IdUsuario");
-        GridEstatus.addColumn(EstatusEntity::getFecha).setHeader("Fecha");
+        GridEstatus.addColumn(EstatusDAO::getId).setHeader("Id");
+        GridEstatus.addColumn(EstatusDAO::getFolio).setHeader("Folio");
+        GridEstatus.addColumn(EstatusDAO::getIdEstatus).setHeader("IdEstatus");
+        GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");
+        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion");
+        GridEstatus.addColumn(EstatusDAO::getIdUsuario).setHeader("IdUsuario");
+        GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario");
+        GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha");
         GridEstatus.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,GridEstatus);

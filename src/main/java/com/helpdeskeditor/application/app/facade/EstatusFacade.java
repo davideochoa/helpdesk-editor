@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.facade;
 
+import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.repository.EstatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class EstatusFacade {
     public List<EstatusEntity> findAll(){
         return estatusRepository.findAll();
     }
+
+    public List<EstatusDAO> findAllDAO(Integer folio){
+        return estatusRepository.findAllDAO(folio);
+    }
+
     public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio){
         return estatusRepository.findByFolioOrderByFecha(Folio);
     }

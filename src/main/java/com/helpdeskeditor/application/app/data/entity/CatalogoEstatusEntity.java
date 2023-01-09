@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Getter
@@ -20,7 +21,10 @@ public class CatalogoEstatusEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Integer id;
-
+/*
+    @OneToOne(mappedBy="catalogoEstatusEntity")
+    private EstatusEntity estatusEntity;
+*/
     @Column(name = "Nombre")
     private String nombre;
 

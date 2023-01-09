@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.service;
 
+import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.facade.EstatusFacade;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ public class EstatusService {
 
     public List<EstatusEntity> findAll(){
         return estatusFacade.findAll();
+    }
+
+    public List<EstatusDAO> findAllDAO(Integer folio){
+        return estatusFacade.findAllDAO(folio);
     }
 
     public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio){
