@@ -1,7 +1,10 @@
 package com.helpdeskeditor.application.app.data.DAO;
 
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -10,34 +13,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class EstatusDAO{
-
     Integer id;
 
     Integer folio;
 
     Integer idEstatus;
 
-    String nombre;
+    //String nombre;
 
     String anotacion;
 
     Integer idUsuario;
 
-    String nombrePropio;
+    //String nombrePropio;
 
     Date fecha;
 
-    public EstatusDAO(Integer id, Integer folio, Integer idEstatus, String nombre, String anotacion, Integer idUsuario, String nombrePropio, Date fecha) {
-        this.id = id;
-        this.folio = folio;
-        this.idEstatus = idEstatus;
-        this.nombre = nombre;
-        this.anotacion = anotacion;
-        this.idUsuario = idUsuario;
-        this.nombrePropio = nombrePropio;
-        this.fecha = fecha;
-    }
 }

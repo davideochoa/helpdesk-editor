@@ -338,10 +338,10 @@ public class FoliosView extends VerticalLayout {
         GridEstatus.addColumn(EstatusDAO::getId).setHeader("Id");
         GridEstatus.addColumn(EstatusDAO::getFolio).setHeader("Folio");
         GridEstatus.addColumn(EstatusDAO::getIdEstatus).setHeader("IdEstatus");
-        GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");
+        //GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");
         GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion");
         GridEstatus.addColumn(EstatusDAO::getIdUsuario).setHeader("IdUsuario");
-        GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario");
+        //GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario");
         GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha");
         GridEstatus.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
