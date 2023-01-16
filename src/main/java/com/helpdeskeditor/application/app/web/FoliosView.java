@@ -335,17 +335,24 @@ public class FoliosView extends VerticalLayout {
                     .setHelperText(e.getValue().length() + "/" + charLimit);
         });
 
-        GridEstatus.addColumn(EstatusDAO::getId).setHeader("Id");
-        GridEstatus.addColumn(EstatusDAO::getFolio).setHeader("Folio");
-        GridEstatus.addColumn(EstatusDAO::getIdEstatus).setHeader("IdEstatus");
-        //GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");
-        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion");
-        GridEstatus.addColumn(EstatusDAO::getIdUsuario).setHeader("IdUsuario");
-        //GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario");
-        GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha");
+        //GridEstatus.addColumn(EstatusDAO::getId).setHeader("Id");
+        //GridEstatus.addColumn(EstatusDAO::getFolio).setHeader("Folio");
+        //GridEstatus.addColumn(EstatusDAO::getIdEstatus).setHeader("IdEstatus");
+        GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");//.setAutoWidth(true);
+        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion");//.setAutoWidth(true);
+        //GridEstatus.addColumn(EstatusDAO::getIdUsuario).setHeader("IdUsuario");
+        GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setWidth("15em");
+        GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setWidth("15em");
+
         GridEstatus.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+        GridEstatus.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
+        GridEstatus.setAllRowsVisible(true);
+
+        FL_Estatus.setColspan(GridEstatus, 2);
 
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,GridEstatus);
+
+
     }
 
     private void layoutTabs(){

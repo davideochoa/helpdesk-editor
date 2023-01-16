@@ -1,6 +1,5 @@
 package com.helpdeskeditor.application.app.data.DAO;
 
-import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -25,13 +24,13 @@ public class EstatusDAO{
 
     Integer idEstatus;
 
-    //String nombre;
+    String nombre;
 
     String anotacion;
 
     Integer idUsuario;
 
-    //String nombrePropio;
+    String nombrePropio;
 
     Date fecha;
 
