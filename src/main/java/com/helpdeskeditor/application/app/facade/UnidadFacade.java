@@ -1,6 +1,5 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.data.entity.FolioIncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.repository.UnidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;

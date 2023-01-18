@@ -27,4 +27,5 @@ public class IncidenciaFacade {
     public Optional<IncidenciaEntity> findById(Integer Id){
         return incidenciaRepository.findById(Id);
     }
+
 }

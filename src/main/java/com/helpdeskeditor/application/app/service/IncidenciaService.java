@@ -21,4 +21,5 @@ public class IncidenciaService {
     public Optional<IncidenciaEntity> findById(Integer Id){
         return incidenciaFacade.findById(Id);
     }
+
 }
