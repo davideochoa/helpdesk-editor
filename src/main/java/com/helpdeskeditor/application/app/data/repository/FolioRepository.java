@@ -29,4 +29,5 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByMarca(String marca);
 
+    public FolioEntity save(FolioEntity folioEntity);
 }
