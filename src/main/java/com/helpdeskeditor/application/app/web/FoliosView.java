@@ -237,7 +237,9 @@ public class FoliosView extends VerticalLayout {
         });
 
         CB_Area.addValueChangeListener(e -> {
-            folioEntity.setIdArea(e.getValue().getId());
+            AreaEntity areaEntity = e.getValue();
+            if(areaEntity != null)
+                folioEntity.setIdArea(areaEntity.getId());
         });
 
         CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
@@ -266,6 +268,9 @@ public class FoliosView extends VerticalLayout {
         VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_Salvar);
     }
     private Boolean guardar(){
+
+        folioEntity = folioService.findById(folioEntity.getId()).get();
+
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
             valor_str = "NO ESPECIFICADO";
@@ -284,11 +289,15 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity.setReferenciaDocumental(valor_str);
 
+        log.info("SAVE getId:"+folioEntity.getId());
         log.info("SAVE getIdUnidad:"+folioEntity.getIdUnidad());
         log.info("SAVE getIdArea:"+folioEntity.getIdArea());
 
         folioEntity = folioService.save(folioEntity);
 
+        log.info("return getId:"+folioEntity.getId());
+        log.info("return getIdUnidad:"+folioEntity.getIdUnidad());
+        log.info("return getIdArea:"+folioEntity.getIdArea());
 
         return true;
     }
