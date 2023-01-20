@@ -46,12 +46,6 @@ public class FolioFacade {
     }
 
     @Transactional
-    @Modifying
-    public FolioEntity save(FolioEntity folioEntity){
-        FolioEntity folioEntity_update = folioRepository.findById(folioEntity.getId()).get();
-
-        folioEntity_update.setIdUnidad(folioEntity.getIdUnidad());
-        folioEntity_update.setIdArea(folioEntity.getIdArea());
-        return folioRepository.save(folioEntity_update);
+    public FolioEntity save(FolioEntity folioEntity){ return folioRepository.save(folioEntity);
     }
 }

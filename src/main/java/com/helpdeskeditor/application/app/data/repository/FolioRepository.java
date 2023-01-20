@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface FolioRepository extends JpaRepository<FolioEntity, Integer> {
+public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
+
     @Query("SELECT CFI.usuarioReporta "+
             "FROM FolioEntity CFI "+
             "GROUP BY CFI.usuarioReporta ORDER BY CFI.usuarioReporta ASC")
