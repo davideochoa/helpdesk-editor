@@ -1,13 +1,17 @@
 package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
-
+@Repository
+public interface FolioRepository extends JpaRepository<FolioEntity, Integer> {
     @Query("SELECT CFI.usuarioReporta "+
             "FROM FolioEntity CFI "+
             "GROUP BY CFI.usuarioReporta ORDER BY CFI.usuarioReporta ASC")
@@ -28,6 +32,4 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "WHERE CFI.marca = :marca "+
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByMarca(String marca);
-
-    public FolioEntity save(FolioEntity folioEntity);
 }
