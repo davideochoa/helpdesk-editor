@@ -1,6 +1,7 @@
 package com.helpdeskeditor.application.app.service;
 
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
+import com.helpdeskeditor.application.app.data.repository.FolioRepository;
 import com.helpdeskeditor.application.app.facade.FolioFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 @Service
 public class FolioService {
 
-    FolioFacade folioFacade;
+    private final FolioFacade  folioFacade;
 
     @Autowired
     public FolioService(FolioFacade folioFacade) {
@@ -39,6 +40,4 @@ public class FolioService {
     }
 
     public FolioEntity save(FolioEntity folioEntity){ return folioFacade.save(folioEntity);}
-
-
 }

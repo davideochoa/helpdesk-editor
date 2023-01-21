@@ -33,4 +33,6 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "WHERE CFI.marca = :marca "+
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByMarca(String marca);
+
+
 }

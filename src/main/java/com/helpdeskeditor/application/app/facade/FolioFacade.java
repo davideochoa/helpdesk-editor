@@ -13,9 +13,8 @@ import java.util.Optional;
 
 @Component
 public class FolioFacade {
-    private FolioRepository folioRepository;
+    private final FolioRepository folioRepository;
 
-    @Autowired
     public FolioFacade(FolioRepository folioRepository) {
         this.folioRepository = folioRepository;
     }

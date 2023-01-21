@@ -87,7 +87,7 @@ public class FoliosView extends VerticalLayout {
 
     private UnidadService unidadService;
     private AreaService areaService;
-    private FolioService folioService;
+    private final FolioService folioService;
     private IncidenciaService incidenciaService;
     private IncidenciaService incidenciaServiceFinal;
     private BienService bienService;
@@ -269,7 +269,7 @@ public class FoliosView extends VerticalLayout {
     }
     private Boolean guardar(){
 
-        folioEntity = folioService.findById(folioEntity.getId()).get();
+        //folioEntity = folioService.findById(folioEntity.getId()).get();
 
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
