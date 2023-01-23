@@ -45,6 +45,9 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import javax.annotation.security.RolesAllowed;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @PageTitle("Folios")
@@ -140,6 +143,10 @@ public class FoliosView extends VerticalLayout {
 
         this.add(tabs, contenidoTab);
 
+        dialog.setHeaderTitle("Guardando informacion");
+        dialog.add("Espere un momento mientras se guarda la informacion");
+        dialog.setModal(true);
+
         DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
     }
@@ -209,10 +216,6 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-
-        dialog.setHeaderTitle("Guardando informacion");
-        dialog.add("Espere un momento mientras se guarda la informacion");
-        dialog.setModal(true);
         dialog.open();
 
         String valor_str = CB_UsuarioReporta.getValue();
@@ -233,11 +236,25 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity.setReferenciaDocumental(valor_str);
 
+        folioEntity.setFecha(java.util.Date
+                .from(DtePikr_fechaApertura.getValue().atZone(ZoneId.systemDefault())
+                        .toInstant()););
+
         folioEntity = folioService.save(folioEntity);
 
         dialog.close();
 
         return true;
+    }
+
+    public LocalDate convertToLocalDate(Date dateToConvert) {
+        return LocalDate.ofInstant(
+                dateToConvert.toInstant(), ZoneId.systemDefault());
+    }
+
+    public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return LocalDateTime.ofInstant(
+                dateToConvert.toInstant(), ZoneId.systemDefault());
     }
 
     private void layoutUnidad(){
