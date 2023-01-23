@@ -22,6 +22,8 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -38,8 +40,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.annotation.security.RolesAllowed;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 @PageTitle("Folios")
@@ -57,6 +62,7 @@ public class FoliosView extends VerticalLayout {
             private ComboBox<String> CB_UsuarioReporta = new ComboBox<String>("Usuario Reporta");
             private TextField TF_Telefono = new TextField();
             private TextField TF_ReferenciaDocumental = new TextField();
+            private DatePicker DtePikr_fechaApertura = new DatePicker("Fecha Apertura");
 
     private FormLayout FL_Incidencia = new FormLayout();
         private ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
@@ -101,6 +107,8 @@ public class FoliosView extends VerticalLayout {
 
     FolioEntity folioEntity = null;
 
+    Dialog dialog = new Dialog();
+
     public FoliosView(UnidadService unidadService,
                       AreaService areaService,
                       FolioService folioService,
@@ -131,6 +139,9 @@ public class FoliosView extends VerticalLayout {
         layoutTabs();
 
         this.add(tabs, contenidoTab);
+
+        DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
+
     }
 
     private boolean cargarFolio(Integer folio){
@@ -165,6 +176,9 @@ public class FoliosView extends VerticalLayout {
 
             TF_ReferenciaDocumental.setValue(valor_str);
 
+
+            DtePikr_fechaApertura.setValue(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(folioEntity.getFecha())));
+
             //************************************************************************
             IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
             BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
@@ -194,6 +208,38 @@ public class FoliosView extends VerticalLayout {
         return true;
     }
 
+    private Boolean guardar(){
+
+        dialog.setHeaderTitle("Guardando informacion");
+        dialog.add("Espere un momento mientras se guarda la informacion");
+        dialog.setModal(true);
+        dialog.open();
+
+        String valor_str = CB_UsuarioReporta.getValue();
+        if(valor_str.equals(null) || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setUsuarioReporta(valor_str);
+
+        valor_str = TF_Telefono.getValue();
+        if(valor_str.equals(null) || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setTelefonoContacto(valor_str);
+
+        valor_str = TF_ReferenciaDocumental.getValue();
+        if(valor_str.equals(null) || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setReferenciaDocumental(valor_str);
+
+        folioEntity = folioService.save(folioEntity);
+
+        dialog.close();
+
+        return true;
+    }
+
     private void layoutUnidad(){
         VL_Unidad.setMargin(false);
         VL_Unidad.setPadding(false);
@@ -217,9 +263,9 @@ public class FoliosView extends VerticalLayout {
         });
         B_cargar.addClickShortcut(Key.ENTER);
 /*
-        Button B_borrar = new Button ("Borrar");
-        B_borrar.addClickListener(e -> {
-            Notification.show("B_borrar ");
+        Button Btt_nuevo = new Button ("Nuevo");
+        Btt_nuevo.addClickListener(e -> {
+            Notification.show("NUEVO ");
         });*/
 
         HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar);//,B_borrar);
@@ -253,6 +299,7 @@ public class FoliosView extends VerticalLayout {
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
 
+
         Button Btt_Salvar = new Button("GUARDAR");
         Btt_Salvar.addClickListener(e -> {
             guardar();
@@ -264,42 +311,9 @@ public class FoliosView extends VerticalLayout {
         FL_Unidad.add(CB_UsuarioReporta);
         FL_Unidad.add(TF_Telefono);
         FL_Unidad.add(TF_ReferenciaDocumental);
+        FL_Unidad.add(DtePikr_fechaApertura);
 
         VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_Salvar);
-    }
-    private Boolean guardar(){
-
-        //folioEntity = folioService.findById(folioEntity.getId()).get();
-
-        String valor_str = CB_UsuarioReporta.getValue();
-        if(valor_str.equals(null) || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
-
-        folioEntity.setUsuarioReporta(valor_str);
-
-        valor_str = TF_Telefono.getValue();
-        if(valor_str.equals(null) || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
-
-        folioEntity.setTelefonoContacto(valor_str);
-
-        valor_str = TF_ReferenciaDocumental.getValue();
-        if(valor_str.equals(null) || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
-
-        folioEntity.setReferenciaDocumental(valor_str);
-
-        log.info("SAVE getId:"+folioEntity.getId());
-        log.info("SAVE getIdUnidad:"+folioEntity.getIdUnidad());
-        log.info("SAVE getIdArea:"+folioEntity.getIdArea());
-
-        folioEntity = folioService.save(folioEntity);
-
-        log.info("return getId:"+folioEntity.getId());
-        log.info("return getIdUnidad:"+folioEntity.getIdUnidad());
-        log.info("return getIdArea:"+folioEntity.getIdArea());
-
-        return true;
     }
 
     private void layoutIncidencia(){
