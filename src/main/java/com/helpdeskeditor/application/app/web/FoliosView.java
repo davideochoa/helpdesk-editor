@@ -19,6 +19,7 @@ import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -27,6 +28,12 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -183,8 +190,9 @@ public class FoliosView extends VerticalLayout {
 
             TF_ReferenciaDocumental.setValue(valor_str);
 
+            DtePikr_fechaApertura.setValue(LocalDate.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault()));
 
-            DtePikr_fechaApertura.setValue(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(folioEntity.getFecha())));
+            //LocalTime localtime = LocalDateTime.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault())
 
             //************************************************************************
             IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
@@ -216,7 +224,11 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        dialog.open();
+        //dialog.open();
+
+        //Notification notification1 = Notification.show("Modificando el Folio!");
+        //notification1.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+        //notification1.setPosition(Notification.Position.MIDDLE);
 
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
@@ -236,25 +248,57 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity.setReferenciaDocumental(valor_str);
 
-        folioEntity.setFecha(java.util.Date
-                .from(DtePikr_fechaApertura.getValue().atZone(ZoneId.systemDefault())
-                        .toInstant()););
+        folioEntity.setFecha(Date.from(DtePikr_fechaApertura.getValue().atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant()));
 
         folioEntity = folioService.save(folioEntity);
 
-        dialog.close();
+        if(folioEntity.getId() > 0){
+            //Notification notification2 = Notification.show("Folio modificado!");
+            //notification2.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            //notification2.setPosition(Notification.Position.MIDDLE);
+
+            createSubmitSuccess().open();
+        }
+        else{
+            Notification notification2 = Notification.show("Error al modificar Folio!");
+            notification2.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            notification2.setPosition(Notification.Position.MIDDLE);
+        }
+
+        //dialog.close();
+
+
 
         return true;
     }
+    public static Notification createSubmitSuccess() {
+        Notification notification = new Notification();
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(5000);
 
-    public LocalDate convertToLocalDate(Date dateToConvert) {
-        return LocalDate.ofInstant(
-                dateToConvert.toInstant(), ZoneId.systemDefault());
+        Icon icon = VaadinIcon.CHECK_CIRCLE.create();
+        Div info = new Div(new Text("Application submitted!"));
+
+        Button viewBtn = new Button("View", clickEvent -> notification.close());
+        viewBtn.getStyle().set("margin", "0 0 0 var(--lumo-space-l)");
+
+        HorizontalLayout layout = new HorizontalLayout(icon, info);//, viewBtn,createCloseBtn(notification));
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        notification.add(layout);
+
+        return notification;
     }
 
-    public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
-        return LocalDateTime.ofInstant(
-                dateToConvert.toInstant(), ZoneId.systemDefault());
+    public static Button createCloseBtn(Notification notification) {
+        Button closeBtn = new Button(VaadinIcon.CLOSE_SMALL.create(),
+                clickEvent -> notification.close());
+        //closeBtn.addThemeVariants(LUMO_TERTIARY_INLINE);
+
+        return closeBtn;
     }
 
     private void layoutUnidad(){
