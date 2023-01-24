@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.util;
+package com.helpdeskeditor.application.old;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;

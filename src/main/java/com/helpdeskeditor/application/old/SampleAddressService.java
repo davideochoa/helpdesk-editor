@@ -1,30 +1,28 @@
-package com.helpdeskeditor.application.util;
+package com.helpdeskeditor.application.old;
 
-import com.helpdeskeditor.application.util.SamplePerson;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.helpdeskeditor.application.util.SamplePersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SamplePersonService {
+public class SampleAddressService {
 
-    private final SamplePersonRepository repository;
+    private final SampleAddressRepository repository;
 
     @Autowired
-    public SamplePersonService(SamplePersonRepository repository) {
+    public SampleAddressService(SampleAddressRepository repository) {
         this.repository = repository;
     }
 
-    public Optional<SamplePerson> get(UUID id) {
+    public Optional<SampleAddress> get(UUID id) {
         return repository.findById(id);
     }
 
-    public SamplePerson update(SamplePerson entity) {
+    public SampleAddress update(SampleAddress entity) {
         return repository.save(entity);
     }
 
@@ -32,7 +30,7 @@ public class SamplePersonService {
         repository.deleteById(id);
     }
 
-    public Page<SamplePerson> list(Pageable pageable) {
+    public Page<SampleAddress> list(Pageable pageable) {
         return repository.findAll(pageable);
     }
 

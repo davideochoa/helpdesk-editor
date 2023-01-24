@@ -18,6 +18,7 @@ import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.util.displayInfo;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -224,11 +225,7 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        //dialog.open();
-
-        //Notification notification1 = Notification.show("Modificando el Folio!");
-        //notification1.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-        //notification1.setPosition(Notification.Position.MIDDLE);
+        displayInfo.notificacion("Modificando el Folio!", NotificationVariant.LUMO_PRIMARY, Notification.Position.MIDDLE);
 
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
@@ -255,16 +252,10 @@ public class FoliosView extends VerticalLayout {
         folioEntity = folioService.save(folioEntity);
 
         if(folioEntity.getId() > 0){
-            //Notification notification2 = Notification.show("Folio modificado!");
-            //notification2.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-            //notification2.setPosition(Notification.Position.MIDDLE);
-
-            createSubmitSuccess().open();
+            displayInfo.notificacion("Folio modificado!", NotificationVariant.LUMO_SUCCESS, Notification.Position.MIDDLE);
         }
         else{
-            Notification notification2 = Notification.show("Error al modificar Folio!");
-            notification2.addThemeVariants(NotificationVariant.LUMO_ERROR);
-            notification2.setPosition(Notification.Position.MIDDLE);
+            displayInfo.notificacion("Error al modificar Folio!", NotificationVariant.LUMO_ERROR, Notification.Position.MIDDLE);
         }
 
         //dialog.close();

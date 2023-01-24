@@ -1,8 +1,8 @@
 package com.helpdeskeditor.application.app.web.antigua;
 
 import com.helpdeskeditor.application.app.web.MainLayout;
-import com.helpdeskeditor.application.util.SampleAddress;
-import com.helpdeskeditor.application.util.SampleAddressService;
+import com.helpdeskeditor.application.old.SampleAddress;
+import com.helpdeskeditor.application.old.SampleAddressService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

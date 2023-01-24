@@ -1,6 +1,5 @@
-package com.helpdeskeditor.application.util;
+package com.helpdeskeditor.application.old;
 
-import com.helpdeskeditor.application.util.SamplePerson;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 

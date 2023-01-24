@@ -1,7 +1,9 @@
-package com.helpdeskeditor.application.util;
+package com.helpdeskeditor.application.app.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.helpdeskeditor.application.app.web.Role;
+import com.helpdeskeditor.application.old.AbstractEntity;
+
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -9,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity

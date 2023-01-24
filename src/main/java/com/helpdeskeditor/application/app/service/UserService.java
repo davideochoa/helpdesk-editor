@@ -1,30 +1,30 @@
-package com.helpdeskeditor.application.util;
+package com.helpdeskeditor.application.app.service;
 
-import com.helpdeskeditor.application.util.SampleAddress;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.helpdeskeditor.application.util.SampleAddressRepository;
+import com.helpdeskeditor.application.app.data.entity.User;
+import com.helpdeskeditor.application.app.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SampleAddressService {
+public class UserService {
 
-    private final SampleAddressRepository repository;
+    private final UserRepository repository;
 
     @Autowired
-    public SampleAddressService(SampleAddressRepository repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
-    public Optional<SampleAddress> get(UUID id) {
+    public Optional<User> get(UUID id) {
         return repository.findById(id);
     }
 
-    public SampleAddress update(SampleAddress entity) {
+    public User update(User entity) {
         return repository.save(entity);
     }
 
@@ -32,7 +32,7 @@ public class SampleAddressService {
         repository.deleteById(id);
     }
 
-    public Page<SampleAddress> list(Pageable pageable) {
+    public Page<User> list(Pageable pageable) {
         return repository.findAll(pageable);
     }
 

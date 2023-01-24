@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.util;
+package com.helpdeskeditor.application.old;
 
 import javax.persistence.Entity;
 
