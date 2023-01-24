@@ -159,6 +159,25 @@ public class FoliosView extends VerticalLayout {
 
     }
 
+    private void borrar(){
+
+
+        CB_Unidad.clear();
+        /*CB_Area.clear();
+        CB_UsuarioReporta.clear();
+        TF_Telefono.clear();
+        TF_ReferenciaDocumental.clear();
+        DtePikr_fechaApertura.clear();
+
+        CB_Unidad.setItems(unidadService.findAll());
+        CB_Unidad.addValueChangeListener(e -> {
+            folioEntity.setIdUnidad(e.getValue().getId());
+            CB_Area.setItems(areaService.findByidUnidad(folioEntity.getIdUnidad()));
+        });
+        CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
+        DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));*/
+    }
+
     private boolean cargarFolio(Integer folio){
         folioEntity = folioService.findById(folio).get();
 
@@ -225,7 +244,9 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        displayInfo.notificacion("Modificando el Folio!", NotificationVariant.LUMO_PRIMARY, Notification.Position.MIDDLE);
+        displayInfo.notificacion("Modificando el Folio!",
+                                    NotificationVariant.LUMO_PRIMARY,
+                                    Notification.Position.MIDDLE).setVisible(true);
 
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
@@ -251,12 +272,17 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity = folioService.save(folioEntity);
 
-        if(folioEntity.getId() > 0){
-            displayInfo.notificacion("Folio modificado!", NotificationVariant.LUMO_SUCCESS, Notification.Position.MIDDLE);
+        if(folioEntity.getId() > 0) {
+            displayInfo.notificacion("Folio modificado!",
+                    NotificationVariant.LUMO_SUCCESS,
+                    Notification.Position.MIDDLE).setVisible(true);
+            borrar();
         }
-        else{
-            displayInfo.notificacion("Error al modificar Folio!", NotificationVariant.LUMO_ERROR, Notification.Position.MIDDLE);
-        }
+        else
+            displayInfo.notificacion("Error al modificar Folio!",
+                                        NotificationVariant.LUMO_ERROR,
+                                        Notification.Position.MIDDLE).setVisible(true);
+
 
         //dialog.close();
 
@@ -264,6 +290,7 @@ public class FoliosView extends VerticalLayout {
 
         return true;
     }
+
     public static Notification createSubmitSuccess() {
         Notification notification = new Notification();
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
