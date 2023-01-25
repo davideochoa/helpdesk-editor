@@ -246,6 +246,8 @@ public class FoliosView extends VerticalLayout {
                 .atZone(ZoneId.systemDefault())
                 .toInstant()));
 
+
+
         folioEntity = folioService.save(folioEntity);
 
         dialogEspere.close();
@@ -355,8 +357,10 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.setItems(incidenciaService.findAll());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
-            IncidenciaEntity seleccion = e.getValue();
-            CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(seleccion.getId()));
+            if(e.getValue() != null){
+                folioEntity.setIdTipoIncidencia(e.getValue().getId());
+                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc((e.getValue().getId()));
+            }
         });
 
         //CB_Bien.setItems(bienService.getAllBienes());
