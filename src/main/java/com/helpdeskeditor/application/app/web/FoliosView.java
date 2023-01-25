@@ -18,7 +18,7 @@ import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
-import com.helpdeskeditor.application.util.displayInfo;
+import com.helpdeskeditor.application.util.DisplayInfo;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -37,6 +37,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -48,12 +49,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.annotation.security.RolesAllowed;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -117,8 +115,7 @@ public class FoliosView extends VerticalLayout {
     private int charLimit;
 
     FolioEntity folioEntity = null;
-
-    Dialog dialog = new Dialog();
+    Dialog dialogEspere = DisplayInfo.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
     public FoliosView(UnidadService unidadService,
                       AreaService areaService,
@@ -151,40 +148,24 @@ public class FoliosView extends VerticalLayout {
 
         this.add(tabs, contenidoTab);
 
-        dialog.setHeaderTitle("Guardando informacion");
-        dialog.add("Espere un momento mientras se guarda la informacion");
-        dialog.setModal(true);
-
-        DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
     }
 
     private void borrar(){
-
-
+        IF_Folio.clear();
         CB_Unidad.clear();
-        /*CB_Area.clear();
+        CB_Area.clear();
         CB_UsuarioReporta.clear();
         TF_Telefono.clear();
         TF_ReferenciaDocumental.clear();
         DtePikr_fechaApertura.clear();
-
-        CB_Unidad.setItems(unidadService.findAll());
-        CB_Unidad.addValueChangeListener(e -> {
-            folioEntity.setIdUnidad(e.getValue().getId());
-            CB_Area.setItems(areaService.findByidUnidad(folioEntity.getIdUnidad()));
-        });
-        CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
-        DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));*/
+        //DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
     }
 
     private boolean cargarFolio(Integer folio){
         folioEntity = folioService.findById(folio).get();
 
         if(folioEntity.getId() > 0){
-            log.info("LOAD getIdUnidad:"+folioEntity.getIdUnidad());
-            log.info("LOAD getIdArea:"+folioEntity.getIdArea());
-
             //************************** UNIDAD *************************
             CB_Unidad.setValue(unidadService.findById(folioEntity.getIdUnidad()).get());
             CB_Area.setValue(areaService.findByIdAndIdUnidad(folioEntity.getIdArea(), unidadService.findById(folioEntity.getIdUnidad()).get().getId()));
@@ -209,10 +190,7 @@ public class FoliosView extends VerticalLayout {
                 valor_str = folioEntity.getReferenciaDocumental();
 
             TF_ReferenciaDocumental.setValue(valor_str);
-
             DtePikr_fechaApertura.setValue(LocalDate.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault()));
-
-            //LocalTime localtime = LocalDateTime.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault())
 
             //************************************************************************
             IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
@@ -244,9 +222,7 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        displayInfo.notificacion("Modificando el Folio!",
-                                    NotificationVariant.LUMO_PRIMARY,
-                                    Notification.Position.MIDDLE).setVisible(true);
+        dialogEspere.open();
 
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
@@ -272,54 +248,26 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity = folioService.save(folioEntity);
 
+        dialogEspere.close();
+
         if(folioEntity.getId() > 0) {
-            displayInfo.notificacion("Folio modificado!",
+            borrar();
+            DisplayInfo.notificacion("Folio modificado!",
                     NotificationVariant.LUMO_SUCCESS,
                     Notification.Position.MIDDLE).setVisible(true);
-            borrar();
+
         }
         else
-            displayInfo.notificacion("Error al modificar Folio!",
+            DisplayInfo.notificacion("Error al modificar Folio!",
                                         NotificationVariant.LUMO_ERROR,
                                         Notification.Position.MIDDLE).setVisible(true);
-
-
-        //dialog.close();
-
 
 
         return true;
     }
 
-    public static Notification createSubmitSuccess() {
-        Notification notification = new Notification();
-        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(5000);
-
-        Icon icon = VaadinIcon.CHECK_CIRCLE.create();
-        Div info = new Div(new Text("Application submitted!"));
-
-        Button viewBtn = new Button("View", clickEvent -> notification.close());
-        viewBtn.getStyle().set("margin", "0 0 0 var(--lumo-space-l)");
-
-        HorizontalLayout layout = new HorizontalLayout(icon, info);//, viewBtn,createCloseBtn(notification));
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
-
-        notification.add(layout);
-
-        return notification;
-    }
-
-    public static Button createCloseBtn(Notification notification) {
-        Button closeBtn = new Button(VaadinIcon.CLOSE_SMALL.create(),
-                clickEvent -> notification.close());
-        //closeBtn.addThemeVariants(LUMO_TERTIARY_INLINE);
-
-        return closeBtn;
-    }
-
     private void layoutUnidad(){
+
         VL_Unidad.setMargin(false);
         VL_Unidad.setPadding(false);
 
@@ -357,14 +305,15 @@ public class FoliosView extends VerticalLayout {
 
         CB_Unidad.setItems(unidadService.findAll());
         CB_Unidad.addValueChangeListener(e -> {
-            folioEntity.setIdUnidad(e.getValue().getId());
-            CB_Area.setItems(areaService.findByidUnidad(folioEntity.getIdUnidad()));
+            if(e.getValue() != null){
+                folioEntity.setIdUnidad(e.getValue().getId());
+                CB_Area.setItems(areaService.findByidUnidad(folioEntity.getIdUnidad()));
+            }
         });
 
         CB_Area.addValueChangeListener(e -> {
-            AreaEntity areaEntity = e.getValue();
-            if(areaEntity != null)
-                folioEntity.setIdArea(areaEntity.getId());
+            if(e.getValue() != null)
+                folioEntity.setIdArea(e.getValue().getId());
         });
 
         CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
@@ -378,6 +327,7 @@ public class FoliosView extends VerticalLayout {
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
 
+        DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
         Button Btt_Salvar = new Button("GUARDAR");
         Btt_Salvar.addClickListener(e -> {
