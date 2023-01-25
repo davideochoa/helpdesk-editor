@@ -359,20 +359,32 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 folioEntity.setIdTipoIncidencia(e.getValue().getId());
-                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc((e.getValue().getId()));
+                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc((e.getValue().getId())));
             }
         });
 
         //CB_Bien.setItems(bienService.getAllBienes());
         CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
+        CB_Bien.addValueChangeListener(e -> {
+            if(e.getValue() != null){
+                folioEntity.setIdBien(e.getValue().getId());
+            }
+        });
 
         CB_Marca.setItems(folioService.getAllMarca());
         CB_Marca.addValueChangeListener(e -> {
-            String seleccion = e.getValue();
-            CB_Modelo.setItems(folioService.findModeloByMarca(seleccion));
+            if (e.getValue() != null) {
+                CB_Modelo.setItems(folioService.findModeloByMarca(e.getValue()));
+            }
         });
 
-        //CB_Modelo.setItems(folioIncidenciaService.getAllModelo());
+        CB_Modelo.addValueChangeListener(e -> {
+            if (e.getValue() != null) {
+                folioEntity.setIdBien(e.getValue().getId());
+            }
+        });
+
+
 
         FL_Incidencia.add(CB_Incidencia);
         FL_Incidencia.add(CB_Bien);
