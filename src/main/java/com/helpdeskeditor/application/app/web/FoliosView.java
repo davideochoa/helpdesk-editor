@@ -394,6 +394,11 @@ public class FoliosView extends VerticalLayout {
             }
         });
 
+        Button Btt_Salvar = new Button("GUARDAR");
+        Btt_Salvar.addClickListener(e -> {
+            guardar();
+        });
+        Btt_Salvar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
 
         FL_Incidencia.add(CB_Incidencia);
@@ -402,6 +407,7 @@ public class FoliosView extends VerticalLayout {
         FL_Incidencia.add(CB_Modelo);
         FL_Incidencia.add(TF_NumeroSerie);
         FL_Incidencia.add(TF_NumeroInventario);
+        FL_Incidencia.add(Btt_Salvar);
     }
 
     private void layoutMotivo(){
