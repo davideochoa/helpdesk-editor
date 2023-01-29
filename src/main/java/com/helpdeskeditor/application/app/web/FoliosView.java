@@ -139,6 +139,8 @@ public class FoliosView extends VerticalLayout {
         this.usuarioSoporteService = usuarioSoporteService;
         this.incidenciaServiceFinal = incidenciaServiceFinal;
 
+        folioEntity = new FolioEntity();
+
         layoutUnidad();
         layoutIncidencia();
         layoutMotivo();
@@ -357,9 +359,12 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.setItems(incidenciaService.findAll());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
+            log.info("e"+e);
+            log.info("e.getValue()"+e.getValue());
+            log.info("folioEntity"+folioEntity);
             if(e.getValue() != null){
                 folioEntity.setIdTipoIncidencia(e.getValue().getId());
-                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc((e.getValue().getId())));
+                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(folioEntity.getIdTipoIncidencia()));
             }
         });
 
@@ -368,19 +373,26 @@ public class FoliosView extends VerticalLayout {
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 folioEntity.setIdBien(e.getValue().getId());
+                CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(folioEntity.getIdTipoIncidencia(),
+                                                                                folioEntity.getIdBien()));
             }
         });
 
-        CB_Marca.setItems(folioService.getAllMarca());
+        //CB_Marca.setItems(folioService.getAllMarca());
         CB_Marca.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                CB_Modelo.setItems(folioService.findModeloByMarca(e.getValue()));
+                folioEntity.setMarca(e.getValue());
+
+                CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
+                                    folioEntity.getIdTipoIncidencia(),
+                                    folioEntity.getIdBien(),
+                                    folioEntity.getMarca()));
             }
         });
 
         CB_Modelo.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                folioEntity.setIdBien(e.getValue().getId());
+                folioEntity.setModelo(e.getValue());
             }
         });
 

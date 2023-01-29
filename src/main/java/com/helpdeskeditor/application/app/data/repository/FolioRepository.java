@@ -1,12 +1,9 @@
 package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +20,13 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY CFI.marca ORDER BY CFI.marca ASC")
     List<String> getAllMarca();
 
+    @Query("SELECT CFI.marca "+
+            "FROM FolioEntity CFI "+
+            "WHERE CFI.idTipoIncidencia = :idIncidencia "+
+            "AND CFI.idBien = :idBien "+
+            "GROUP BY CFI.marca ORDER BY CFI.marca ASC")
+    List<String> findMarcaByIdIncidenciaAndIdBien(Integer idIncidencia, Integer idBien);
+
     @Query("SELECT CFI.modelo "+
             "FROM FolioEntity CFI "+
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
@@ -33,6 +37,14 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "WHERE CFI.marca = :marca "+
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByMarca(String marca);
+
+    @Query("SELECT CFI.modelo "+
+            "FROM FolioEntity CFI "+
+            "WHERE CFI.idTipoIncidencia = :idIncidencia "+
+            "AND CFI.idBien = :idBien "+
+            "AND CFI.marca = :marca "+
+            "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
+    List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca);
 
 
 }

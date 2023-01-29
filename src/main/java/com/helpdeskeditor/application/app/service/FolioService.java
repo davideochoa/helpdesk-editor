@@ -27,12 +27,20 @@ public class FolioService {
         return folioFacade.getAllMarca();
     }
 
+    public List<String> findMarcaByIdIncidenciaAndIdBien(Integer idIncidencia,Integer idBien){
+        return  folioFacade.findMarcaByIdIncidenciaAndIdBien(idIncidencia,idBien);
+    }
+
     public List<String> getAllModelo(){
         return folioFacade.getAllModelo();
     }
 
     public List<String> findModeloByMarca(String marca){
         return  folioFacade.findModeloByMarca(marca);
+    }
+
+    public List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca){
+        return  folioFacade.findModeloByIdIncidenciaAndIdBienAndMarca(idIncidencia, idBien, marca);
     }
 
     public Optional<FolioEntity> findById(Integer Id){

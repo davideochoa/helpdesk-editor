@@ -1,8 +1,6 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +27,10 @@ public class FolioFacade {
         return  folioRepository.getAllMarca();
     }
 
+    public List<String> findMarcaByIdIncidenciaAndIdBien(Integer idIncidencia,Integer idBien){
+        return  folioRepository.findMarcaByIdIncidenciaAndIdBien(idIncidencia,idBien);
+    }
+
     @Transactional(readOnly = true)
     public List<String> getAllModelo(){
         return  folioRepository.getAllModelo();
@@ -37,6 +39,10 @@ public class FolioFacade {
     @Transactional(readOnly = true)
     public List<String> findModeloByMarca(String marca){
         return  folioRepository.findModeloByMarca(marca);
+    }
+
+    public List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca){
+        return  folioRepository.findModeloByIdIncidenciaAndIdBienAndMarca(idIncidencia, idBien, marca);
     }
 
     @Transactional(readOnly = true)
