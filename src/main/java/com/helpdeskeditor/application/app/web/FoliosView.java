@@ -149,8 +149,6 @@ public class FoliosView extends VerticalLayout {
         layoutTabs();
 
         this.add(tabs, contenidoTab);
-
-
     }
 
     private void borrar(){
