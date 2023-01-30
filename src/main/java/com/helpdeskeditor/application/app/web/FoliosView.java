@@ -72,26 +72,33 @@ public class FoliosView extends VerticalLayout {
             private TextField TF_Telefono = new TextField();
             private TextField TF_ReferenciaDocumental = new TextField();
             private DatePicker DtePikr_fechaApertura = new DatePicker("Fecha Apertura");
+        Button Btt_SalvarUnidad = new Button("GUARDAR");
 
-    private FormLayout FL_Incidencia = new FormLayout();
-        private ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
-        private ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
-        private ComboBox<String> CB_Marca = new ComboBox<String>("Marca");
-        private ComboBox<String> CB_Modelo = new ComboBox<String>("Modelo");
-        private TextField TF_NumeroSerie = new TextField("Numero Serie");
-        private TextField TF_NumeroInventario = new TextField("Numero Inventario");
+    private VerticalLayout VL_Incidencia = new VerticalLayout();
+        private FormLayout FL_Incidencia = new FormLayout();
+            private ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
+            private ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
+            private ComboBox<String> CB_Marca = new ComboBox<String>("Marca");
+            private ComboBox<String> CB_Modelo = new ComboBox<String>("Modelo");
+            private TextField TF_NumeroSerie = new TextField("Numero Serie");
+            private TextField TF_NumeroInventario = new TextField("Numero Inventario");
+        Button Btt_SalvarIncidencia = new Button("GUARDAR");
+
 
     private VerticalLayout VL_Motivo = new VerticalLayout();
         private FormLayout FL_Motivo = new FormLayout();
             private TextArea TA_MotivoReporte = new TextArea();
         private ComboBox<PrioridadEntity> CB_Prioridad = new ComboBox<PrioridadEntity>("Prioridad");
+        Button Btt_SalvarMotivo = new Button("GUARDAR");
 
-    private FormLayout FL_Estatus = new FormLayout();
-        private ComboBox<CatalogoEstatusEntity> CB_Estaus = new ComboBox<CatalogoEstatusEntity>("Estatus");
-        private TextArea TA_Anotacion = new TextArea("Anotacion");
-        private ComboBox<UsuarioSoporteEntity> CB_SoporteAsignado = new ComboBox<UsuarioSoporteEntity>("Soporte Asignado");
-        private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
-        private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
+    private VerticalLayout VL_Estatus = new VerticalLayout();
+        private FormLayout FL_Estatus = new FormLayout();
+            private ComboBox<CatalogoEstatusEntity> CB_Estaus = new ComboBox<CatalogoEstatusEntity>("Estatus");
+            private TextArea TA_Anotacion = new TextArea("Anotacion");
+            private ComboBox<UsuarioSoporteEntity> CB_SoporteAsignado = new ComboBox<UsuarioSoporteEntity>("Soporte Asignado");
+            private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
+            private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
+        Button Btt_SalvarEstatus = new Button("GUARDAR");
 
     private Tabs tabs;
         private Tab tabUnidad;
@@ -269,7 +276,6 @@ public class FoliosView extends VerticalLayout {
     }
 
     private void layoutUnidad(){
-
         VL_Unidad.setMargin(false);
         VL_Unidad.setPadding(false);
 
@@ -331,11 +337,11 @@ public class FoliosView extends VerticalLayout {
 
         DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
-        Button Btt_Salvar = new Button("GUARDAR");
-        Btt_Salvar.addClickListener(e -> {
+
+        Btt_SalvarUnidad.addClickListener(e -> {
             guardar();
         });
-        Btt_Salvar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Btt_SalvarUnidad.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         FL_Unidad.add(CB_Unidad);
         FL_Unidad.add(CB_Area);
@@ -344,10 +350,13 @@ public class FoliosView extends VerticalLayout {
         FL_Unidad.add(TF_ReferenciaDocumental);
         FL_Unidad.add(DtePikr_fechaApertura);
 
-        VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_Salvar);
+        VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_SalvarUnidad);
     }
 
     private void layoutIncidencia(){
+        VL_Incidencia.setMargin(false);
+        VL_Incidencia.setPadding(false);
+
         FL_Incidencia.setResponsiveSteps(
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
@@ -394,12 +403,10 @@ public class FoliosView extends VerticalLayout {
             }
         });
 
-        Button Btt_Salvar = new Button("GUARDAR");
-        Btt_Salvar.addClickListener(e -> {
+        Btt_SalvarIncidencia.addClickListener(e -> {
             guardar();
         });
-        Btt_Salvar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
+        Btt_SalvarIncidencia.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         FL_Incidencia.add(CB_Incidencia);
         FL_Incidencia.add(CB_Bien);
@@ -407,7 +414,8 @@ public class FoliosView extends VerticalLayout {
         FL_Incidencia.add(CB_Modelo);
         FL_Incidencia.add(TF_NumeroSerie);
         FL_Incidencia.add(TF_NumeroInventario);
-        FL_Incidencia.add(Btt_Salvar);
+
+        VL_Incidencia.add(FL_Incidencia,Btt_SalvarIncidencia);
     }
 
     private void layoutMotivo(){
@@ -434,11 +442,19 @@ public class FoliosView extends VerticalLayout {
 
         FL_Motivo.add(TA_MotivoReporte);
 
-        VL_Motivo.add(FL_Motivo,CB_Prioridad);
+        Btt_SalvarMotivo.addClickListener(e -> {
+            guardar();
+        });
+        Btt_SalvarMotivo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        VL_Motivo.add(FL_Motivo,CB_Prioridad,Btt_SalvarMotivo);
 
     }
 
     private void layoutEstatus(){
+        VL_Estatus.setMargin(false);
+        VL_Estatus.setPadding(false);
+
         FL_Estatus.setResponsiveSteps(
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
@@ -477,8 +493,14 @@ public class FoliosView extends VerticalLayout {
 
         FL_Estatus.setColspan(GridEstatus, 2);
 
+        Btt_SalvarEstatus.addClickListener(e -> {
+            guardar();
+        });
+        Btt_SalvarEstatus.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,GridEstatus);
 
+        VL_Estatus.add(FL_Estatus,Btt_SalvarEstatus);
 
     }
 
@@ -504,13 +526,13 @@ public class FoliosView extends VerticalLayout {
             contenidoTab.add(VL_Unidad);
         else
             if (tab.equals(tabIncidencia))
-                contenidoTab.add(FL_Incidencia);
+                contenidoTab.add(VL_Incidencia);
             else
                 if (tab.equals(tabMotivo))
                     contenidoTab.add(VL_Motivo);
                 else
                     if (tab.equals(tabEstatus))
-                        contenidoTab.add(FL_Estatus);
+                        contenidoTab.add(VL_Estatus);
 
     }
 
