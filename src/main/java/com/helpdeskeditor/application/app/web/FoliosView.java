@@ -231,6 +231,7 @@ public class FoliosView extends VerticalLayout {
     private Boolean guardar(){
         dialogEspere.open();
 
+        //****************** UNIDAD ******************************************************
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str.equals(null) || valor_str.length() == 0)
             valor_str = "NO ESPECIFICADO";
@@ -253,6 +254,13 @@ public class FoliosView extends VerticalLayout {
                 .atZone(ZoneId.systemDefault())
                 .toInstant()));
 
+        //**************** INCIDENCIA *******************************
+        folioEntity.setMarca(CB_Marca.getValue());
+        folioEntity.setModelo(CB_Modelo.getValue());
+        folioEntity.setNumeroSerie(TF_NumeroSerie.getValue());
+        folioEntity.setNumeroInventario(TF_NumeroInventario.getValue());
+
+        //****************** MOTIVO *******************************
 
 
         folioEntity = folioService.save(folioEntity);
@@ -315,6 +323,7 @@ public class FoliosView extends VerticalLayout {
         CB_Unidad.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 folioEntity.setIdUnidad(e.getValue().getId());
+                folioEntity.setIdArea(0);
                 CB_Area.setItems(areaService.findByidUnidad(folioEntity.getIdUnidad()));
             }
         });
@@ -366,26 +375,33 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.setItems(incidenciaService.findAll());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
-            log.info("e"+e);
-            log.info("e.getValue()"+e.getValue());
-            log.info("folioEntity"+folioEntity);
             if(e.getValue() != null){
                 folioEntity.setIdTipoIncidencia(e.getValue().getId());
+                folioEntity.setIdBien(0);
+                folioEntity.setMarca("NO ESPECIFICADO");
+                folioEntity.setModelo("NO ESPECIFICADO");
                 CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(folioEntity.getIdTipoIncidencia()));
+                CB_Marca.clear();
+                CB_Modelo.clear();
+                TF_NumeroSerie.clear();
+                TF_NumeroInventario.clear();
             }
         });
 
-        //CB_Bien.setItems(bienService.getAllBienes());
         CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 folioEntity.setIdBien(e.getValue().getId());
+                folioEntity.setMarca("NO ESPECIFICADO");
+                folioEntity.setModelo("NO ESPECIFICADO");
                 CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(folioEntity.getIdTipoIncidencia(),
                                                                                 folioEntity.getIdBien()));
+                CB_Modelo.clear();
+                TF_NumeroSerie.clear();
+                TF_NumeroInventario.clear();
             }
         });
 
-        //CB_Marca.setItems(folioService.getAllMarca());
         CB_Marca.addValueChangeListener(e -> {
             if (e.getValue() != null) {
                 folioEntity.setMarca(e.getValue());
@@ -394,12 +410,16 @@ public class FoliosView extends VerticalLayout {
                                     folioEntity.getIdTipoIncidencia(),
                                     folioEntity.getIdBien(),
                                     folioEntity.getMarca()));
+                TF_NumeroSerie.clear();
+                TF_NumeroInventario.clear();
             }
         });
 
         CB_Modelo.addValueChangeListener(e -> {
             if (e.getValue() != null) {
                 folioEntity.setModelo(e.getValue());
+                TF_NumeroSerie.clear();
+                TF_NumeroInventario.clear();
             }
         });
 
@@ -431,15 +451,20 @@ public class FoliosView extends VerticalLayout {
         //TA_MotivoReporte.setWidthFull();
         TA_MotivoReporte.setLabel("Description");
         TA_MotivoReporte.setMaxLength(charLimit);
-        TA_MotivoReporte.setValueChangeMode(ValueChangeMode.EAGER);
+        //TA_MotivoReporte.setValueChangeMode(ValueChangeMode.EAGER);
         TA_MotivoReporte.addValueChangeListener(e -> {
-            e.getSource()
-                    .setHelperText(e.getValue().length() + "/" + charLimit);
+            e.getSource().setHelperText(e.getValue().length() + "/" + charLimit);
+            if(e.getValue() != null)
+                folioEntity.setMotivoReporte(e.getValue());
         });
 
         CB_Prioridad.setItems(prioridadService.findAll());
         CB_Prioridad.setItemLabelGenerator(PrioridadEntity::getNombre);
-
+        CB_Prioridad.addValueChangeListener(e -> {
+            if (e.getValue() != null) {
+                folioEntity.setIdPrioridad(e.getValue().getId());
+            }
+        });
         FL_Motivo.add(TA_MotivoReporte);
 
         Btt_SalvarMotivo.addClickListener(e -> {
