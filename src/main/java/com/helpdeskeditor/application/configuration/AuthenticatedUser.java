@@ -1,7 +1,9 @@
 package com.helpdeskeditor.application.configuration;
 
 import com.helpdeskeditor.application.app.data.entity.User;
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.data.repository.UserRepository;
+import com.helpdeskeditor.application.app.data.repository.UsuarioSoporteRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import java.util.Optional;
@@ -16,10 +18,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticatedUser {
 
-    private final UserRepository userRepository;
+    private final UsuarioSoporteRepository userRepository;
 
     @Autowired
-    public AuthenticatedUser(UserRepository userRepository) {
+    public AuthenticatedUser(UsuarioSoporteRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -29,8 +31,8 @@ public class AuthenticatedUser {
                 .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken));
     }
 
-    public Optional<User> get() {
-        return getAuthentication().map(authentication -> userRepository.findByUsername(authentication.getName()));
+    public Optional<UsuarioSoporteEntity> get() {
+        return getAuthentication().map(authentication -> userRepository.findByNombreUsuario(authentication.getName()));
     }
 
     public void logout() {

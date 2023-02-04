@@ -1,9 +1,12 @@
 package com.helpdeskeditor.application.configuration;
 
 import com.helpdeskeditor.application.app.data.entity.User;
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.data.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.helpdeskeditor.application.app.data.repository.UsuarioSoporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,28 +18,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UsuarioSoporteRepository userRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UsuarioSoporteRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        UsuarioSoporteEntity user = userRepository.findByNombreUsuario(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         }
         else {
-            return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                                                                            user.getHashedPassword(),
+            return new org.springframework.security.core.userdetails.User(user.getNombreUsuario(),
+                                                                            user.getPassword(),
                                                                             getAuthorities(user));
         }
     }
 
-    private static List<GrantedAuthority> getAuthorities(User user) {
+    private static List<GrantedAuthority> getAuthorities(UsuarioSoporteEntity user) {
         return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
 
