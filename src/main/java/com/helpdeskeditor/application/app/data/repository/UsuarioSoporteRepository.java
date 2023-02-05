@@ -1,6 +1,5 @@
 package com.helpdeskeditor.application.app.data.repository;
 
-import com.helpdeskeditor.application.app.data.entity.User;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

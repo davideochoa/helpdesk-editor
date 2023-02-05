@@ -7,7 +7,6 @@ import com.helpdeskeditor.application.app.web.antigua.EstatusView;
 import com.helpdeskeditor.application.app.web.antigua.HelloWorldView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
-import com.helpdeskeditor.application.app.data.entity.User;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -32,12 +31,9 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 public class MainLayout extends AppLayout {
-
     private H2 viewTitle;
-
     private AuthenticatedUser authenticatedUser;
     private AccessAnnotationChecker accessChecker;
-
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;

@@ -1,8 +1,6 @@
 package com.helpdeskeditor.application.configuration;
 
-import com.helpdeskeditor.application.app.data.entity.User;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.data.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
