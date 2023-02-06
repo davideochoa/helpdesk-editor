@@ -10,10 +10,13 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 @AnonymousAllowed
 @PageTitle("Login")
 @Route(value = "login")
+@Slf4j
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
     private final AuthenticatedUser authenticatedUser;
@@ -35,8 +38,9 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        log.info("ANTES");
         if (authenticatedUser.get().isPresent()) {
-            // Already logged in
+
             setOpened(false);
             event.forwardTo("");
         }
