@@ -26,10 +26,26 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
 
         LoginI18n i18n = LoginI18n.createDefault();
+
+
+        LoginI18n.Form i18nForm = i18n.getForm();
+        i18nForm.setTitle("Acceso");
+        i18nForm.setUsername("Usuario");
+        i18nForm.setPassword("Contraseña");
+        i18nForm.setSubmit("ENVIAR");
+
+        LoginI18n.ErrorMessage i18nErrorMessage = i18n.getErrorMessage();
+        i18nErrorMessage.setTitle("ERROR LOGIN");
+        i18nErrorMessage.setMessage("Nombre de usuario o contraseña incorrecta, intente nuevamente");
+        i18n.setErrorMessage(i18nErrorMessage);
+
         i18n.setHeader(new LoginI18n.Header());
         i18n.getHeader().setTitle("HelpDesk Editor");
-        i18n.getHeader().setDescription("Login using user/user or admin/admin");
+        i18n.getHeader().setDescription("Registro de incidencias de TI");
+        i18n.setForm(i18nForm);
         i18n.setAdditionalInformation(null);
+
+        i18n.setForm(i18nForm);
         setI18n(i18n);
 
         setForgotPasswordButtonVisible(false);
