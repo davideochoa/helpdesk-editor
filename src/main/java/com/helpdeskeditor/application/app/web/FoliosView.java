@@ -242,20 +242,28 @@ public class FoliosView extends VerticalLayout {
         dialogEspere.open();
 
         //****************** UNIDAD ******************************************************
+        UnidadEntity unidadEntity = CB_Unidad.getValue();
+        if(unidadEntity != null)
+            folioEntity.setIdUnidad(unidadEntity.getId());
+
+        AreaEntity areaEntity = CB_Area.getValue();
+        if(areaEntity != null)
+            folioEntity.setIdArea(areaEntity.getId());
+
         String valor_str = CB_UsuarioReporta.getValue();
-        if(valor_str.equals(null) || valor_str.length() == 0)
+        if(valor_str == null)
             valor_str = "NO ESPECIFICADO";
 
         folioEntity.setUsuarioReporta(valor_str);
 
         valor_str = TF_Telefono.getValue();
-        if(valor_str.equals(null) || valor_str.length() == 0)
+        if(valor_str == null)
             valor_str = "NO ESPECIFICADO";
 
         folioEntity.setTelefonoContacto(valor_str);
 
         valor_str = TF_ReferenciaDocumental.getValue();
-        if(valor_str.equals(null) || valor_str.length() == 0)
+        if(valor_str == null)
             valor_str = "NO ESPECIFICADO";
 
         folioEntity.setReferenciaDocumental(valor_str);
@@ -265,15 +273,42 @@ public class FoliosView extends VerticalLayout {
                 .toInstant()));
 
         //**************** INCIDENCIA *******************************
-        folioEntity.setMarca(CB_Marca.getValue());
-        folioEntity.setModelo(CB_Modelo.getValue());
-        folioEntity.setNumeroSerie(TF_NumeroSerie.getValue());
-        log.info("TF_NumeroInventario.getValue():"+TF_NumeroInventario.getValue());
-        folioEntity.setNumeroInventario(TF_NumeroInventario.getValue());
-        log.info("folioEntity.getNumeroInventario():"+folioEntity.getNumeroInventario());
+        IncidenciaEntity incidenciaEntity = CB_Incidencia.getValue();
+        if(incidenciaEntity != null)
+            folioEntity.setIdTipoIncidencia(incidenciaEntity.getId());
+
+        BiendEntity biendEntity = CB_Bien.getValue();
+        if(biendEntity != null)
+            folioEntity.setIdBien(biendEntity.getId());
+
+        valor_str = CB_Marca.getValue();
+        if(valor_str == null || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setMarca(valor_str);
+
+        valor_str = CB_Modelo.getValue();
+        if(valor_str == null || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setModelo(valor_str);
+
+        valor_str = TF_NumeroSerie.getValue();
+        if(valor_str == null || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        valor_str = TF_NumeroInventario.getValue();
+        if(valor_str == null || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setNumeroInventario(valor_str);
 
         //****************** MOTIVO *******************************
-        folioEntity.setMotivoReporte(TA_MotivoReporte.getValue());
+        valor_str = TA_MotivoReporte.getValue();
+        if(valor_str == null || valor_str.length() == 0)
+            valor_str = "NO ESPECIFICADO";
+
+        folioEntity.setMotivoReporte(valor_str);
 
         folioEntity = folioService.save(folioEntity);
 
@@ -331,37 +366,24 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.setLabel("Numero Telefonico");
         TF_Telefono.setWidth("240px");
 
+        CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);
         CB_Unidad.setItems(unidadService.findAll());
         CB_Unidad.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                folioEntity.setIdUnidad(e.getValue().getId());
-                folioEntity.setIdArea(0);
-                CB_Area.setItems(areaService.findByidUnidad(folioEntity.getIdUnidad()));
+                CB_Area.setItems(areaService.findByidUnidad(CB_Unidad.getValue().getId()));
             }
         });
 
-        CB_Area.addValueChangeListener(e -> {
-            if(e.getValue() != null)
-                folioEntity.setIdArea(e.getValue().getId());
-        });
+        CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
 
         CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
-        CB_UsuarioReporta.addValueChangeListener(e -> {
-            folioEntity.setUsuarioReporta(e.getValue());
-        });
-
-        CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);
-        CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
 
         DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
-
-        Btt_SalvarUnidad.addClickListener(e -> {
-            guardar();
-        });
+        Btt_SalvarUnidad.addClickListener(e -> { guardar(); });
         Btt_SalvarUnidad.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         FL_Unidad.add(CB_Unidad);
@@ -388,11 +410,12 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                folioEntity.setIdTipoIncidencia(e.getValue().getId());
                 folioEntity.setIdBien(0);
                 folioEntity.setMarca("NO ESPECIFICADO");
                 folioEntity.setModelo("NO ESPECIFICADO");
-                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(folioEntity.getIdTipoIncidencia()));
+
+                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(CB_Incidencia.getValue().getId()));
+
                 CB_Marca.clear();
                 CB_Modelo.clear();
                 TF_NumeroSerie.clear();
@@ -403,11 +426,12 @@ public class FoliosView extends VerticalLayout {
         CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                folioEntity.setIdBien(e.getValue().getId());
                 folioEntity.setMarca("NO ESPECIFICADO");
                 folioEntity.setModelo("NO ESPECIFICADO");
-                CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(folioEntity.getIdTipoIncidencia(),
-                                                                                folioEntity.getIdBien()));
+
+                CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(CB_Incidencia.getValue().getId(),
+                                                                                e.getValue().getId()));
+
                 CB_Modelo.clear();
                 TF_NumeroSerie.clear();
                 TF_NumeroInventario.clear();
@@ -416,12 +440,11 @@ public class FoliosView extends VerticalLayout {
 
         CB_Marca.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                folioEntity.setMarca(e.getValue());
 
                 CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
-                                    folioEntity.getIdTipoIncidencia(),
-                                    folioEntity.getIdBien(),
-                                    folioEntity.getMarca()));
+                                    CB_Incidencia.getValue().getId(),
+                                    CB_Bien.getValue().getId(),
+                                    CB_Marca.getValue()));
                 TF_NumeroSerie.clear();
                 TF_NumeroInventario.clear();
             }
@@ -429,7 +452,6 @@ public class FoliosView extends VerticalLayout {
 
         CB_Modelo.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                folioEntity.setModelo(e.getValue());
                 TF_NumeroSerie.clear();
                 TF_NumeroInventario.clear();
             }
