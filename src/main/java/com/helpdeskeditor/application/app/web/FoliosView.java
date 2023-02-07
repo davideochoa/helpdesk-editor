@@ -59,10 +59,9 @@ import java.util.List;
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-@RolesAllowed("USER")
+@RolesAllowed({"USER","ADMIN"})
 @Slf4j
 public class FoliosView extends VerticalLayout {
-
     private VerticalLayout VL_Unidad = new VerticalLayout();
         private IntegerField IF_Folio = new IntegerField();
         private FormLayout FL_Unidad = new FormLayout();
@@ -97,8 +96,9 @@ public class FoliosView extends VerticalLayout {
             private TextArea TA_Anotacion = new TextArea("Anotacion");
             private ComboBox<UsuarioSoporteEntity> CB_SoporteAsignado = new ComboBox<UsuarioSoporteEntity>("Soporte Asignado");
             private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
-            private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
-        Button Btt_SalvarEstatus = new Button("GUARDAR");
+        private Button Btt_AgregarEstatus = new Button("AGREGAR");
+        private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
+        private Button Btt_SalvarEstatus = new Button("GUARDAR");
 
     private Tabs tabs;
         private Tab tabUnidad;
@@ -166,7 +166,17 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.clear();
         TF_ReferenciaDocumental.clear();
         DtePikr_fechaApertura.clear();
-        //DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+        DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+        CB_Incidencia.clear();
+        CB_Bien.clear();
+        CB_Marca.clear();
+        CB_Modelo.clear();
+        TF_NumeroSerie.clear();
+        TF_NumeroInventario.clear();
+
+        TA_MotivoReporte.clear();
+        CB_Prioridad.clear();
     }
 
     private boolean cargarFolio(Integer folio){
@@ -204,8 +214,8 @@ public class FoliosView extends VerticalLayout {
             BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
             String marca = folioEntity.getMarca();
             String modelo = folioEntity.getModelo();
-            String numSerie = folioEntity.getModelo();
-            String numInventario = folioEntity.getModelo();
+            String numSerie = folioEntity.getNumeroSerie();
+            String numInventario = folioEntity.getNumeroInventario();
 
             String motivoReporte = folioEntity.getMotivoReporte();
             PrioridadEntity prioridad = prioridadService.findById(folioEntity.getIdPrioridad()).get();
@@ -258,10 +268,12 @@ public class FoliosView extends VerticalLayout {
         folioEntity.setMarca(CB_Marca.getValue());
         folioEntity.setModelo(CB_Modelo.getValue());
         folioEntity.setNumeroSerie(TF_NumeroSerie.getValue());
+        log.info("TF_NumeroInventario.getValue():"+TF_NumeroInventario.getValue());
         folioEntity.setNumeroInventario(TF_NumeroInventario.getValue());
+        log.info("folioEntity.getNumeroInventario():"+folioEntity.getNumeroInventario());
 
         //****************** MOTIVO *******************************
-
+        folioEntity.setMotivoReporte(TA_MotivoReporte.getValue());
 
         folioEntity = folioService.save(folioEntity);
 
@@ -488,6 +500,11 @@ public class FoliosView extends VerticalLayout {
 
         CB_Estaus.setItems(catalogoEstatusService.findAll());
         CB_Estaus.setItemLabelGenerator(CatalogoEstatusEntity::getNombre);
+        CB_Estaus.addValueChangeListener(e -> {
+            if(e.getValue() != null){
+                //folioEntity.set(e.getValue().getId());
+            }
+        });
 
         CB_SoporteAsignado.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
         CB_SoporteAsignado.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
@@ -503,12 +520,8 @@ public class FoliosView extends VerticalLayout {
                     .setHelperText(e.getValue().length() + "/" + charLimit);
         });
 
-        //GridEstatus.addColumn(EstatusDAO::getId).setHeader("Id");
-        //GridEstatus.addColumn(EstatusDAO::getFolio).setHeader("Folio");
-        //GridEstatus.addColumn(EstatusDAO::getIdEstatus).setHeader("IdEstatus");
         GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");//.setAutoWidth(true);
         GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion");//.setAutoWidth(true);
-        //GridEstatus.addColumn(EstatusDAO::getIdUsuario).setHeader("IdUsuario");
         GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setWidth("15em");
         GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setWidth("15em");
 
@@ -516,16 +529,16 @@ public class FoliosView extends VerticalLayout {
         GridEstatus.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
         GridEstatus.setAllRowsVisible(true);
 
-        FL_Estatus.setColspan(GridEstatus, 2);
+        //FL_Estatus.setColspan(GridEstatus, 2);
 
         Btt_SalvarEstatus.addClickListener(e -> {
             guardar();
         });
         Btt_SalvarEstatus.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,GridEstatus);
+        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal);
 
-        VL_Estatus.add(FL_Estatus,Btt_SalvarEstatus);
+        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus,Btt_SalvarEstatus);
 
     }
 

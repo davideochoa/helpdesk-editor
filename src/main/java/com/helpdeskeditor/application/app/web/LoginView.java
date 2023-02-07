@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @PageTitle("Login")
 @Route(value = "login")
 @Slf4j
-public class LoginView extends LoginOverlay implements BeforeEnterObserver {
+public class LoginView extends LoginOverlay implements BeforeEnterObserver{
 
     private final AuthenticatedUser authenticatedUser;
 
@@ -26,7 +26,6 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
 
         LoginI18n i18n = LoginI18n.createDefault();
-
 
         LoginI18n.Form i18nForm = i18n.getForm();
         i18nForm.setTitle("Acceso");
@@ -40,7 +39,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         i18n.setErrorMessage(i18nErrorMessage);
 
         i18n.setHeader(new LoginI18n.Header());
-        i18n.getHeader().setTitle("HelpDesk Editor");
+        i18n.getHeader().setTitle("HelpDesk");
         i18n.getHeader().setDescription("Registro de incidencias de TI");
         i18n.setForm(i18nForm);
         i18n.setAdditionalInformation(null);
@@ -54,9 +53,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        log.info("ANTES");
         if (authenticatedUser.get().isPresent()) {
-
             setOpened(false);
             event.forwardTo("");
         }

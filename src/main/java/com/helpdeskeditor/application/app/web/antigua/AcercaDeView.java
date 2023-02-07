@@ -9,9 +9,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
+import javax.annotation.security.RolesAllowed;
+
 @PageTitle("Acerca De")
 @Route(value = "acerca-de", layout = MainLayout.class)
-@AnonymousAllowed
+//@AnonymousAllowed
+@RolesAllowed("USER")
 public class AcercaDeView extends VerticalLayout {
 
     public AcercaDeView() {

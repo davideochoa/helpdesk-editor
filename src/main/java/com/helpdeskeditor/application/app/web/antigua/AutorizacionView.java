@@ -20,7 +20,8 @@ import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Autorizacion")
 @Route(value = "autorizacion", layout = MainLayout.class)
-@RolesAllowed("ADMIN")
+//@RolesAllowed("ADMIN")
+@RolesAllowed("USER")
 public class AutorizacionView extends Div {
 
     private TextField street = new TextField("Street address");
