@@ -20,7 +20,6 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.util.DisplayInfo;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -29,15 +28,10 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -55,6 +49,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -185,59 +180,62 @@ public class FoliosView extends VerticalLayout {
     }
 
     private boolean cargarFolio(Integer folio){
-        folioEntity = folioService.findById(folio).get();
+        if(folioService.findById(folio) != null){
+            folioEntity = folioService.findById(folio).get();
 
-        if(folioEntity.getId() > 0){
-            //************************** UNIDAD *************************
-            CB_Unidad.setValue(unidadService.findById(folioEntity.getIdUnidad()).get());
-            CB_Area.setValue(areaService.findByIdAndIdUnidad(folioEntity.getIdArea(), unidadService.findById(folioEntity.getIdUnidad()).get().getId()));
-            CB_UsuarioReporta.setValue(folioEntity.getUsuarioReporta());
+            if(folioEntity.getId() > 0){
+                //************************** UNIDAD *************************
+                CB_Unidad.setValue(unidadService.findById(folioEntity.getIdUnidad()).get());
+                CB_Area.setValue(areaService.findByIdAndIdUnidad(folioEntity.getIdArea(), unidadService.findById(folioEntity.getIdUnidad()).get().getId()));
+                CB_UsuarioReporta.setValue(folioEntity.getUsuarioReporta());
 
-            String valor_str = folioEntity.getTelefonoContacto();
-            if(valor_str == null || valor_str.length() == 0 ||
-                    valor_str.equals("null") || valor_str.equals("NULL") ||
-                    valor_str.equals("Null"))
-                valor_str = "NO ESPECIFICADO";
-            else
-                valor_str = folioEntity.getTelefonoContacto();
+                String valor_str = folioEntity.getTelefonoContacto();
+                if(valor_str == null || valor_str.length() == 0 ||
+                        valor_str.equals("null") || valor_str.equals("NULL") ||
+                        valor_str.equals("Null"))
+                    valor_str = "NO ESPECIFICADO";
+                else
+                    valor_str = folioEntity.getTelefonoContacto();
 
-            TF_Telefono.setValue(valor_str);
+                TF_Telefono.setValue(valor_str);
 
-            valor_str = folioEntity.getReferenciaDocumental();
-            if(valor_str == null || valor_str.length() == 0 ||
-                    valor_str.equals("null") || valor_str.equals("NULL") ||
-                    valor_str.equals("Null"))
-                valor_str = "NO ESPECIFICADO";
-            else
                 valor_str = folioEntity.getReferenciaDocumental();
+                if(valor_str == null || valor_str.length() == 0 ||
+                        valor_str.equals("null") || valor_str.equals("NULL") ||
+                        valor_str.equals("Null"))
+                    valor_str = "NO ESPECIFICADO";
+                else
+                    valor_str = folioEntity.getReferenciaDocumental();
 
-            TF_ReferenciaDocumental.setValue(valor_str);
-            DtePikr_fechaApertura.setValue(LocalDate.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault()));
+                TF_ReferenciaDocumental.setValue(valor_str);
+                DtePikr_fechaApertura.setValue(LocalDate.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault()));
 
-            //************************************************************************
-            IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
-            BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
-            String marca = folioEntity.getMarca();
-            String modelo = folioEntity.getModelo();
-            String numSerie = folioEntity.getNumeroSerie();
-            String numInventario = folioEntity.getNumeroInventario();
+                //************************************************************************
+                IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
+                BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
+                String marca = folioEntity.getMarca();
+                String modelo = folioEntity.getModelo();
+                String numSerie = folioEntity.getNumeroSerie();
+                String numInventario = folioEntity.getNumeroInventario();
 
-            String motivoReporte = folioEntity.getMotivoReporte();
-            PrioridadEntity prioridad = prioridadService.findById(folioEntity.getIdPrioridad()).get();
+                String motivoReporte = folioEntity.getMotivoReporte();
+                PrioridadEntity prioridad = prioridadService.findById(folioEntity.getIdPrioridad()).get();
 
-            List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
-            CB_Incidencia.setValue(incidenciaEntity);
-            CB_Bien.setValue(biendEntity);
-            CB_Marca.setValue(marca);
-            CB_Modelo.setValue(modelo);
-            TF_NumeroSerie.setValue(numSerie);
-            TF_NumeroInventario.setValue(numInventario);
+                CB_Incidencia.setValue(incidenciaEntity);
+                CB_Bien.setValue(biendEntity);
+                CB_Marca.setValue(marca);
+                CB_Modelo.setValue(modelo);
+                TF_NumeroSerie.setValue(numSerie);
+                TF_NumeroInventario.setValue(numInventario);
 
-            TA_MotivoReporte.setValue(motivoReporte);
-            CB_Prioridad.setValue(prioridad);
+                TA_MotivoReporte.setValue(motivoReporte);
+                CB_Prioridad.setValue(prioridad);
 
-            GridEstatus.setItems(estatusEntityList);
+                GridEstatus.setItems(estatusEntityList);
+            }
+
         }
 
         return true;
