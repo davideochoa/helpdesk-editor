@@ -166,7 +166,7 @@ public class FoliosView extends VerticalLayout {
         TF_Telefono.clear();
         TF_ReferenciaDocumental.clear();
         DtePikr_fechaApertura.clear();
-        DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+
 
         CB_Incidencia.clear();
         CB_Bien.clear();
@@ -177,6 +177,11 @@ public class FoliosView extends VerticalLayout {
 
         TA_MotivoReporte.clear();
         CB_Prioridad.clear();
+
+        DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+        CB_Unidad.setItems(unidadService.findAll());
+        CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
+
     }
 
     private boolean cargarFolio(Integer folio){
@@ -352,14 +357,14 @@ public class FoliosView extends VerticalLayout {
             cargarFolio(IF_Folio.getValue());
         });
         B_cargar.addClickShortcut(Key.ENTER);
-/*
+
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
-            Notification.show("NUEVO ");
-        });*/
+            borrar();
+        });
 
-        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar);//,B_borrar);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar);//,B_borrar);
+        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_nuevo);
 
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
@@ -384,6 +389,9 @@ public class FoliosView extends VerticalLayout {
         DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
         Btt_SalvarUnidad.addClickListener(e -> { guardar(); });
+        Btt_SalvarUnidad.addClickListener(e -> {
+            guardar();
+        });
         Btt_SalvarUnidad.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         FL_Unidad.add(CB_Unidad);
