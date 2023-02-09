@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class EstatusService {
-    private EstatusFacade estatusFacade;
+    private final EstatusFacade estatusFacade;
     public EstatusService(EstatusFacade estatusFacade) {
         this.estatusFacade = estatusFacade;
     }

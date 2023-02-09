@@ -4,6 +4,7 @@ import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BiendEntity;
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
+import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
@@ -546,6 +547,16 @@ public class FoliosView extends VerticalLayout {
         TA_Anotacion.addValueChangeListener(e -> {
             e.getSource()
                     .setHelperText(e.getValue().length() + "/" + charLimit);
+        });
+
+        Btt_AgregarEstatus.addClickListener(e -> {
+            CatalogoEstatusEntity catalogoEstatusEntity = CB_Estaus.getValue();
+            String anotacion = TA_Anotacion.getValue();
+            UsuarioSoporteEntity usuarioSoporteEntity = CB_SoporteAsignado.getValue();
+            IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
+            List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+
+
         });
 
         GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");//.setAutoWidth(true);
