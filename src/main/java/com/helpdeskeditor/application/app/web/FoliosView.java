@@ -556,6 +556,54 @@ public class FoliosView extends VerticalLayout {
             IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
             List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
+            List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
+
+            /*
+            Folios pruebs: 10686 10685 10682 10675 10674
+            1:Apertura
+            2:Confirman Entrega/Solucion-Cierre
+            3:En espera de refacciones
+            4:En Atencion
+            5:Lista para entrega
+            6:Reasignar
+            7:Diagnostico Inicial
+            8:Diagnostico Final
+            */
+
+            Boolean existeApertura = false;
+            Boolean existeDiagnosticoInicial = false;
+            Boolean existeDiagnosticoFinal = false;
+            Boolean existeListaParaEntrega = false;
+            Boolean existeConfirmanEntrega = false;
+            /*
+            for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList)
+                log.info(catalogoEstatusEntity1.getId()+":"+catalogoEstatusEntity1.getNombre());*/
+
+            for(EstatusDAO estatusDAO : estatusEntityList){
+                if(estatusDAO.getIdEstatus() == 1)
+                    existeApertura = true;
+                else
+                    if(estatusDAO.getIdEstatus() == 7)
+                        existeDiagnosticoInicial = true;
+                    else
+                        if(estatusDAO.getIdEstatus() == 8)
+                            existeDiagnosticoFinal = true;
+                        else
+                            if(estatusDAO.getIdEstatus() == 5)
+                                existeListaParaEntrega = true;
+                            else
+                                if(estatusDAO.getIdEstatus() == 2)
+                                    existeConfirmanEntrega = true;
+            }
+
+            log.info("existeApertura:"+existeApertura);
+            log.info("existeDiagnosticoInicial:"+existeDiagnosticoInicial);
+            log.info("existeDiagnosticoFinal:"+existeDiagnosticoFinal);
+            log.info("existeListaParaEntrega:"+existeListaParaEntrega);
+            log.info("existeConfirmanEntrega:"+existeConfirmanEntrega);
+            log.info("Esatatus Agregar"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
+
+            if(existeApertura && existeDiagnosticoInicial == false && )
 
         });
 
