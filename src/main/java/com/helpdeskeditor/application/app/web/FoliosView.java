@@ -556,8 +556,6 @@ public class FoliosView extends VerticalLayout {
             IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
             List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
-            List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
-
             /*
             Folios pruebs: 10686 10685 10682 10675 10674
             1:Apertura
@@ -574,36 +572,57 @@ public class FoliosView extends VerticalLayout {
             Boolean existeDiagnosticoInicial = false;
             Boolean existeDiagnosticoFinal = false;
             Boolean existeListaParaEntrega = false;
-            Boolean existeConfirmanEntrega = false;
-            /*
-            for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList)
-                log.info(catalogoEstatusEntity1.getId()+":"+catalogoEstatusEntity1.getNombre());*/
+            Boolean existeCerrar = false;
+
+            Integer idApertura = 0;
+            Integer idDiagnosticoInicial = 0;
+            Integer idDiagnosticoFinal = 0;
+            Integer idCerrar = 0;
+            Integer idReasignar = 0;
+
+            List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
+
+            for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
+                if(catalogoEstatusEntity1.getAbrir())
+                    idApertura = catalogoEstatusEntity1.getId();
+                else
+                    if(catalogoEstatusEntity1.getDiagnostinoInicial())
+                        idDiagnosticoInicial = catalogoEstatusEntity1.getId();
+                    else
+                        if(catalogoEstatusEntity1.getDiagnostinoFinal())
+                            idDiagnosticoFinal = catalogoEstatusEntity1.getId();
+                        else
+                            if(catalogoEstatusEntity1.getReasignar())
+                                idReasignar = catalogoEstatusEntity1.getId();
+                            else
+                                if(catalogoEstatusEntity1.getDiagnostinoFinal())
+                                    idCerrar = catalogoEstatusEntity1.getId();
+            }
 
             for(EstatusDAO estatusDAO : estatusEntityList){
-                if(estatusDAO.getIdEstatus() == 1)
+                if(estatusDAO.getIdEstatus() == idApertura)
                     existeApertura = true;
                 else
-                    if(estatusDAO.getIdEstatus() == 7)
+                    if(estatusDAO.getIdEstatus() == idDiagnosticoInicial)
                         existeDiagnosticoInicial = true;
                     else
-                        if(estatusDAO.getIdEstatus() == 8)
+                        if(estatusDAO.getIdEstatus() == idDiagnosticoFinal)
                             existeDiagnosticoFinal = true;
                         else
-                            if(estatusDAO.getIdEstatus() == 5)
-                                existeListaParaEntrega = true;
-                            else
-                                if(estatusDAO.getIdEstatus() == 2)
-                                    existeConfirmanEntrega = true;
+                            if(estatusDAO.getIdEstatus() == idCerrar)
+                                existeCerrar = true;
             }
+
 
             log.info("existeApertura:"+existeApertura);
             log.info("existeDiagnosticoInicial:"+existeDiagnosticoInicial);
             log.info("existeDiagnosticoFinal:"+existeDiagnosticoFinal);
             log.info("existeListaParaEntrega:"+existeListaParaEntrega);
-            log.info("existeConfirmanEntrega:"+existeConfirmanEntrega);
-            log.info("Esatatus Agregar"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
+            log.info("existeCerrar:"+existeCerrar);
 
-            if(existeApertura && existeDiagnosticoInicial == false && )
+            log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
+
+            //if(existeApertura && existeDiagnosticoInicial == false && )
 
         });
 
