@@ -529,18 +529,6 @@ public class FoliosView extends VerticalLayout {
             8:Diagnostico Final
             */
 
-        Boolean existeApertura = false;
-        Boolean existeDiagnosticoInicial = false;
-        Boolean existeDiagnosticoFinal = false;
-        Boolean existeListaParaEntrega = false;
-        Boolean existeCerrar = false;
-
-        Integer idApertura = 0;
-        Integer idDiagnosticoInicial = 0;
-        Integer idDiagnosticoFinal = 0;
-        Integer idCerrar = 0;
-        Integer idReasignar = 0;
-
         VL_Estatus.setMargin(false);
         VL_Estatus.setPadding(false);
 
@@ -573,6 +561,12 @@ public class FoliosView extends VerticalLayout {
         });
 
         Btt_AgregarEstatus.addClickListener(e -> {
+            Integer idApertura = 0;
+            Integer idDiagnosticoInicial = 0;
+            Integer idDiagnosticoFinal = 0;
+            Integer idCerrar = 0;
+            Integer idReasignar = 0;
+
             CatalogoEstatusEntity catalogoEstatusEntity = CB_Estaus.getValue();
             String anotacion = TA_Anotacion.getValue();
             UsuarioSoporteEntity usuarioSoporteEntity = CB_SoporteAsignado.getValue();
@@ -596,7 +590,16 @@ public class FoliosView extends VerticalLayout {
                             else
                                 if(catalogoEstatusEntity1.getCerrar())
                                     idCerrar = catalogoEstatusEntity1.getId();
+                                else
+                                    if(catalogoEstatusEntity1.getReasignar())
+                                        idReasignar = catalogoEstatusEntity1.getId();
             }
+
+            Boolean existeApertura = false;
+            Boolean existeDiagnosticoInicial = false;
+            Boolean existeDiagnosticoFinal = false;
+            Boolean existeListaParaEntrega = false;
+            Boolean existeCerrar = false;
 
             for(EstatusDAO estatusDAO : estatusEntityList){
                 if(estatusDAO.getIdEstatus() == idApertura)
@@ -659,11 +662,20 @@ public class FoliosView extends VerticalLayout {
                                 DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                         }
                         else{
-                            if(existeApertura && !existeCerrar){
-                                log.info("GUARDAR ESTATUS DIFERENTE");
+                            if(catalogoEstatusEntity.getId() == idReasignar){
+                                if(existeApertura && existeDiagnosticoInicial && !existeCerrar){
+                                    log.info("REASIGNAR FOLIO");
+                                }
+                                else
+                                    DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                             }
-                            else
-                                DisplayInfo.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
+                            else{
+                                if(existeApertura && !existeCerrar){
+                                    log.info("GUARDAR ESTATUS DIFERENTE");
+                                }
+                                else
+                                    DisplayInfo.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
+                            }
                         }
                     }
                 }
