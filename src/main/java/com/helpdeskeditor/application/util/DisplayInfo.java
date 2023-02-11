@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.util;
 
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -24,6 +25,16 @@ public class DisplayInfo {
         dialog.add(texto);
         dialog.add(progressBar);
         dialog.setModal(true);
+
+        return dialog;
+    }
+
+    public static ConfirmDialog confirmDialog(String header, String texto){
+        ConfirmDialog dialog = new ConfirmDialog();
+        dialog.setHeader(header);
+        dialog.setText(texto);
+
+        dialog.setConfirmText("OK");
 
         return dialog;
     }

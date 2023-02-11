@@ -4,7 +4,6 @@ import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BiendEntity;
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
-import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
@@ -24,6 +23,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -50,7 +50,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -118,7 +117,7 @@ public class FoliosView extends VerticalLayout {
     private int charLimit;
 
     FolioEntity folioEntity = null;
-    Dialog dialogEspere = DisplayInfo.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
+    Dialog dialogProgressBarModificandoFolio = DisplayInfo.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
     public FoliosView(UnidadService unidadService,
                       AreaService areaService,
@@ -243,7 +242,7 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        dialogEspere.open();
+        dialogProgressBarModificandoFolio.open();
 
         //****************** UNIDAD ******************************************************
         UnidadEntity unidadEntity = CB_Unidad.getValue();
@@ -316,7 +315,7 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity = folioService.save(folioEntity);
 
-        dialogEspere.close();
+        dialogProgressBarModificandoFolio.close();
 
         if(folioEntity.getId() > 0) {
             borrar();
@@ -518,6 +517,30 @@ public class FoliosView extends VerticalLayout {
     }
 
     private void layoutEstatus(){
+         /*
+            Folios pruebs: 10686 10685 10682 10675 10674
+            1:Apertura
+            2:Confirman Entrega/Solucion-Cierre
+            3:En espera de refacciones
+            4:En Atencion
+            5:Lista para entrega
+            6:Reasignar
+            7:Diagnostico Inicial
+            8:Diagnostico Final
+            */
+
+        Boolean existeApertura = false;
+        Boolean existeDiagnosticoInicial = false;
+        Boolean existeDiagnosticoFinal = false;
+        Boolean existeListaParaEntrega = false;
+        Boolean existeCerrar = false;
+
+        Integer idApertura = 0;
+        Integer idDiagnosticoInicial = 0;
+        Integer idDiagnosticoFinal = 0;
+        Integer idCerrar = 0;
+        Integer idReasignar = 0;
+
         VL_Estatus.setMargin(false);
         VL_Estatus.setPadding(false);
 
@@ -556,30 +579,6 @@ public class FoliosView extends VerticalLayout {
             IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
             List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
-            /*
-            Folios pruebs: 10686 10685 10682 10675 10674
-            1:Apertura
-            2:Confirman Entrega/Solucion-Cierre
-            3:En espera de refacciones
-            4:En Atencion
-            5:Lista para entrega
-            6:Reasignar
-            7:Diagnostico Inicial
-            8:Diagnostico Final
-            */
-
-            Boolean existeApertura = false;
-            Boolean existeDiagnosticoInicial = false;
-            Boolean existeDiagnosticoFinal = false;
-            Boolean existeListaParaEntrega = false;
-            Boolean existeCerrar = false;
-
-            Integer idApertura = 0;
-            Integer idDiagnosticoInicial = 0;
-            Integer idDiagnosticoFinal = 0;
-            Integer idCerrar = 0;
-            Integer idReasignar = 0;
-
             List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
 
             for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
@@ -595,7 +594,7 @@ public class FoliosView extends VerticalLayout {
                             if(catalogoEstatusEntity1.getReasignar())
                                 idReasignar = catalogoEstatusEntity1.getId();
                             else
-                                if(catalogoEstatusEntity1.getDiagnostinoFinal())
+                                if(catalogoEstatusEntity1.getCerrar())
                                     idCerrar = catalogoEstatusEntity1.getId();
             }
 
@@ -621,6 +620,56 @@ public class FoliosView extends VerticalLayout {
             log.info("existeCerrar:"+existeCerrar);
 
             log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
+
+            log.info("idApertura:"+idApertura);
+            log.info("idDiagnosticoInicial:"+idDiagnosticoInicial);
+            log.info("idDiagnosticoFinal:"+idDiagnosticoFinal);
+            log.info("idCerrar:"+idCerrar);
+            log.info("idReasignar:"+idReasignar);
+
+            if(catalogoEstatusEntity.getId() == idApertura){
+                if(!existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
+                    log.info("GUARDAR APERTURA");
+                }
+                else
+                    DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+            }
+            else{
+                if(catalogoEstatusEntity.getId() == idDiagnosticoInicial){
+                    if(existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
+                        log.info("GUARDAR DIAGNOSTICO INICIAL");
+                    }
+                    else
+                        DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                }
+                else{
+                    if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
+                        if(existeApertura && existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
+                            log.info("GUARDAR DIAGNOSTICO FINAL");
+                        }
+                        else
+                            DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                    }
+                    else{
+                        if(catalogoEstatusEntity.getId() == idCerrar){
+                            if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar){
+                                log.info("GUARDAR CERRAR FOLIO");
+                            }
+                            else
+                                DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                        }
+                        else{
+                            if(existeApertura && !existeCerrar){
+                                log.info("GUARDAR ESTATUS DIFERENTE");
+                            }
+                            else
+                                DisplayInfo.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
+                        }
+                    }
+                }
+            }
+
+
 
             //if(existeApertura && existeDiagnosticoInicial == false && )
 
