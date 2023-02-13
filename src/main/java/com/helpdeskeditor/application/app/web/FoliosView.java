@@ -365,6 +365,8 @@ public class FoliosView extends VerticalLayout {
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
             borrar();
+
+
         });
 
         HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_nuevo);
