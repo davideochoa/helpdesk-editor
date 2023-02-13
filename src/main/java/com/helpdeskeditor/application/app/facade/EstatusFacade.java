@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 @Transactional(readOnly = true)
 public class EstatusFacade {
-    private EstatusRepository estatusRepository;
+    private final EstatusRepository estatusRepository;
 
     @Autowired
     public EstatusFacade(EstatusRepository estatusRepository) {
@@ -29,5 +29,9 @@ public class EstatusFacade {
 
     public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio){
         return estatusRepository.findByFolioOrderByFecha(Folio);
+    }
+
+    public EstatusEntity save(EstatusEntity entity){
+        return estatusRepository.save(entity);
     }
 }

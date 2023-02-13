@@ -25,4 +25,8 @@ public class EstatusService {
     public List<EstatusEntity> findByFolioOrderByFecha(Integer Folio){
         return estatusFacade.findByFolioOrderByFecha(Folio);
     }
+
+    public EstatusEntity save(EstatusEntity entity){
+        return estatusFacade.save(entity);
+    }
 }

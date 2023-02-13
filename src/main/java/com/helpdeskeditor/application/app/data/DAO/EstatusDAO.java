@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -19,19 +21,12 @@ import java.util.Date;
 @Setter
 public class EstatusDAO{
     Integer id;
-
     Integer folio;
-
     Integer idEstatus;
-
     String nombre;
-
     String anotacion;
-
     Integer idUsuario;
-
     String nombrePropio;
-
-    Date fecha;
-
+    //Date fecha;
+    LocalDate fecha;
 }

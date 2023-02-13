@@ -4,6 +4,7 @@ import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BiendEntity;
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
+import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
@@ -18,6 +19,7 @@ import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.DisplayInfo;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -47,6 +49,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +115,7 @@ public class FoliosView extends VerticalLayout {
     private EstatusService estatusService;
     private CatalogoEstatusService catalogoEstatusService;
     private UsuarioSoporteService usuarioSoporteService;
+    AuthenticatedUser authenticatedUser;
 
     @Value("${charLimit}")
     private int charLimit;
@@ -128,7 +132,8 @@ public class FoliosView extends VerticalLayout {
                       EstatusService estatusService,
                       CatalogoEstatusService catalogoEstatusService,
                       UsuarioSoporteService usuarioSoporteService,
-                      IncidenciaService incidenciaServiceFinal) {
+                      IncidenciaService incidenciaServiceFinal,
+                      AuthenticatedUser authenticatedUser) {
 
         this.unidadService = unidadService;
         this.areaService = areaService;
@@ -140,6 +145,7 @@ public class FoliosView extends VerticalLayout {
         this.catalogoEstatusService = catalogoEstatusService;
         this.usuarioSoporteService = usuarioSoporteService;
         this.incidenciaServiceFinal = incidenciaServiceFinal;
+        this.authenticatedUser = authenticatedUser;
 
         folioEntity = new FolioEntity();
 
@@ -517,17 +523,17 @@ public class FoliosView extends VerticalLayout {
     }
 
     private void layoutEstatus(){
-         /*
-            Folios pruebs: 10686 10685 10682 10675 10674
-            1:Apertura
-            2:Confirman Entrega/Solucion-Cierre
-            3:En espera de refacciones
-            4:En Atencion
-            5:Lista para entrega
-            6:Reasignar
-            7:Diagnostico Inicial
-            8:Diagnostico Final
-            */
+
+       /* Folios pruebs: 10686 10685 10682 10675 10674
+        1:Apertura
+        2:Confirman Entrega/Solucion-Cierre
+        3:En espera de refacciones
+        4:En Atencion
+        5:Lista para entrega
+        6:Reasignar
+        7:Diagnostico Inicial
+        8:Diagnostico Final*/
+
 
         VL_Estatus.setMargin(false);
         VL_Estatus.setPadding(false);
@@ -569,6 +575,8 @@ public class FoliosView extends VerticalLayout {
 
             CatalogoEstatusEntity catalogoEstatusEntity = CB_Estaus.getValue();
             String anotacion = TA_Anotacion.getValue();
+            if(anotacion == null)
+                anotacion = "";
             UsuarioSoporteEntity usuarioSoporteEntity = CB_SoporteAsignado.getValue();
             IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
             List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
@@ -615,20 +623,30 @@ public class FoliosView extends VerticalLayout {
                                 existeCerrar = true;
             }
 
-
-            log.info("existeApertura:"+existeApertura);
-            log.info("existeDiagnosticoInicial:"+existeDiagnosticoInicial);
-            log.info("existeDiagnosticoFinal:"+existeDiagnosticoFinal);
-            log.info("existeListaParaEntrega:"+existeListaParaEntrega);
-            log.info("existeCerrar:"+existeCerrar);
-
-            log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
-
+            log.info("");
             log.info("idApertura:"+idApertura);
             log.info("idDiagnosticoInicial:"+idDiagnosticoInicial);
             log.info("idDiagnosticoFinal:"+idDiagnosticoFinal);
             log.info("idCerrar:"+idCerrar);
             log.info("idReasignar:"+idReasignar);
+
+            log.info("");
+            log.info("existeApertura:"+existeApertura);
+            log.info("existeDiagnosticoInicial:"+existeDiagnosticoInicial);
+            log.info("existeDiagnosticoFinal:"+existeDiagnosticoFinal);
+            log.info("existeListaParaEntrega:"+existeListaParaEntrega);
+            log.info("existeCerrar:"+existeCerrar);
+            log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
+
+            /* Folios pruebs: 10686 10685 10682 10675 10674
+            1:Apertura
+            2:Confirman Entrega/Solucion-Cierre
+            3:En espera de refacciones
+            4:En Atencion
+            5:Lista para entrega
+            6:Reasignar
+            7:Diagnostico Inicial
+            8:Diagnostico Final*/
 
             if(catalogoEstatusEntity.getId() == idApertura){
                 if(!existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
@@ -639,11 +657,21 @@ public class FoliosView extends VerticalLayout {
             }
             else{
                 if(catalogoEstatusEntity.getId() == idDiagnosticoInicial){
-                    if(existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
+                    if(existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                         log.info("GUARDAR DIAGNOSTICO INICIAL");
+
+                        EstatusEntity estatusEntity = new EstatusEntity();
+                        estatusEntity.setFolio(folioEntity.getId());
+                        estatusEntity.setIdEstatus(catalogoEstatusEntity.getId());
+                        estatusEntity.setAnotacion(anotacion);
+                        estatusEntity.setIdUsuario(authenticatedUser.get().get().getId());
+                        //estatusEntity.setFecha(LocalDateTime.now(ZoneId.systemDefault()));
+
+                        estatusService.save(estatusEntity);
+
                     }
                     else
-                        DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                        DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe, falta su correlativo anterior o falta la anotacion").open();
                 }
                 else{
                     if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
@@ -663,7 +691,7 @@ public class FoliosView extends VerticalLayout {
                         }
                         else{
                             if(catalogoEstatusEntity.getId() == idReasignar){
-                                if(existeApertura && existeDiagnosticoInicial && !existeCerrar){
+                                if(existeApertura && !existeCerrar){
                                     log.info("REASIGNAR FOLIO");
                                 }
                                 else
