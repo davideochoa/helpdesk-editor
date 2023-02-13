@@ -651,6 +651,8 @@ public class FoliosView extends VerticalLayout {
             if(catalogoEstatusEntity.getId() == idApertura){
                 if(!existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
                     log.info("GUARDAR APERTURA");
+
+                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                 }
                 else
                     DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -660,15 +662,7 @@ public class FoliosView extends VerticalLayout {
                     if(existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                         log.info("GUARDAR DIAGNOSTICO INICIAL");
 
-                        EstatusEntity estatusEntity = new EstatusEntity();
-                        estatusEntity.setFolio(folioEntity.getId());
-                        estatusEntity.setIdEstatus(catalogoEstatusEntity.getId());
-                        estatusEntity.setAnotacion(anotacion);
-                        estatusEntity.setIdUsuario(authenticatedUser.get().get().getId());
-                        //estatusEntity.setFecha(LocalDateTime.now(ZoneId.systemDefault()));
-
-                        estatusService.save(estatusEntity);
-
+                        agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                     }
                     else
                         DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe, falta su correlativo anterior o falta la anotacion").open();
@@ -677,6 +671,8 @@ public class FoliosView extends VerticalLayout {
                     if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
                         if(existeApertura && existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
                             log.info("GUARDAR DIAGNOSTICO FINAL");
+
+                            agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                         }
                         else
                             DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -685,6 +681,8 @@ public class FoliosView extends VerticalLayout {
                         if(catalogoEstatusEntity.getId() == idCerrar){
                             if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar){
                                 log.info("GUARDAR CERRAR FOLIO");
+
+                                agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                             }
                             else
                                 DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -693,6 +691,8 @@ public class FoliosView extends VerticalLayout {
                             if(catalogoEstatusEntity.getId() == idReasignar){
                                 if(existeApertura && !existeCerrar){
                                     log.info("REASIGNAR FOLIO");
+
+                                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                                 }
                                 else
                                     DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -700,6 +700,8 @@ public class FoliosView extends VerticalLayout {
                             else{
                                 if(existeApertura && !existeCerrar){
                                     log.info("GUARDAR ESTATUS DIFERENTE");
+
+                                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                                 }
                                 else
                                     DisplayInfo.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
@@ -735,6 +737,24 @@ public class FoliosView extends VerticalLayout {
 
         VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus,Btt_SalvarEstatus);
 
+    }
+
+    private void agregarEstatus(Integer idEstatus, String anotacion){
+        EstatusEntity estatusEntity = new EstatusEntity();
+        estatusEntity.setFolio(folioEntity.getId());
+        estatusEntity.setIdEstatus(idEstatus);
+        estatusEntity.setAnotacion(anotacion);
+        estatusEntity.setIdUsuario(authenticatedUser.get().get().getId());
+
+        estatusService.save(estatusEntity);
+
+        List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+        GridEstatus.setItems(estatusEntityList);
+
+        CB_Estaus.clear();
+        TA_Anotacion.clear();
+        CB_SoporteAsignado.clear();
+        CB_TipoIncidenciaFinal.clear();
     }
 
     private void layoutTabs(){
