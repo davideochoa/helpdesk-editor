@@ -669,7 +669,7 @@ public class FoliosView extends VerticalLayout {
                 }
                 else{
                     if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
-                        if(existeApertura && existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
+                        if(existeApertura && existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                             log.info("GUARDAR DIAGNOSTICO FINAL");
 
                             agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
@@ -679,7 +679,7 @@ public class FoliosView extends VerticalLayout {
                     }
                     else{
                         if(catalogoEstatusEntity.getId() == idCerrar){
-                            if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar){
+                            if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                                 log.info("GUARDAR CERRAR FOLIO");
 
                                 agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
@@ -692,13 +692,16 @@ public class FoliosView extends VerticalLayout {
                                 if(existeApertura && !existeCerrar){
                                     log.info("REASIGNAR FOLIO");
 
-                                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
+                                    folioEntity.setIdUsuarioSoporteAsignado(usuarioSoporteEntity.getId());
+                                    folioEntity = folioService.save(folioEntity);
+
+                                    agregarEstatus(catalogoEstatusEntity.getId(), "Nuevo usuario de soporte asignado"+usuarioSoporteEntity.getNombrePropio());
                                 }
                                 else
                                     DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                             }
                             else{
-                                if(existeApertura && !existeCerrar){
+                                if(existeApertura && !existeCerrar && anotacion.length() > 0){
                                     log.info("GUARDAR ESTATUS DIFERENTE");
 
                                     agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
