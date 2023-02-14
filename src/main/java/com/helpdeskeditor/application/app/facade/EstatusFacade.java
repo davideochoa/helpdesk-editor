@@ -20,7 +20,7 @@ public class EstatusFacade {
     }
 
     public List<EstatusEntity> findAll(){
-        return estatusRepository.findAll();
+        return (List<EstatusEntity>) estatusRepository.findAll();
     }
 
     public List<EstatusDAO> findAllDAO(Integer folio){

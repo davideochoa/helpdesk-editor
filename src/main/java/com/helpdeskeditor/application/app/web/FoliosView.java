@@ -117,7 +117,7 @@ public class FoliosView extends VerticalLayout {
     private IncidenciaService incidenciaServiceFinal;
     private BienService bienService;
     private PrioridadService prioridadService;
-    private EstatusService estatusService;
+    private final EstatusService estatusService;
     private CatalogoEstatusService catalogoEstatusService;
     private UsuarioSoporteService usuarioSoporteService;
     AuthenticatedUser authenticatedUser;
