@@ -29,8 +29,11 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -40,6 +43,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -94,9 +98,10 @@ public class FoliosView extends VerticalLayout {
             private TextArea TA_Anotacion = new TextArea("Anotacion");
             private ComboBox<UsuarioSoporteEntity> CB_SoporteAsignado = new ComboBox<UsuarioSoporteEntity>("Soporte Asignado");
             private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
+            private DatePicker DtePikr_fechaMovimiento = new DatePicker("Fecha Movimiento");
         private Button Btt_AgregarEstatus = new Button("AGREGAR");
         private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
-        private Button Btt_SalvarEstatus = new Button("GUARDAR");
+        //private Button Btt_SalvarEstatus = new Button("GUARDAR");
 
     private Tabs tabs;
         private Tab tabUnidad;
@@ -179,9 +184,14 @@ public class FoliosView extends VerticalLayout {
         TA_MotivoReporte.clear();
         CB_Prioridad.clear();
 
+        CB_Estaus.clear();
+        TA_Anotacion.clear();
+        CB_SoporteAsignado.clear();
+        CB_TipoIncidenciaFinal.clear();
+
         DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
-        CB_Unidad.setItems(unidadService.findAll());
-        CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
+        //CB_Unidad.setItems(unidadService.findAll());
+        //CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
 
     }
 
@@ -365,8 +375,6 @@ public class FoliosView extends VerticalLayout {
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
             borrar();
-
-
         });
 
         HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_nuevo);
@@ -625,7 +633,7 @@ public class FoliosView extends VerticalLayout {
                                 existeCerrar = true;
             }
 
-            log.info("");
+            /*log.info("");
             log.info("idApertura:"+idApertura);
             log.info("idDiagnosticoInicial:"+idDiagnosticoInicial);
             log.info("idDiagnosticoFinal:"+idDiagnosticoFinal);
@@ -638,7 +646,7 @@ public class FoliosView extends VerticalLayout {
             log.info("existeDiagnosticoFinal:"+existeDiagnosticoFinal);
             log.info("existeListaParaEntrega:"+existeListaParaEntrega);
             log.info("existeCerrar:"+existeCerrar);
-            log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());
+            log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());*/
 
             /* Folios pruebs: 10686 10685 10682 10675 10674
             1:Apertura
@@ -722,26 +730,44 @@ public class FoliosView extends VerticalLayout {
 
         });
 
-        GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus");//.setAutoWidth(true);
-        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion");//.setAutoWidth(true);
-        GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setWidth("15em");
-        GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setWidth("15em");
+        GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus").setResizable(true);//.setAutoWidth(true);
+        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion").setResizable(true);//.setAutoWidth(true);
+        GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setResizable(true);
+        GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
+        GridEstatus.addColumn(
+                new ComponentRenderer<>(Button::new, (button, person) -> {
+                    button.addThemeVariants(ButtonVariant.LUMO_ICON,
+                            ButtonVariant.LUMO_ERROR,
+                            ButtonVariant.LUMO_TERTIARY);
+                    button.addClickListener(e -> this.removeInvitation(person));
+                    button.setIcon(new Icon(VaadinIcon.TRASH));
+                })).setHeader("Eliminar").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
 
         GridEstatus.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         GridEstatus.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
         GridEstatus.setAllRowsVisible(true);
 
-        //FL_Estatus.setColspan(GridEstatus, 2);
 
+        //FL_Estatus.setColspan(GridEstatus, 2);
+/*
         Btt_SalvarEstatus.addClickListener(e -> {
             guardar();
         });
-        Btt_SalvarEstatus.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Btt_SalvarEstatus.addThemeVariants(ButtonVariant.LUMO_PRIMARY);*/
 
-        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal);
+        FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,DtePikr_fechaMovimiento);
 
-        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus,Btt_SalvarEstatus);
+        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus);//,Btt_SalvarEstatus);
 
+
+    }
+
+    private void removeInvitation(EstatusDAO person) {
+        if (person == null)
+            return;
+        //EstatusDAO.remove(person);
+
+        GridEstatus.getDataProvider().refreshAll();
     }
 
     private void agregarEstatus(Integer idEstatus, String anotacion){
