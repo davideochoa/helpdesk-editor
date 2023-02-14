@@ -125,6 +125,8 @@ public class FoliosView extends VerticalLayout {
     @Value("${charLimit}")
     private int charLimit;
 
+    List<EstatusDAO> estatusEntityList = null;
+
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = DisplayInfo.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
@@ -237,7 +239,8 @@ public class FoliosView extends VerticalLayout {
                 String motivoReporte = folioEntity.getMotivoReporte();
                 PrioridadEntity prioridad = prioridadService.findById(folioEntity.getIdPrioridad()).get();
 
-                List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                //List<EstatusDAO>
+                estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
                 CB_Incidencia.setValue(incidenciaEntity);
                 CB_Bien.setValue(biendEntity);
@@ -735,11 +738,20 @@ public class FoliosView extends VerticalLayout {
         GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setResizable(true);
         GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
         GridEstatus.addColumn(
-                new ComponentRenderer<>(Button::new, (button, person) -> {
+                new ComponentRenderer<>(Button::new, (button, estatus) -> {
                     button.addThemeVariants(ButtonVariant.LUMO_ICON,
                             ButtonVariant.LUMO_ERROR,
                             ButtonVariant.LUMO_TERTIARY);
-                    button.addClickListener(e -> this.removeInvitation(person));
+                    button.addClickListener(e -> {
+                        //estatusEntityList.remove(estatus);
+
+                        estatusService.deleteById(estatus.getId());
+
+                        List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                        GridEstatus.setItems(estatusEntityList);
+
+                        //GridEstatus.getDataProvider().refreshAll()
+                    });
                     button.setIcon(new Icon(VaadinIcon.TRASH));
                 })).setHeader("Eliminar").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
 

@@ -34,4 +34,8 @@ public class EstatusFacade {
     public EstatusEntity save(EstatusEntity entity){
         return estatusRepository.save(entity);
     }
+
+    public void deleteById(Integer Id){
+        estatusRepository.deleteById(Id);
+    }
 }
