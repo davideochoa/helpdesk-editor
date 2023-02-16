@@ -3,12 +3,13 @@ package com.helpdeskeditor.application.app.facade;
 import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.repository.EstatusRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Slf4j
 @Component
 @Transactional(readOnly = true)
 public class EstatusFacade {
@@ -38,4 +39,11 @@ public class EstatusFacade {
     public void deleteById(Integer Id){
         estatusRepository.deleteById(Id);
     }
+
+    public void delete(EstatusEntity entity){
+        log.info("EstatusFacade:public void delete(EstatusEntity entity){");
+        estatusRepository.delete(entity);
+        log.info("EstatusFacade:fin");
+    }
+
 }

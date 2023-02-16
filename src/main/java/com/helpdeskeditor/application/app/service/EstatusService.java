@@ -3,10 +3,11 @@ package com.helpdeskeditor.application.app.service;
 import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.facade.EstatusFacade;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class EstatusService {
     private final EstatusFacade estatusFacade;
@@ -31,6 +32,10 @@ public class EstatusService {
     }
     public void deleteById(Integer Id){
         estatusFacade.deleteById(Id);
+    }
+    public void delete(EstatusEntity entity){
+        log.info("EstatusService:public void delete(EstatusEntity entity)");
+        estatusFacade.delete(entity);
     }
 
 }

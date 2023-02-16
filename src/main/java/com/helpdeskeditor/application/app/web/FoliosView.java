@@ -49,6 +49,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
@@ -130,6 +131,7 @@ public class FoliosView extends VerticalLayout {
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = DisplayInfo.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
+    @Autowired
     public FoliosView(UnidadService unidadService,
                       AreaService areaService,
                       FolioService folioService,
@@ -743,11 +745,22 @@ public class FoliosView extends VerticalLayout {
                             ButtonVariant.LUMO_ERROR,
                             ButtonVariant.LUMO_TERTIARY);
                     button.addClickListener(e -> {
+
+                        EstatusEntity estatusEntity = new EstatusEntity();
+                        estatusEntity.setId(estatus.getId());
+                        estatusEntity.setFolio(estatus.getFolio());
+                        estatusEntity.setIdEstatus(estatus.getIdEstatus());
+                        estatusEntity.setAnotacion(estatus.getAnotacion());
+                        estatusEntity.setIdUsuario(estatus.getIdUsuario());
+                        estatusEntity.setFecha(estatus.getFecha());
+                        log.info(estatusEntity.toString());
+
                         //estatusEntityList.remove(estatus);
-
-                        estatusService.deleteById(estatus.getId());
-
-                        List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                        log.info("DELETE 1");
+                        estatusService.delete(estatusEntity);
+                        log.info("DELETE 2");
+                        estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                        log.info("DELETE 3");
                         GridEstatus.setItems(estatusEntityList);
 
                         //GridEstatus.getDataProvider().refreshAll()

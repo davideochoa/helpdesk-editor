@@ -48,4 +48,14 @@ public class EstatusEntity {
     @Column(name = "Fecha")
     @CreationTimestamp
     LocalDate fecha;
+
+    @Override
+    public String toString(){
+        return "getId:"+getId()+
+                ":getFolio:"+getFolio()+
+                ":getIdEstatus:"+getIdEstatus()+
+                ":getIdUsuario:"+getIdUsuario()+
+                ":getFecha:"+getFecha()+
+                ":getAnotacion:"+getAnotacion();
+    }
 }

@@ -28,4 +28,5 @@ public interface EstatusRepository extends CrudRepository<EstatusEntity, Integer
             "AND cs.id = e.idUsuario " +
             "ORDER BY e.fecha")
     public List<EstatusDAO> findAllDAO(Integer folio);
+
 }
