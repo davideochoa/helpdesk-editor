@@ -11,11 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 @Slf4j
 @Component
-@Transactional(readOnly = true)
 public class EstatusFacade {
     private final EstatusRepository estatusRepository;
 
-    @Autowired
     public EstatusFacade(EstatusRepository estatusRepository) {
         this.estatusRepository = estatusRepository;
     }
@@ -40,6 +38,7 @@ public class EstatusFacade {
         estatusRepository.deleteById(Id);
     }
 
+    @Transactional
     public void delete(EstatusEntity entity){
         log.info("EstatusFacade:public void delete(EstatusEntity entity){");
         estatusRepository.delete(entity);
