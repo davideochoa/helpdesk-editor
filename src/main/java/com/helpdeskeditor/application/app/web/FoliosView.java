@@ -538,7 +538,6 @@ public class FoliosView extends VerticalLayout {
     }
 
     private void layoutEstatus(){
-
        /* Folios pruebs: 10686 10685 10682 10675 10674
         1:Apertura
         2:Confirman Entrega/Solucion-Cierre
@@ -548,7 +547,6 @@ public class FoliosView extends VerticalLayout {
         6:Reasignar
         7:Diagnostico Inicial
         8:Diagnostico Final*/
-
 
         VL_Estatus.setMargin(false);
         VL_Estatus.setPadding(false);
@@ -638,21 +636,6 @@ public class FoliosView extends VerticalLayout {
                                 existeCerrar = true;
             }
 
-            /*log.info("");
-            log.info("idApertura:"+idApertura);
-            log.info("idDiagnosticoInicial:"+idDiagnosticoInicial);
-            log.info("idDiagnosticoFinal:"+idDiagnosticoFinal);
-            log.info("idCerrar:"+idCerrar);
-            log.info("idReasignar:"+idReasignar);
-
-            log.info("");
-            log.info("existeApertura:"+existeApertura);
-            log.info("existeDiagnosticoInicial:"+existeDiagnosticoInicial);
-            log.info("existeDiagnosticoFinal:"+existeDiagnosticoFinal);
-            log.info("existeListaParaEntrega:"+existeListaParaEntrega);
-            log.info("existeCerrar:"+existeCerrar);
-            log.info("Estatus Agregar:"+catalogoEstatusEntity.getId()+":"+catalogoEstatusEntity.getNombre());*/
-
             /* Folios pruebs: 10686 10685 10682 10675 10674
             1:Apertura
             2:Confirman Entrega/Solucion-Cierre
@@ -729,8 +712,6 @@ public class FoliosView extends VerticalLayout {
                 }
             }
 
-
-
             //if(existeApertura && existeDiagnosticoInicial == false && )
 
         });
@@ -753,17 +734,11 @@ public class FoliosView extends VerticalLayout {
                         estatusEntity.setAnotacion(estatus.getAnotacion());
                         estatusEntity.setIdUsuario(estatus.getIdUsuario());
                         estatusEntity.setFecha(estatus.getFecha());
-                        log.info(estatusEntity.toString());
 
-                        //estatusEntityList.remove(estatus);
-                        log.info("DELETE 1");
                         estatusService.delete(estatusEntity);
-                        log.info("DELETE 2");
                         estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
-                        log.info("DELETE 3");
                         GridEstatus.setItems(estatusEntityList);
 
-                        //GridEstatus.getDataProvider().refreshAll()
                     });
                     button.setIcon(new Icon(VaadinIcon.TRASH));
                 })).setHeader("Eliminar").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
@@ -772,27 +747,9 @@ public class FoliosView extends VerticalLayout {
         GridEstatus.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
         GridEstatus.setAllRowsVisible(true);
 
-
-        //FL_Estatus.setColspan(GridEstatus, 2);
-/*
-        Btt_SalvarEstatus.addClickListener(e -> {
-            guardar();
-        });
-        Btt_SalvarEstatus.addThemeVariants(ButtonVariant.LUMO_PRIMARY);*/
-
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,DtePikr_fechaMovimiento);
 
         VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus);//,Btt_SalvarEstatus);
-
-
-    }
-
-    private void removeInvitation(EstatusDAO person) {
-        if (person == null)
-            return;
-        //EstatusDAO.remove(person);
-
-        GridEstatus.getDataProvider().refreshAll();
     }
 
     private void agregarEstatus(Integer idEstatus, String anotacion){
