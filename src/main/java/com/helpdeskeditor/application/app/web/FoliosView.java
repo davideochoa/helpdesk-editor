@@ -2,7 +2,7 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
-import com.helpdeskeditor.application.app.data.entity.BiendEntity;
+import com.helpdeskeditor.application.app.data.entity.BienEntity;
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
@@ -25,7 +25,6 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -54,7 +53,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -79,7 +77,7 @@ public class FoliosView extends VerticalLayout {
     private VerticalLayout VL_Incidencia = new VerticalLayout();
         private FormLayout FL_Incidencia = new FormLayout();
             private ComboBox<IncidenciaEntity> CB_Incidencia = new ComboBox<IncidenciaEntity>("Incidencia");
-            private ComboBox<BiendEntity> CB_Bien = new ComboBox<BiendEntity>("Bien");
+            private ComboBox<BienEntity> CB_Bien = new ComboBox<BienEntity>("Bien");
             private ComboBox<String> CB_Marca = new ComboBox<String>("Marca");
             private ComboBox<String> CB_Modelo = new ComboBox<String>("Modelo");
             private TextField TF_NumeroSerie = new TextField("Numero Serie");
@@ -232,7 +230,7 @@ public class FoliosView extends VerticalLayout {
 
                 //************************************************************************
                 IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
-                BiendEntity biendEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
+                BienEntity bienEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
                 String marca = folioEntity.getMarca();
                 String modelo = folioEntity.getModelo();
                 String numSerie = folioEntity.getNumeroSerie();
@@ -245,7 +243,7 @@ public class FoliosView extends VerticalLayout {
                 estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
                 CB_Incidencia.setValue(incidenciaEntity);
-                CB_Bien.setValue(biendEntity);
+                CB_Bien.setValue(bienEntity);
                 CB_Marca.setValue(marca);
                 CB_Modelo.setValue(modelo);
                 TF_NumeroSerie.setValue(numSerie);
@@ -301,9 +299,9 @@ public class FoliosView extends VerticalLayout {
         if(incidenciaEntity != null)
             folioEntity.setIdTipoIncidencia(incidenciaEntity.getId());
 
-        BiendEntity biendEntity = CB_Bien.getValue();
-        if(biendEntity != null)
-            folioEntity.setIdBien(biendEntity.getId());
+        BienEntity bienEntity = CB_Bien.getValue();
+        if(bienEntity != null)
+            folioEntity.setIdBien(bienEntity.getId());
 
         valor_str = CB_Marca.getValue();
         if(valor_str == null || valor_str.length() == 0)
@@ -450,7 +448,7 @@ public class FoliosView extends VerticalLayout {
             }
         });
 
-        CB_Bien.setItemLabelGenerator(BiendEntity::getNombre);
+        CB_Bien.setItemLabelGenerator(BienEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 folioEntity.setMarca("NO ESPECIFICADO");

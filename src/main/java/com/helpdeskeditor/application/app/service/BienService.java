@@ -1,6 +1,6 @@
 package com.helpdeskeditor.application.app.service;
 
-import com.helpdeskeditor.application.app.data.entity.BiendEntity;
+import com.helpdeskeditor.application.app.data.entity.BienEntity;
 import com.helpdeskeditor.application.app.facade.BienFacade;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +14,15 @@ public class BienService {
         this.bienFacade = bienFacade;
     }
 
-    public List<BiendEntity> findAll(){
+    public List<BienEntity> findAll(){
         return bienFacade.findAll();
     }
 
-    public List<BiendEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
+    public List<BienEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
         return bienFacade.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
 
-    public BiendEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
+    public BienEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
         return bienFacade.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
     }
 

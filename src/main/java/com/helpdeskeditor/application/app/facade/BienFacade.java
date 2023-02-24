@@ -1,6 +1,6 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.data.entity.BiendEntity;
+import com.helpdeskeditor.application.app.data.entity.BienEntity;
 import com.helpdeskeditor.application.app.data.repository.BienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,15 +18,15 @@ public class BienFacade {
         this.bienRepository = bienRepository;
     }
 
-    public List<BiendEntity> findAll(){
+    public List<BienEntity> findAll(){
         return bienRepository.findAll();
     }
 
-    public List<BiendEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
+    public List<BienEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
         return bienRepository.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
 
-    public BiendEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
+    public BienEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
         return bienRepository.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
     }
 

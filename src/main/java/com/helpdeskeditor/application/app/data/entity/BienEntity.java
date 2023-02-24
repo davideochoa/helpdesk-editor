@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(name = "catalogo_bien")
-public class BiendEntity {
+public class BienEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
