@@ -4,7 +4,6 @@ import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.web.antigua.AcercaDeView;
 import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
 import com.helpdeskeditor.application.app.web.antigua.EstatusView;
-import com.helpdeskeditor.application.app.web.antigua.FoliosGrid;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
@@ -74,6 +73,10 @@ public class MainLayout extends AppLayout {
         }
         if (accessChecker.hasAccess(FoliosGrid.class)) {
             nav.addItem(new AppNavItem("Listado de Folios", FoliosGrid.class, "la la-globe"));
+
+        }
+        if (accessChecker.hasAccess(FoliosGrid2.class)) {
+            nav.addItem(new AppNavItem("Listado de Folios", FoliosGrid2.class, "la la-globe"));
 
         }
         if (accessChecker.hasAccess(EstatusView.class)) {

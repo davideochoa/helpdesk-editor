@@ -1,13 +1,9 @@
-package com.helpdeskeditor.application.app.web.antigua;
+package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.web.MainLayout;
 import com.vaadin.flow.component.ItemLabelGenerator;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -22,17 +18,17 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-@PageTitle("Listado de Folios")
-@Route(value = "foliosgrid", layout = MainLayout.class)
+@PageTitle("Listado de Folios2")
+@Route(value = "foliosgrid2", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
-public class FoliosGrid extends HorizontalLayout {
+public class FoliosGrid2 extends HorizontalLayout {
     private Grid<LocalDate> grid;
     private TextField toStringFilter, yearFilter;
     private ComboBox<Month> monthFilter;
     private ComboBox<DayOfWeek> dayOfWeekFilter;
 
-    public FoliosGrid() {
+    public FoliosGrid2() {
         grid = new Grid<>(LocalDate.class, false);
         List< LocalDate > dates = List.of(
                 LocalDate.of( 2020 , Month.JANUARY , 23 ) ,
