@@ -4,7 +4,7 @@ import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.web.antigua.AcercaDeView;
 import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
 import com.helpdeskeditor.application.app.web.antigua.EstatusView;
-import com.helpdeskeditor.application.app.web.antigua.HelloWorldView;
+import com.helpdeskeditor.application.app.web.antigua.FoliosGrid;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
@@ -68,13 +68,12 @@ public class MainLayout extends AppLayout {
         // For documentation, visit https://github.com/vaadin/vcf-nav#readme
         AppNav nav = new AppNav();
 
-
         if (accessChecker.hasAccess(FoliosView.class)) {
             nav.addItem(new AppNavItem("Folios", FoliosView.class, "la la-globe"));
 
         }
-        if (accessChecker.hasAccess(HelloWorldView.class)) {
-            nav.addItem(new AppNavItem("Hello World", HelloWorldView.class, "la la-globe"));
+        if (accessChecker.hasAccess(FoliosGrid.class)) {
+            nav.addItem(new AppNavItem("Listado de Folios", FoliosGrid.class, "la la-globe"));
 
         }
         if (accessChecker.hasAccess(EstatusView.class)) {

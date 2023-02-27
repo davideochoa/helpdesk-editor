@@ -56,6 +56,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -198,7 +199,8 @@ public class FoliosView extends VerticalLayout {
     }
 
     private boolean cargarFolio(Integer folio){
-        if(folioService.findById(folio) != null){
+        Optional<FolioEntity> OptionalfolioEntity = folioService.findById(folio);
+        if(!OptionalfolioEntity.isEmpty()){
             folioEntity = folioService.findById(folio).get();
 
             if(folioEntity.getId() > 0){
@@ -254,7 +256,11 @@ public class FoliosView extends VerticalLayout {
 
                 GridEstatus.setItems(estatusEntityList);
             }
-
+        }
+        else{
+            DisplayInfo.confirmDialog("Error al cargar el Folio!","El folio no fue encontrado").open();
+            borrar();
+            folioEntity = new FolioEntity();
         }
 
         return true;
@@ -587,7 +593,7 @@ public class FoliosView extends VerticalLayout {
             CatalogoEstatusEntity catalogoEstatusEntity = CB_Estaus.getValue();
             String anotacion = TA_Anotacion.getValue();
             if(anotacion == null)
-                anotacion = "";
+                anotacion = "NO ESPECIFICADO";
             UsuarioSoporteEntity usuarioSoporteEntity = CB_SoporteAsignado.getValue();
             IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
             List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
@@ -646,8 +652,6 @@ public class FoliosView extends VerticalLayout {
 
             if(catalogoEstatusEntity.getId() == idApertura){
                 if(!existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
-                    log.info("GUARDAR APERTURA");
-
                     agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                 }
                 else
@@ -656,8 +660,6 @@ public class FoliosView extends VerticalLayout {
             else{
                 if(catalogoEstatusEntity.getId() == idDiagnosticoInicial){
                     if(existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
-                        log.info("GUARDAR DIAGNOSTICO INICIAL");
-
                         agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
                     }
                     else
@@ -709,9 +711,6 @@ public class FoliosView extends VerticalLayout {
                     }
                 }
             }
-
-            //if(existeApertura && existeDiagnosticoInicial == false && )
-
         });
 
         GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus").setResizable(true);//.setAutoWidth(true);
@@ -725,18 +724,96 @@ public class FoliosView extends VerticalLayout {
                             ButtonVariant.LUMO_TERTIARY);
                     button.addClickListener(e -> {
 
-                        EstatusEntity estatusEntity = new EstatusEntity();
-                        estatusEntity.setId(estatus.getId());
-                        estatusEntity.setFolio(estatus.getFolio());
-                        estatusEntity.setIdEstatus(estatus.getIdEstatus());
-                        estatusEntity.setAnotacion(estatus.getAnotacion());
-                        estatusEntity.setIdUsuario(estatus.getIdUsuario());
-                        estatusEntity.setFecha(estatus.getFecha());
+                        Integer idApertura = 0;
+                        Integer idDiagnosticoInicial = 0;
+                        Integer idDiagnosticoFinal = 0;
+                        Integer idCerrar = 0;
+                        Integer idReasignar = 0;
 
-                        estatusService.delete(estatusEntity);
-                        estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
-                        GridEstatus.setItems(estatusEntityList);
+                        List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
 
+                        for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
+                            if(catalogoEstatusEntity1.getAbrir())
+                                idApertura = catalogoEstatusEntity1.getId();
+                            else
+                            if(catalogoEstatusEntity1.getDiagnostinoInicial())
+                                idDiagnosticoInicial = catalogoEstatusEntity1.getId();
+                            else
+                            if(catalogoEstatusEntity1.getDiagnostinoFinal())
+                                idDiagnosticoFinal = catalogoEstatusEntity1.getId();
+                            else
+                            if(catalogoEstatusEntity1.getReasignar())
+                                idReasignar = catalogoEstatusEntity1.getId();
+                            else
+                            if(catalogoEstatusEntity1.getCerrar())
+                                idCerrar = catalogoEstatusEntity1.getId();
+                            else
+                            if(catalogoEstatusEntity1.getReasignar())
+                                idReasignar = catalogoEstatusEntity1.getId();
+                        }
+
+                        Boolean existeApertura = false;
+                        Boolean existeDiagnosticoInicial = false;
+                        Boolean existeDiagnosticoFinal = false;
+                        Boolean existeListaParaEntrega = false;
+                        Boolean existeCerrar = false;
+
+                        List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+
+                        for(EstatusDAO estatusDAO : estatusEntityList){
+                            if(estatusDAO.getIdEstatus() == idApertura)
+                                existeApertura = true;
+                            else
+                            if(estatusDAO.getIdEstatus() == idDiagnosticoInicial)
+                                existeDiagnosticoInicial = true;
+                            else
+                            if(estatusDAO.getIdEstatus() == idDiagnosticoFinal)
+                                existeDiagnosticoFinal = true;
+                            else
+                            if(estatusDAO.getIdEstatus() == idCerrar)
+                                existeCerrar = true;
+                        }
+
+                        if(estatus.getIdEstatus() == idApertura){
+                            if(!existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeListaParaEntrega && !existeCerrar){
+                                EstatusEntity estatusEntity = estatus.getEntity();
+                                estatusService.delete(estatusEntity);
+                                estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                                GridEstatus.setItems(estatusEntityList);
+                            }
+                            else
+                                DisplayInfo.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
+                        }
+                        else{
+                            if(estatus.getIdEstatus() == idDiagnosticoInicial){
+                                if(!existeDiagnosticoFinal && !existeListaParaEntrega && !existeCerrar){
+                                    EstatusEntity estatusEntity = estatus.getEntity();
+                                    estatusService.delete(estatusEntity);
+                                    estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                                    GridEstatus.setItems(estatusEntityList);
+                                }
+                                else
+                                    DisplayInfo.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
+                            }
+                            else{
+                                if(estatus.getIdEstatus() == idDiagnosticoFinal){
+                                    if(!existeListaParaEntrega && !existeCerrar){
+                                        EstatusEntity estatusEntity = estatus.getEntity();
+                                        estatusService.delete(estatusEntity);
+                                        estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                                        GridEstatus.setItems(estatusEntityList);
+                                    }
+                                    else
+                                        DisplayInfo.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
+                                }
+                                else{
+                                    EstatusEntity estatusEntity = estatus.getEntity();
+                                    estatusService.delete(estatusEntity);
+                                    estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                                    GridEstatus.setItems(estatusEntityList);
+                                }
+                            }
+                        }
                     });
                     button.setIcon(new Icon(VaadinIcon.TRASH));
                 })).setHeader("Eliminar").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
