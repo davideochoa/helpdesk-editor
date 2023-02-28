@@ -1,6 +1,7 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
+import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.Key;
@@ -29,24 +30,21 @@ import java.util.List;
 @RolesAllowed("ADMIN")
 public class FoliosGrid extends HorizontalLayout {
     private Grid<FolioDAO> grid;
-    private TextField folioFilter,unidadFilter,areaFilter,usuarioreportaFilter;
+    private TextField folioFilter;//,unidadFilter,areaFilter,usuarioreportaFilter;
     //private ComboBox<Month> monthFilter;
     //private ComboBox<DayOfWeek> dayOfWeekFilter;
 
-    public FoliosGrid() {
+    private final FolioService folioService;
+
+    public FoliosGrid(FolioService folioService) {
+        this.folioService = folioService;
+
         grid = new Grid<>(FolioDAO.class, false);
-        List< LocalDate > dates = List.of(
-                LocalDate.of( 2020 , Month.JANUARY , 23 ) ,
-                LocalDate.of( 2019 , Month.FEBRUARY , 24 ) ,
-                LocalDate.of( 2022 , Month.MARCH , 25 ) ,
-                LocalDate.of( 2011 , Month.APRIL , 26 ) ,
-                LocalDate.of( 2022 , Month.APRIL , 23 )
-        );
-        //grid.setItems( new ArrayList< LocalDate >( dates ) );
+        grid.setItems(folioService.getAll());
         grid.addColumn( FolioDAO :: getFolio ).setHeader("Folio").setKey("folio");
-        grid.addColumn( FolioDAO :: getUnidad ).setHeader("Unidad").setKey("unidad");
-        grid.addColumn( FolioDAO :: getArea ).setHeader("Area").setKey("area");
-        grid.addColumn( FolioDAO :: getUsuarioReporta ).setHeader("Usuario Reporta").setKey("usuarioreporta");
+        //grid.addColumn( FolioDAO :: getUnidad ).setHeader("Unidad").setKey("unidad");
+        //grid.addColumn( FolioDAO :: getArea ).setHeader("Area").setKey("area");
+        //grid.addColumn( FolioDAO :: getUsuarioReporta ).setHeader("Usuario Reporta").setKey("usuarioreporta");
 
         prepareFilterFields();
         add(grid);
@@ -56,23 +54,10 @@ public class FoliosGrid extends HorizontalLayout {
     private void prepareFilterFields() {
         HeaderRow headerRow = grid.appendHeaderRow();
 
-        folioFilter = gridTextFieldFilter("folio", headerRow);
+        folioFilter = gridTextFieldFilter("folio", headerRow);/*
         unidadFilter = gridTextFieldFilter("unidad", headerRow);
         areaFilter = gridTextFieldFilter("area", headerRow);
-        usuarioreportaFilter = gridTextFieldFilter("usuarioreporta", headerRow);
-        //monthFilter = gridComboBoxFilter("month", headerRow, Month::toString, Month.values());
-        //dayOfWeekFilter = gridComboBoxFilter("dayofweek", headerRow, DayOfWeek::toString, DayOfWeek.values());
-    }
-
-    private <T> ComboBox<T> gridComboBoxFilter(String columnKey, HeaderRow headerRow, ItemLabelGenerator<T> itemLabelGenerator, T... items) {
-        ComboBox<T> filter = new ComboBox<>();
-        filter.addValueChangeListener(event -> this.onFilterChange());
-        filter.setItemLabelGenerator(itemLabelGenerator);
-        filter.setItems(items);
-        filter.setWidthFull();
-        filter.setClearButtonVisible(true);
-        headerRow.getCell(grid.getColumnByKey(columnKey)).setComponent(filter);
-        return filter;
+        usuarioreportaFilter = gridTextFieldFilter("usuarioreporta", headerRow);*/
     }
 
     private TextField gridTextFieldFilter(String columnKey, HeaderRow headerRow) {
@@ -96,15 +81,17 @@ public class FoliosGrid extends HorizontalLayout {
             if(!folioFilter.isEmpty()){
                 toStringFilterMatch = item.toString().contains(folioFilter.getValue());
             }
+/*
             if(!unidadFilter.isEmpty()){
                 yearFilterMatch = String.valueOf(item.getUnidad()).contains(unidadFilter.getValue());
             }
             if(!areaFilter.isEmpty()){
                 monthFilterMatch = item.getArea().equals(areaFilter.getValue());
             }
+
             if(!usuarioreportaFilter.isEmpty()){
                 dayOfWeekFilterMatch = item.getUsuarioReporta().equals(usuarioreportaFilter.getValue());
-            }
+            }*/
 
             return toStringFilterMatch && yearFilterMatch && monthFilterMatch && dayOfWeekFilterMatch;
         });

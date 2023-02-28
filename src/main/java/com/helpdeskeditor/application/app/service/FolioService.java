@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.service;
 
+import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.data.repository.FolioRepository;
 import com.helpdeskeditor.application.app.facade.FolioFacade;
@@ -48,4 +49,8 @@ public class FolioService {
     }
 
     public FolioEntity save(FolioEntity folioEntity){ return folioFacade.save(folioEntity);}
+
+    public List<FolioDAO> getAll(){
+        return folioFacade.getAll();
+    }
 }

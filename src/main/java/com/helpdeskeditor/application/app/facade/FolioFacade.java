@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.facade;
 
+import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,5 +53,10 @@ public class FolioFacade {
 
     @Transactional
     public FolioEntity save(FolioEntity folioEntity){ return folioRepository.save(folioEntity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FolioDAO> getAll(){
+        return folioRepository.getAll();
     }
 }

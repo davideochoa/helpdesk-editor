@@ -47,31 +47,32 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca);
 
-    @Query(value="SELECT " +
-            "concentrado_folios_incidencias.Folio," +
-            "catalogo_unidades.Nombre AS Unidad," +
-            "catalogo_areas.Nombre AS Area," +
-            "UsuarioReporta," +
-            "catalogo_tipo_incidencias.Nombre AS Incidencia," +
-            "catalogo_bien.Nombre AS Bien," +
-            "Marca," +
-            "Modelo," +
-            "NumeroSerie," +
-            "NumeroInventario," +
-            "MotivoReporte," +
-            "catalogo_usuarios_soporte.NombrePropio As SoporteAsignado," +
-            "CASE Activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS Estado," +
-            "DatosEstatus.Nombre AS Estatus," +
-            "DatosEstatus.Fecha " +
-            "FROM concentrado_folios_incidencias,(SELECT Folio,IdEstatus,catalogo_estatus.Nombre,Fecha FROM estatus,catalogo_estatus " +
-            "WHERE estatus.Id IN (SELECT MAX(Id) AS MaxId FROM estatus GROUP BY Folio) AND IdEstatus = catalogo_estatus.Id) AS DatosEstatus, " +
-            "catalogo_unidades, catalogo_areas,catalogo_tipo_incidencias, catalogo_bien, catalogo_usuarios_soporte " +
-            "WHERE concentrado_folios_incidencias.Folio = DatosEstatus.Folio " +
-            "AND concentrado_folios_incidencias.IdUnidad = catalogo_unidades.Id " +
-            "AND concentrado_folios_incidencias.IdArea = catalogo_areas.Id " +
-            "AND concentrado_folios_incidencias.IdTipoIncidencia = catalogo_tipo_incidencias.Id " +
-            "AND concentrado_folios_incidencias.IdBien = catalogo_bien.Id " +
-            "AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_soporte.Id " +
-            "ORDER BY concentrado_folios_incidencias.Folio DESC", nativeQuery=true)
+    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO( "+
+            "id ) " +
+            "FROM FolioEntity "+
+            "ORDER BY Folio DESC", nativeQuery=false)
     List<FolioDAO> getAll();
+
+    /*
+      @Query(value="SELECT Folio,Unidad,Area,Incidencia,Bien,Marca,Modelo,NumeroSerie,NumeroInventario,MotivoReporte,Estado
+        FROM
+        (select
+        concentrado_folios_incidencias.Folio,
+        catalogo_unidades.Nombre AS Unidad,
+        catalogo_areas.Nombre AS Area,
+        catalogo_tipo_incidencias.Nombre AS Incidencia,
+        catalogo_bien.Nombre AS Bien,
+        Marca,
+        Modelo,
+        NumeroSerie,
+        NumeroInventario,
+        MotivoReporte,
+        CASE Activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS Estado
+        FROM concentrado_folios_incidencias,catalogo_unidades, catalogo_areas,catalogo_tipo_incidencias, catalogo_bien
+        WHERE concentrado_folios_incidencias.IdUnidad = catalogo_unidades.Id
+        AND concentrado_folios_incidencias.IdArea = catalogo_areas.Id
+        AND concentrado_folios_incidencias.IdTipoIncidencia = catalogo_tipo_incidencias.Id
+        AND concentrado_folios_incidencias.IdBien = catalogo_bien.Id) AS tabla
+        ORDER BY Folio DESC", nativeQuery=true)
+    */
 }
