@@ -12,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FolioDAO {
-    Integer Folio;
+    Integer id;
+    String usuarioReporta;
     /*
     String Unidad;
     String  Area;

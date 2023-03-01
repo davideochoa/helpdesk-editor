@@ -30,7 +30,7 @@ import java.util.List;
 @RolesAllowed("ADMIN")
 public class FoliosGrid extends HorizontalLayout {
     private Grid<FolioDAO> grid;
-    private TextField folioFilter;//,unidadFilter,areaFilter,usuarioreportaFilter;
+    private TextField folioFilter,usuarioreportaFilter;//,unidadFilter,areaFilter,;
     //private ComboBox<Month> monthFilter;
     //private ComboBox<DayOfWeek> dayOfWeekFilter;
 
@@ -41,10 +41,10 @@ public class FoliosGrid extends HorizontalLayout {
 
         grid = new Grid<>(FolioDAO.class, false);
         grid.setItems(folioService.getAll());
-        grid.addColumn( FolioDAO :: getFolio ).setHeader("Folio").setKey("folio");
+        grid.addColumn( FolioDAO :: getId ).setHeader("Folio").setKey("id");
+        grid.addColumn( FolioDAO :: getUsuarioReporta ).setHeader("Usuario Reporta").setKey("usuarioReporta");
         //grid.addColumn( FolioDAO :: getUnidad ).setHeader("Unidad").setKey("unidad");
         //grid.addColumn( FolioDAO :: getArea ).setHeader("Area").setKey("area");
-        //grid.addColumn( FolioDAO :: getUsuarioReporta ).setHeader("Usuario Reporta").setKey("usuarioreporta");
 
         prepareFilterFields();
         add(grid);
@@ -54,15 +54,20 @@ public class FoliosGrid extends HorizontalLayout {
     private void prepareFilterFields() {
         HeaderRow headerRow = grid.appendHeaderRow();
 
-        folioFilter = gridTextFieldFilter("folio", headerRow);/*
+        folioFilter = gridTextFieldFilter("id", headerRow);
+        usuarioreportaFilter = gridTextFieldFilter("usuarioReporta", headerRow);
+
+        /*
         unidadFilter = gridTextFieldFilter("unidad", headerRow);
         areaFilter = gridTextFieldFilter("area", headerRow);
-        usuarioreportaFilter = gridTextFieldFilter("usuarioreporta", headerRow);*/
+        */
     }
 
     private TextField gridTextFieldFilter(String columnKey, HeaderRow headerRow) {
         TextField filter = new TextField();
         filter.setValueChangeMode(ValueChangeMode.TIMEOUT);
+
+        filter.setClearButtonVisible(true);
         filter.addValueChangeListener(event -> this.onFilterChange());
         filter.setWidthFull();
         headerRow.getCell(grid.getColumnByKey(columnKey)).setComponent(filter);
@@ -79,7 +84,10 @@ public class FoliosGrid extends HorizontalLayout {
             boolean dayOfWeekFilterMatch = true;
 
             if(!folioFilter.isEmpty()){
-                toStringFilterMatch = item.toString().contains(folioFilter.getValue());
+                toStringFilterMatch = item.toString().contains(folioFilter.getValue().toUpperCase());
+            }
+            if(!usuarioreportaFilter.isEmpty()){
+                dayOfWeekFilterMatch = item.toString().contains(usuarioreportaFilter.getValue().toUpperCase());
             }
 /*
             if(!unidadFilter.isEmpty()){
@@ -89,11 +97,9 @@ public class FoliosGrid extends HorizontalLayout {
                 monthFilterMatch = item.getArea().equals(areaFilter.getValue());
             }
 
-            if(!usuarioreportaFilter.isEmpty()){
-                dayOfWeekFilterMatch = item.getUsuarioReporta().equals(usuarioreportaFilter.getValue());
-            }*/
+           */
 
-            return toStringFilterMatch && yearFilterMatch && monthFilterMatch && dayOfWeekFilterMatch;
+            return toStringFilterMatch && dayOfWeekFilterMatch;//&& yearFilterMatch && monthFilterMatch ;
         });
     }
 
