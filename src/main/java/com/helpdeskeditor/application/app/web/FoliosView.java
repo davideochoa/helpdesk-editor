@@ -266,7 +266,7 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        dialogProgressBarModificandoFolio.open();
+        //dialogProgressBarModificandoFolio.open();
 
         //****************** UNIDAD ******************************************************
         UnidadEntity unidadEntity = CB_Unidad.getValue();
@@ -298,6 +298,8 @@ public class FoliosView extends VerticalLayout {
             valor_str = "NO ESPECIFICADO";
 
         folioEntity.setReferenciaDocumental(valor_str);
+
+        LocalDate localDate = DtePikr_fechaApertura.getValue();
 
         folioEntity.setFecha(Date.from(DtePikr_fechaApertura.getValue().atStartOfDay()
                 .atZone(ZoneId.systemDefault())
