@@ -11,6 +11,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -28,11 +29,10 @@ import java.util.List;
 @Route(value = "foliosgrid", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
-public class FoliosGrid extends HorizontalLayout {
+public class FoliosGrid extends VerticalLayout{
     private Grid<FolioDAO> grid;
-    private TextField folioFilter,usuarioreportaFilter;//,unidadFilter,areaFilter,;
-    //private ComboBox<Month> monthFilter;
-    //private ComboBox<DayOfWeek> dayOfWeekFilter;
+    private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
+            numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
 
     private final FolioService folioService;
 
@@ -41,10 +41,15 @@ public class FoliosGrid extends HorizontalLayout {
 
         grid = new Grid<>(FolioDAO.class, false);
         grid.setItems(folioService.getAll());
-        grid.addColumn( FolioDAO :: getId ).setHeader("Folio").setKey("id");
-        grid.addColumn( FolioDAO :: getUsuarioReporta ).setHeader("Usuario Reporta").setKey("usuarioReporta");
-        //grid.addColumn( FolioDAO :: getUnidad ).setHeader("Unidad").setKey("unidad");
-        //grid.addColumn( FolioDAO :: getArea ).setHeader("Area").setKey("area");
+
+        grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id");
+        grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad");
+        grid.addColumn(FolioDAO :: getUsuarioReporta).setHeader("Usuario Reporta").setKey("usuarioReporta");
+        grid.addColumn(FolioDAO :: getMarca).setHeader("Marca").setKey("marca");
+        grid.addColumn(FolioDAO :: getModelo).setHeader("Modelo").setKey("modelo");
+        grid.addColumn(FolioDAO :: getNumeroSerie).setHeader("Numero Serie").setKey("numeroSerie");
+        grid.addColumn(FolioDAO :: getNumeroInventario).setHeader("Numero Inventario").setKey("numeroInventario");
+        grid.addColumn(FolioDAO :: getEstado).setHeader("Estado").setKey("estado");
 
         prepareFilterFields();
         add(grid);
@@ -55,12 +60,13 @@ public class FoliosGrid extends HorizontalLayout {
         HeaderRow headerRow = grid.appendHeaderRow();
 
         folioFilter = gridTextFieldFilter("id", headerRow);
-        usuarioreportaFilter = gridTextFieldFilter("usuarioReporta", headerRow);
-
-        /*
         unidadFilter = gridTextFieldFilter("unidad", headerRow);
-        areaFilter = gridTextFieldFilter("area", headerRow);
-        */
+        usuarioreportaFilter = gridTextFieldFilter("usuarioReporta", headerRow);
+        marcaFilter = gridTextFieldFilter("marca", headerRow);
+        modeloFilter = gridTextFieldFilter("modelo", headerRow);
+        numeroSerieFilter = gridTextFieldFilter("numeroSerie", headerRow);
+        numeroInventarioFilter = gridTextFieldFilter("numeroInventario", headerRow);
+        estadoFilter = gridTextFieldFilter("estado", headerRow);
     }
 
     private TextField gridTextFieldFilter(String columnKey, HeaderRow headerRow) {
@@ -76,30 +82,42 @@ public class FoliosGrid extends HorizontalLayout {
 
     private void onFilterChange(){
         ListDataProvider<FolioDAO> listDataProvider = (ListDataProvider<FolioDAO>) grid.getDataProvider();
-        // Since this will be the only active filter, it needs to account for all values of my filter fields
         listDataProvider.setFilter(item -> {
-            boolean toStringFilterMatch = true;
-            boolean yearFilterMatch = true;
-            boolean monthFilterMatch = true;
-            boolean dayOfWeekFilterMatch = true;
+            boolean folioFilterMatch = true;
+            boolean unidadFilterMatch = true;
+            boolean usuarioreportaFilterMatch = true;
+            boolean marcaFilterMatch = true;
+            boolean modeloFilterMatch = true;
+            boolean numeroSerieFilterMatch = true;
+            boolean numeroInventarioFilterMatch = true;
+            boolean estadoFilterMatch = true;
 
-            if(!folioFilter.isEmpty()){
-                toStringFilterMatch = item.toString().contains(folioFilter.getValue().toUpperCase());
-            }
-            if(!usuarioreportaFilter.isEmpty()){
-                dayOfWeekFilterMatch = item.toString().contains(usuarioreportaFilter.getValue().toUpperCase());
-            }
-/*
-            if(!unidadFilter.isEmpty()){
-                yearFilterMatch = String.valueOf(item.getUnidad()).contains(unidadFilter.getValue());
-            }
-            if(!areaFilter.isEmpty()){
-                monthFilterMatch = item.getArea().equals(areaFilter.getValue());
-            }
+            if(!folioFilter.isEmpty())
+                folioFilterMatch = item.toString().contains(folioFilter.getValue().toUpperCase());
 
-           */
+            if(!unidadFilter.isEmpty())
+                unidadFilterMatch = item.toString().contains(unidadFilter.getValue().toUpperCase());
 
-            return toStringFilterMatch && dayOfWeekFilterMatch;//&& yearFilterMatch && monthFilterMatch ;
+            if(!usuarioreportaFilter.isEmpty())
+                usuarioreportaFilterMatch = item.toString().contains(usuarioreportaFilter.getValue().toUpperCase());
+
+            if(!marcaFilter.isEmpty())
+                marcaFilterMatch = item.toString().contains(marcaFilter.getValue().toUpperCase());
+
+            if(!modeloFilter.isEmpty())
+                modeloFilterMatch = item.toString().contains(modeloFilter.getValue().toUpperCase());
+
+            if(!numeroSerieFilter.isEmpty())
+                numeroSerieFilterMatch = item.toString().contains(numeroSerieFilter.getValue().toUpperCase());
+
+            if(!numeroInventarioFilter.isEmpty())
+                numeroInventarioFilterMatch = item.toString().contains(numeroInventarioFilter.getValue().toUpperCase());
+
+            if(!estadoFilter.isEmpty())
+                estadoFilterMatch = item.toString().contains(estadoFilter.getValue().toUpperCase());
+
+            return folioFilterMatch && unidadFilterMatch && usuarioreportaFilterMatch && marcaFilterMatch && modeloFilterMatch &&
+                    numeroSerieFilterMatch && numeroInventarioFilterMatch && estadoFilterMatch;
         });
     }
 

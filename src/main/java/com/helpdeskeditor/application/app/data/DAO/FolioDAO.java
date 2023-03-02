@@ -13,16 +13,18 @@ import lombok.Setter;
 @Setter
 public class FolioDAO {
     Integer id;
+    String unidad;
     String usuarioReporta;
+    String marca;
+    String modelo;
+    String numeroSerie;
+    String numeroInventario;
+    String estado;
+
     /*
-    String Unidad;
+
     String  Area;
     String Incidencia;
     String Bien;
-    String Marca;
-    String Modelo;
-    String NumeroSerie;
-    String NumeroInventario;
-    String Estado;
      */
 }

@@ -193,9 +193,8 @@ public class FoliosView extends VerticalLayout {
         CB_TipoIncidenciaFinal.clear();
 
         DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
-        //CB_Unidad.setItems(unidadService.findAll());
-        //CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
 
+        folioEntity = new FolioEntity();
     }
 
     private boolean cargarFolio(Integer folio){
@@ -273,10 +272,14 @@ public class FoliosView extends VerticalLayout {
         UnidadEntity unidadEntity = CB_Unidad.getValue();
         if(unidadEntity != null)
             folioEntity.setIdUnidad(unidadEntity.getId());
+        else
+            folioEntity.setIdUnidad(0);
 
         AreaEntity areaEntity = CB_Area.getValue();
         if(areaEntity != null)
             folioEntity.setIdArea(areaEntity.getId());
+        else
+            folioEntity.setIdArea(0);
 
         String valor_str = CB_UsuarioReporta.getValue();
         if(valor_str == null)
@@ -304,10 +307,15 @@ public class FoliosView extends VerticalLayout {
         IncidenciaEntity incidenciaEntity = CB_Incidencia.getValue();
         if(incidenciaEntity != null)
             folioEntity.setIdTipoIncidencia(incidenciaEntity.getId());
+        else
+            folioEntity.setIdTipoIncidencia(0);
+
 
         BienEntity bienEntity = CB_Bien.getValue();
         if(bienEntity != null)
             folioEntity.setIdBien(bienEntity.getId());
+        else
+            folioEntity.setIdBien(0);
 
         valor_str = CB_Marca.getValue();
         if(valor_str == null || valor_str.length() == 0)
@@ -333,27 +341,34 @@ public class FoliosView extends VerticalLayout {
 
         //****************** MOTIVO *******************************
         valor_str = TA_MotivoReporte.getValue();
-        if(valor_str == null || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
+        if(valor_str == null)
+            valor_str = "";
 
         folioEntity.setMotivoReporte(valor_str);
 
-        folioEntity = folioService.save(folioEntity);
+        PrioridadEntity prioridadEntity = CB_Prioridad.getValue();
+        if(prioridadEntity != null)
+            folioEntity.setIdPrioridad(prioridadEntity.getId());
+        else
+            folioEntity.setIdPrioridad(0);
 
-        dialogProgressBarModificandoFolio.close();
-
-        if(folioEntity.getId() > 0) {
+        if(folioEntity.getIdUnidad() > 0 && folioEntity.getIdArea() > 0 &&
+                folioEntity.getIdTipoIncidencia() > 0 && folioEntity.getIdBien() > 0 &&
+                folioEntity.getMotivoReporte().length() > 0 && folioEntity.getIdPrioridad() > 0){
+            folioEntity = folioService.save(folioEntity);
+            dialogProgressBarModificandoFolio.close();
             borrar();
             DisplayInfo.notificacion("Folio modificado!",
                     NotificationVariant.LUMO_SUCCESS,
                     Notification.Position.MIDDLE).setVisible(true);
 
         }
-        else
-            DisplayInfo.notificacion("Error al modificar Folio!",
-                                        NotificationVariant.LUMO_ERROR,
-                                        Notification.Position.MIDDLE).setVisible(true);
-
+        else{
+            dialogProgressBarModificandoFolio.close();
+            DisplayInfo.notificacion("Error al crear/modificar Folio!",
+                    NotificationVariant.LUMO_ERROR,
+                    Notification.Position.MIDDLE).setVisible(true);
+        }
 
         return true;
     }
@@ -525,11 +540,7 @@ public class FoliosView extends VerticalLayout {
 
         CB_Prioridad.setItems(prioridadService.findAll());
         CB_Prioridad.setItemLabelGenerator(PrioridadEntity::getNombre);
-        CB_Prioridad.addValueChangeListener(e -> {
-            if (e.getValue() != null) {
-                folioEntity.setIdPrioridad(e.getValue().getId());
-            }
-        });
+
         FL_Motivo.add(TA_MotivoReporte);
 
         Btt_SalvarMotivo.addClickListener(e -> {
