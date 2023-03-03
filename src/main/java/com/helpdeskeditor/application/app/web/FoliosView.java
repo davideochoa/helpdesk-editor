@@ -266,7 +266,7 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        //dialogProgressBarModificandoFolio.open();
+        dialogProgressBarModificandoFolio.open();
 
         //****************** UNIDAD ******************************************************
         UnidadEntity unidadEntity = CB_Unidad.getValue();
