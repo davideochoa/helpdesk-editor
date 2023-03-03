@@ -53,6 +53,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -176,7 +177,6 @@ public class FoliosView extends VerticalLayout {
         TF_ReferenciaDocumental.clear();
         DtePikr_fechaApertura.clear();
 
-
         CB_Incidencia.clear();
         CB_Bien.clear();
         CB_Marca.clear();
@@ -266,7 +266,7 @@ public class FoliosView extends VerticalLayout {
     }
 
     private Boolean guardar(){
-        dialogProgressBarModificandoFolio.open();
+        //dialogProgressBarModificandoFolio.open();
 
         //****************** UNIDAD ******************************************************
         UnidadEntity unidadEntity = CB_Unidad.getValue();
@@ -299,9 +299,13 @@ public class FoliosView extends VerticalLayout {
 
         folioEntity.setReferenciaDocumental(valor_str);
 
-        folioEntity.setFecha(Date.from(DtePikr_fechaApertura.getValue().atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant()));
+
+        LocalDate localDate = DtePikr_fechaApertura.getValue();
+
+        if(localDate == null)
+            DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+        folioEntity.setFecha(Date.from(DtePikr_fechaApertura.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 
         //**************** INCIDENCIA *******************************
         IncidenciaEntity incidenciaEntity = CB_Incidencia.getValue();
@@ -356,7 +360,7 @@ public class FoliosView extends VerticalLayout {
                 folioEntity.getIdTipoIncidencia() > 0 && folioEntity.getIdBien() > 0 &&
                 folioEntity.getMotivoReporte().length() > 0 && folioEntity.getIdPrioridad() > 0){
             folioEntity = folioService.save(folioEntity);
-            dialogProgressBarModificandoFolio.close();
+            //dialogProgressBarModificandoFolio.close();
             borrar();
             DisplayInfo.notificacion("Folio modificado!",
                     NotificationVariant.LUMO_SUCCESS,
@@ -364,10 +368,11 @@ public class FoliosView extends VerticalLayout {
 
         }
         else{
-            dialogProgressBarModificandoFolio.close();
+            //dialogProgressBarModificandoFolio.close();
+
             DisplayInfo.notificacion("Error al crear/modificar Folio!",
                     NotificationVariant.LUMO_ERROR,
-                    Notification.Position.MIDDLE).setVisible(true);
+                    Notification.Position.MIDDLE).open();
         }
 
         return true;

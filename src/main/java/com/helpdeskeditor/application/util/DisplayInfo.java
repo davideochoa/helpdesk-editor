@@ -9,7 +9,8 @@ import com.vaadin.flow.component.progressbar.ProgressBar;
 public class DisplayInfo {
 
     public static Notification notificacion(String texto, NotificationVariant variante, Notification.Position posicion){
-        Notification notification = Notification.show(texto);
+        Notification notification = new Notification();
+        notification.setText(texto);
         notification.addThemeVariants(variante);
         notification.setPosition(posicion);
         notification.setDuration(10000);
