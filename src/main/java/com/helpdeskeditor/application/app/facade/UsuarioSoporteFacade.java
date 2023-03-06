@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 @Transactional(readOnly = true)
 public class UsuarioSoporteFacade {
-    private UsuarioSoporteRepository usuarioSoporteRepository;
+    private final UsuarioSoporteRepository usuarioSoporteRepository;
 
     @Autowired
     public UsuarioSoporteFacade(UsuarioSoporteRepository usuarioSoporteRepository) {
@@ -21,6 +21,10 @@ public class UsuarioSoporteFacade {
 
     public List<UsuarioSoporteEntity> findByOrderBynombreUsuarioAsc(){
         return usuarioSoporteRepository.findAll(Sort.by(Sort.Direction.ASC,"nombrePropio"));
+    }
+
+    public UsuarioSoporteEntity save(UsuarioSoporteEntity usuarioSoporteEntity){
+        return usuarioSoporteRepository.save(usuarioSoporteEntity);
     }
 
 }

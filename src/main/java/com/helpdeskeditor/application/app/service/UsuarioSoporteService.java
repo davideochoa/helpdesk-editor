@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class UsuarioSoporteService {
-    private UsuarioSoporteFacade usuarioSoporteFacade;
+    private final UsuarioSoporteFacade usuarioSoporteFacade;
     public UsuarioSoporteService(UsuarioSoporteFacade usuarioSoporteFacade) {
         this.usuarioSoporteFacade = usuarioSoporteFacade;
     }
@@ -16,5 +16,7 @@ public class UsuarioSoporteService {
     public List<UsuarioSoporteEntity> findByOrderBynombreUsuarioAsc(){
         return usuarioSoporteFacade.findByOrderBynombreUsuarioAsc();
     }
-
+    public UsuarioSoporteEntity save(UsuarioSoporteEntity usuarioSoporteEntity){
+        return usuarioSoporteFacade.save(usuarioSoporteEntity);
+    }
 }

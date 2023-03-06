@@ -1,12 +1,16 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
+import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.app.web.antigua.AcercaDeView;
 import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
 import com.helpdeskeditor.application.app.web.antigua.EstatusView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
+import com.helpdeskeditor.application.app.web.components.appnav.DialogRePasword;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.helpdeskeditor.application.configuration.SecurityConfiguration;
+import com.helpdeskeditor.application.old.FoliosGrid2;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -23,9 +27,11 @@ import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 /**
  * The main view is a top-level placeholder for other views.
  */
@@ -33,13 +39,24 @@ public class MainLayout extends AppLayout {
     private H2 viewTitle;
     private AuthenticatedUser authenticatedUser;
     private AccessAnnotationChecker accessChecker;
-    public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
+    public MainLayout(AuthenticatedUser authenticatedUser,
+                      AccessAnnotationChecker accessChecker,
+                      SecurityConfiguration securityConfiguration,
+                      UsuarioSoporteService usuarioSoporteService) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
 
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
+
+        UsuarioSoporteEntity usuarioSoporteEntity = authenticatedUser.get().get();
+
+        if(usuarioSoporteEntity.getEsReseteadoPassword()){
+            DialogRePasword dr = new DialogRePasword(securityConfiguration);
+            dr.open();
+        }
+
     }
 
     private void addHeaderContent() {

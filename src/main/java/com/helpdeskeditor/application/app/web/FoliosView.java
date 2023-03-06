@@ -21,6 +21,7 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.DisplayInfo;
+import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -33,8 +34,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -42,6 +41,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
@@ -53,7 +53,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -166,21 +165,36 @@ public class FoliosView extends VerticalLayout {
         layoutTabs();
 
         this.add(tabs, contenidoTab);
+
+        borrar();
     }
 
     private void borrar(){
         IF_Folio.clear();
+
         CB_Unidad.clear();
+
         CB_Area.clear();
+        CB_Area.setItems();
+
         CB_UsuarioReporta.clear();
+        CB_UsuarioReporta.setItems();
+
         TF_Telefono.clear();
         TF_ReferenciaDocumental.clear();
         DtePikr_fechaApertura.clear();
 
         CB_Incidencia.clear();
+
         CB_Bien.clear();
+        CB_Area.setItems();
+
         CB_Marca.clear();
+        CB_Marca.setItems();
+
         CB_Modelo.clear();
+        CB_Modelo.setItems();
+
         TF_NumeroSerie.clear();
         TF_NumeroInventario.clear();
 
@@ -195,6 +209,7 @@ public class FoliosView extends VerticalLayout {
         DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
 
         folioEntity = new FolioEntity();
+        //folioEntity.setInitValues();
     }
 
     private boolean cargarFolio(Integer folio){
@@ -265,117 +280,134 @@ public class FoliosView extends VerticalLayout {
         return true;
     }
 
-    private Boolean guardar(){
-        dialogProgressBarModificandoFolio.open();
+    private void guardar(){
+        if(folioEntity != null){
+            DisplayInfo.notificacionEventoNeutro("Guardando Folio!").open();
 
-        //****************** UNIDAD ******************************************************
-        UnidadEntity unidadEntity = CB_Unidad.getValue();
-        if(unidadEntity != null)
-            folioEntity.setIdUnidad(unidadEntity.getId());
-        else
-            folioEntity.setIdUnidad(0);
+            //****************** UNIDAD ******************************************************
+            UnidadEntity unidadEntity = CB_Unidad.getValue();
+            if(unidadEntity != null)
+                folioEntity.setIdUnidad(unidadEntity.getId());
+            else
+                folioEntity.setIdUnidad(0);
 
-        AreaEntity areaEntity = CB_Area.getValue();
-        if(areaEntity != null)
-            folioEntity.setIdArea(areaEntity.getId());
-        else
-            folioEntity.setIdArea(0);
+            AreaEntity areaEntity = CB_Area.getValue();
+            if(areaEntity != null)
+                folioEntity.setIdArea(areaEntity.getId());
+            else
+                folioEntity.setIdArea(0);
 
-        String valor_str = CB_UsuarioReporta.getValue();
-        if(valor_str == null)
-            valor_str = "NO ESPECIFICADO";
+            String valor_str = CB_UsuarioReporta.getValue();
+            if(valor_str == null)
+                valor_str = "NO ESPECIFICADO";
 
-        folioEntity.setUsuarioReporta(valor_str);
+            folioEntity.setUsuarioReporta(valor_str);
 
-        valor_str = TF_Telefono.getValue();
-        if(valor_str == null)
-            valor_str = "NO ESPECIFICADO";
+            valor_str = TF_Telefono.getValue();
+            if(valor_str == null)
+                valor_str = "NO ESPECIFICADO";
 
-        folioEntity.setTelefonoContacto(valor_str);
+            folioEntity.setTelefonoContacto(valor_str);
 
-        valor_str = TF_ReferenciaDocumental.getValue();
-        if(valor_str == null)
-            valor_str = "NO ESPECIFICADO";
+            valor_str = TF_ReferenciaDocumental.getValue();
+            if(valor_str == null)
+                valor_str = "NO ESPECIFICADO";
 
-        folioEntity.setReferenciaDocumental(valor_str);
+            folioEntity.setReferenciaDocumental(valor_str);
+
+            LocalDate localDate = DtePikr_fechaApertura.getValue();
+
+            if(localDate == null)
+                DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+            folioEntity.setFecha(Date.from(DtePikr_fechaApertura.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+
+            //**************** INCIDENCIA *******************************
+            IncidenciaEntity incidenciaEntity = CB_Incidencia.getValue();
+            if(incidenciaEntity != null)
+                folioEntity.setIdTipoIncidencia(incidenciaEntity.getId());
+            else
+                folioEntity.setIdTipoIncidencia(0);
 
 
-        LocalDate localDate = DtePikr_fechaApertura.getValue();
+            BienEntity bienEntity = CB_Bien.getValue();
+            if(bienEntity != null)
+                folioEntity.setIdBien(bienEntity.getId());
+            else
+                folioEntity.setIdBien(0);
 
-        if(localDate == null)
-            DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
+            valor_str = CB_Marca.getValue();
+            if(valor_str == null || valor_str.length() == 0)
+                valor_str = "NO ESPECIFICADO";
 
-        folioEntity.setFecha(Date.from(DtePikr_fechaApertura.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+            folioEntity.setMarca(valor_str);
 
-        //**************** INCIDENCIA *******************************
-        IncidenciaEntity incidenciaEntity = CB_Incidencia.getValue();
-        if(incidenciaEntity != null)
-            folioEntity.setIdTipoIncidencia(incidenciaEntity.getId());
-        else
-            folioEntity.setIdTipoIncidencia(0);
+            valor_str = CB_Modelo.getValue();
+            if(valor_str == null || valor_str.length() == 0)
+                valor_str = "NO ESPECIFICADO";
 
+            folioEntity.setModelo(valor_str);
 
-        BienEntity bienEntity = CB_Bien.getValue();
-        if(bienEntity != null)
-            folioEntity.setIdBien(bienEntity.getId());
-        else
-            folioEntity.setIdBien(0);
+            valor_str = TF_NumeroSerie.getValue();
+            if(valor_str == null || valor_str.length() == 0)
+                valor_str = "NO ESPECIFICADO";
 
-        valor_str = CB_Marca.getValue();
-        if(valor_str == null || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
+            folioEntity.setNumeroSerie(valor_str);
 
-        folioEntity.setMarca(valor_str);
+            valor_str = TF_NumeroInventario.getValue();
+            if(valor_str == null || valor_str.length() == 0)
+                valor_str = "NO ESPECIFICADO";
 
-        valor_str = CB_Modelo.getValue();
-        if(valor_str == null || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
+            folioEntity.setNumeroInventario(valor_str);
 
-        folioEntity.setModelo(valor_str);
+            //****************** MOTIVO *******************************
+            valor_str = TA_MotivoReporte.getValue();
+            if(valor_str == null)
+                valor_str = "";
 
-        valor_str = TF_NumeroSerie.getValue();
-        if(valor_str == null || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
+            folioEntity.setMotivoReporte(valor_str);
 
-        valor_str = TF_NumeroInventario.getValue();
-        if(valor_str == null || valor_str.length() == 0)
-            valor_str = "NO ESPECIFICADO";
+            PrioridadEntity prioridadEntity = CB_Prioridad.getValue();
+            if(prioridadEntity != null)
+                folioEntity.setIdPrioridad(prioridadEntity.getId());
+            else
+                folioEntity.setIdPrioridad(0);
 
-        folioEntity.setNumeroInventario(valor_str);
+            log.info("folioEntity:"+folioEntity);
 
-        //****************** MOTIVO *******************************
-        valor_str = TA_MotivoReporte.getValue();
-        if(valor_str == null)
-            valor_str = "";
+            log.info("folioEntity.getId():"+folioEntity.getId());
+            boolean apertura = false;
+            if(folioEntity.getId() == null) {
+                apertura = true;
+                folioEntity.setActivo(true);
+                folioEntity.setIdTipoIncidenciaFinal(0);
+                folioEntity.setIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId());
+            }
 
-        folioEntity.setMotivoReporte(valor_str);
+            if(folioEntity.getIdUnidad() > 0 && folioEntity.getIdArea() > 0 &&
+                    folioEntity.getIdTipoIncidencia() > 0 && folioEntity.getIdBien() > 0 &&
+                    folioEntity.getMotivoReporte().length() > 0 && folioEntity.getIdPrioridad() > 0 &&
+                    folioEntity.getActivo()){
 
-        PrioridadEntity prioridadEntity = CB_Prioridad.getValue();
-        if(prioridadEntity != null)
-            folioEntity.setIdPrioridad(prioridadEntity.getId());
-        else
-            folioEntity.setIdPrioridad(0);
+                folioEntity = folioService.save(folioEntity);
 
-        if(folioEntity.getIdUnidad() > 0 && folioEntity.getIdArea() > 0 &&
-                folioEntity.getIdTipoIncidencia() > 0 && folioEntity.getIdBien() > 0 &&
-                folioEntity.getMotivoReporte().length() > 0 && folioEntity.getIdPrioridad() > 0){
-            folioEntity = folioService.save(folioEntity);
-            //dialogProgressBarModificandoFolio.close();
-            borrar();
-            DisplayInfo.notificacion("Folio modificado!",
-                    NotificationVariant.LUMO_SUCCESS,
-                    Notification.Position.MIDDLE).setVisible(true);
+                if(apertura){
+                    List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
 
+                    for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
+                        if(catalogoEstatusEntity1.getAbrir())
+                            agregarEstatus(catalogoEstatusEntity1.getId(),"Apertura de Folio",
+                                    folioEntity.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                    }
+                }
+                borrar();
+                DisplayInfo.notificacionEventoSUCCESS("Folio creado/modificado: "+folioEntity.getId()).setVisible(true);
+            }
+            else{
+                DisplayInfo.notificacionEventoERROR("Error al crear/modificar Folio!").open();
+
+            }
         }
-        else{
-            //dialogProgressBarModificandoFolio.close();
-
-            DisplayInfo.notificacion("Error al crear/modificar Folio!",
-                    NotificationVariant.LUMO_ERROR,
-                    Notification.Position.MIDDLE).open();
-        }
-
-        return true;
     }
 
     private void layoutUnidad(){
@@ -418,13 +450,29 @@ public class FoliosView extends VerticalLayout {
         CB_Unidad.setItems(unidadService.findAll());
         CB_Unidad.addValueChangeListener(e -> {
             if(e.getValue() != null){
+                CB_Unidad.setValue(e.getValue());
                 CB_Area.setItems(areaService.findByidUnidad(CB_Unidad.getValue().getId()));
             }
         });
 
         CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
+        CB_Area.addValueChangeListener(e -> {
+            CB_Area.setValue(e.getValue());
+        });
 
         CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
+
+        CB_UsuarioReporta.addValueChangeListener(e -> {
+            CB_UsuarioReporta.setValue(e.getValue());
+        });
+
+        CB_UsuarioReporta.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_UsuarioReporta.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_UsuarioReporta.setItems(allItems);
+            CB_UsuarioReporta.setValue(customValue);
+        });
 
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
@@ -432,9 +480,6 @@ public class FoliosView extends VerticalLayout {
         DtePikr_fechaApertura.setPlaceholder("yyyy-MM-dd");
 
         Btt_SalvarUnidad.addClickListener(e -> { guardar(); });
-        Btt_SalvarUnidad.addClickListener(e -> {
-            guardar();
-        });
         Btt_SalvarUnidad.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         FL_Unidad.add(CB_Unidad);
@@ -461,6 +506,7 @@ public class FoliosView extends VerticalLayout {
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             if(e.getValue() != null){
+                CB_Incidencia.setValue(e.getValue());
                 folioEntity.setIdBien(0);
                 folioEntity.setMarca("NO ESPECIFICADO");
                 folioEntity.setModelo("NO ESPECIFICADO");
@@ -477,6 +523,7 @@ public class FoliosView extends VerticalLayout {
         CB_Bien.setItemLabelGenerator(BienEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
+                CB_Bien.setValue(e.getValue());
                 folioEntity.setMarca("NO ESPECIFICADO");
                 folioEntity.setModelo("NO ESPECIFICADO");
 
@@ -491,6 +538,7 @@ public class FoliosView extends VerticalLayout {
 
         CB_Marca.addValueChangeListener(e -> {
             if (e.getValue() != null) {
+                CB_Marca.setValue(e.getValue());
 
                 CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
                                     CB_Incidencia.getValue().getId(),
@@ -501,11 +549,28 @@ public class FoliosView extends VerticalLayout {
             }
         });
 
+        CB_Marca.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_Marca.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_Marca.setItems(allItems);
+            CB_Marca.setValue(customValue);
+        });
+
         CB_Modelo.addValueChangeListener(e -> {
             if (e.getValue() != null) {
+                CB_Modelo.setValue(e.getValue());
                 TF_NumeroSerie.clear();
                 TF_NumeroInventario.clear();
             }
+        });
+
+        CB_Modelo.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_Modelo.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_Modelo.setItems(allItems);
+            CB_Modelo.setValue(customValue);
         });
 
         Btt_SalvarIncidencia.addClickListener(e -> {
@@ -545,6 +610,9 @@ public class FoliosView extends VerticalLayout {
 
         CB_Prioridad.setItems(prioridadService.findAll());
         CB_Prioridad.setItemLabelGenerator(PrioridadEntity::getNombre);
+        CB_UsuarioReporta.addValueChangeListener(e -> {
+            CB_UsuarioReporta.setValue(e.getValue());
+        });
 
         FL_Motivo.add(TA_MotivoReporte);
 
@@ -668,7 +736,7 @@ public class FoliosView extends VerticalLayout {
 
             if(catalogoEstatusEntity.getId() == idApertura){
                 if(!existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
-                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
+                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                 }
                 else
                     DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -676,7 +744,7 @@ public class FoliosView extends VerticalLayout {
             else{
                 if(catalogoEstatusEntity.getId() == idDiagnosticoInicial){
                     if(existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
-                        agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
+                        agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                     }
                     else
                         DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe, falta su correlativo anterior o falta la anotacion").open();
@@ -684,9 +752,7 @@ public class FoliosView extends VerticalLayout {
                 else{
                     if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
                         if(existeApertura && existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
-                            log.info("GUARDAR DIAGNOSTICO FINAL");
-
-                            agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
+                            agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                         }
                         else
                             DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -694,9 +760,7 @@ public class FoliosView extends VerticalLayout {
                     else{
                         if(catalogoEstatusEntity.getId() == idCerrar){
                             if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
-                                log.info("GUARDAR CERRAR FOLIO");
-
-                                agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
+                                agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                             }
                             else
                                 DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -704,21 +768,17 @@ public class FoliosView extends VerticalLayout {
                         else{
                             if(catalogoEstatusEntity.getId() == idReasignar){
                                 if(existeApertura && !existeCerrar){
-                                    log.info("REASIGNAR FOLIO");
-
                                     folioEntity.setIdUsuarioSoporteAsignado(usuarioSoporteEntity.getId());
                                     folioEntity = folioService.save(folioEntity);
 
-                                    agregarEstatus(catalogoEstatusEntity.getId(), "Nuevo usuario de soporte asignado"+usuarioSoporteEntity.getNombrePropio());
+                                    agregarEstatus(catalogoEstatusEntity.getId(), "Nuevo usuario de soporte asignado"+usuarioSoporteEntity.getNombrePropio(),DtePikr_fechaMovimiento.getValue());
                                 }
                                 else
                                     DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                             }
                             else{
                                 if(existeApertura && !existeCerrar && anotacion.length() > 0){
-                                    log.info("GUARDAR ESTATUS DIFERENTE");
-
-                                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion);
+                                    agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                                 }
                                 else
                                     DisplayInfo.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
@@ -843,9 +903,10 @@ public class FoliosView extends VerticalLayout {
         VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus);//,Btt_SalvarEstatus);
     }
 
-    private void agregarEstatus(Integer idEstatus, String anotacion){
+    private void agregarEstatus(Integer idEstatus, String anotacion, LocalDate fecha){
         EstatusEntity estatusEntity = new EstatusEntity();
         estatusEntity.setFolio(folioEntity.getId());
+        estatusEntity.setFecha(fecha);
         estatusEntity.setIdEstatus(idEstatus);
         estatusEntity.setAnotacion(anotacion);
         estatusEntity.setIdUsuario(authenticatedUser.get().get().getId());

@@ -1,5 +1,6 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.old;
 
+import com.helpdeskeditor.application.app.web.MainLayout;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;

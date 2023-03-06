@@ -2,15 +2,8 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.service.FolioService;
-import com.helpdeskeditor.application.app.web.MainLayout;
-import com.vaadin.flow.component.ItemLabelGenerator;
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -19,24 +12,19 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.RolesAllowed;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
 
-@PageTitle("Listado de Folios")
-@Route(value = "foliosgrid", layout = MainLayout.class)
+@PageTitle("Catalogos")
+@Route(value = "catalogos", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
-@RolesAllowed({"USER","ADMIN"})
-public class FoliosGrid extends VerticalLayout{
+@RolesAllowed("ADMIN")
+public class Catalogos extends VerticalLayout{
     private Grid<FolioDAO> grid;
     private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
             numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
 
     private final FolioService folioService;
 
-    public FoliosGrid(FolioService folioService) {
+    public Catalogos(FolioService folioService) {
         this.folioService = folioService;
 
         grid = new Grid<>(FolioDAO.class, false);

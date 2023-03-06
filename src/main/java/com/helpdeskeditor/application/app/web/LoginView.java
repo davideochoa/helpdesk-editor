@@ -1,8 +1,11 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -17,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @PageTitle("Login")
 @Route(value = "login")
 @Slf4j
-public class LoginView extends LoginOverlay implements BeforeEnterObserver{
+public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
     private final AuthenticatedUser authenticatedUser;
 

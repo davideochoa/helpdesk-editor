@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 @Getter
@@ -71,4 +74,25 @@ public class FolioEntity {
 
     @Column(name = "IdTipoIncidenciaFinal")
     private Integer idTipoIncidenciaFinal;
+/*
+    public void setInitValues(){
+        setId(0);
+        setIdUnidad(0);
+        setIdArea(0);
+        setUsuarioReporta("NO ESPECIFICADO");
+        setTelefonoContacto("NO ESPECIFICADO");
+        setReferenciaDocumental("NO ESPECIFICADO");
+        setIdTipoIncidencia(0);
+        setIdBien(0);
+        setMarca("NO ESPECIFICADO");
+        setModelo("NO ESPECIFICADO");
+        setNumeroSerie("NO ESPECIFICADO");
+        setNumeroInventario("NO ESPECIFICADO");
+        setMotivoReporte("");
+        setIdPrioridad(0);
+        setIdUsuarioSoporteAsignado(0);
+        setFecha(new Date());
+        setActivo(false);
+        setIdTipoIncidenciaFinal(0);
+    }*/
 }

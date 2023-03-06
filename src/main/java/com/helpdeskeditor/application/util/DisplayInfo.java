@@ -8,14 +8,30 @@ import com.vaadin.flow.component.progressbar.ProgressBar;
 
 public class DisplayInfo {
 
-    public static Notification notificacion(String texto, NotificationVariant variante, Notification.Position posicion){
-        Notification notification = new Notification();
-        notification.setText(texto);
-        notification.addThemeVariants(variante);
-        notification.setPosition(posicion);
-        notification.setDuration(10000);
+    public static Notification notificacionEventoERROR(String texto){
+        Notification notification = new Notification(texto);
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(5000);
         return notification;
     }
+
+    public static Notification notificacionEventoSUCCESS(String texto){
+        Notification notification = new Notification(texto);
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(5000);
+        return notification;
+    }
+
+    public static Notification notificacionEventoNeutro(String texto){
+        Notification notification = new Notification(texto);
+        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.setDuration(5000);
+        return notification;
+    }
+
 
     public static Dialog dialogPorgressBarIndeterminate(String textoHeader, String texto){
         ProgressBar progressBar = new ProgressBar();
