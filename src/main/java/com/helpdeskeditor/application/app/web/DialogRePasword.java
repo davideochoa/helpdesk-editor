@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.components.appnav;
+package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
@@ -27,13 +27,14 @@ public class DialogRePasword extends Dialog {
     private UsuarioSoporteService usuarioSoporteService;
 
     private SecurityConfiguration securityConfiguration;
-    @Autowired
     private AuthenticatedUser authenticatedUser;
-    public DialogRePasword(SecurityConfiguration securityConfiguration) {
+    public DialogRePasword(SecurityConfiguration securityConfiguration, AuthenticatedUser authenticatedUser) {
         super.setModal(false);
         this.setModal(false);
 
         this.securityConfiguration = securityConfiguration;
+        this.authenticatedUser = authenticatedUser;
+
         PasswordEncoder passwordEncoder = securityConfiguration.passwordEncoder();
 
         this.setHeaderTitle("Nueva contraseña");
@@ -62,7 +63,8 @@ public class DialogRePasword extends Dialog {
                     if(password1.equals(password2)){
                         UsuarioSoporteEntity usuarioSoporteEntity = authenticatedUser.get().get();
                         usuarioSoporteEntity.setPassword(passwordEncoder.encode(password1));
-                        usuarioSoporteService.save(usuarioSoporteEntity);
+                        //usuarioSoporteService.save(usuarioSoporteEntity);
+                        authenticatedUser.logout();
                     }
                     else
                         DisplayInfo.notificacionEventoERROR("Las contaseñas deben ser iguales!").open();

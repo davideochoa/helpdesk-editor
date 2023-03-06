@@ -7,7 +7,6 @@ import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
 import com.helpdeskeditor.application.app.web.antigua.EstatusView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
-import com.helpdeskeditor.application.app.web.components.appnav.DialogRePasword;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.helpdeskeditor.application.old.FoliosGrid2;
@@ -52,8 +51,9 @@ public class MainLayout extends AppLayout {
 
         UsuarioSoporteEntity usuarioSoporteEntity = authenticatedUser.get().get();
 
-        if(usuarioSoporteEntity.getEsReseteadoPassword()){
-            DialogRePasword dr = new DialogRePasword(securityConfiguration);
+        if(false){//usuarioSoporteEntity.getEsReseteadoPassword()){
+            this.setVisible(false);
+            DialogRePasword dr = new DialogRePasword(securityConfiguration,authenticatedUser);
             dr.open();
         }
 
