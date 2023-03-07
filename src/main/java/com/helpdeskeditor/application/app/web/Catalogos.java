@@ -1,21 +1,17 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
-import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.service.FolioService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -35,10 +31,11 @@ public class Catalogos extends VerticalLayout{
 
     private VerticalLayout VL_CatalogoUsuairios = new VerticalLayout();
         private FormLayout FL_principal = new FormLayout();
-            private ComboBox<UsuarioSoporteEntity> CB_Unidad = new ComboBox<UsuarioSoporteEntity>("Usuario");
+            private ComboBox<UsuarioSoporteEntity> CB_usuario = new ComboBox<UsuarioSoporteEntity>("Usuario");
             private TextField TF_userName = new TextField("User Name");
             private Checkbox CKB_resetPassword = new Checkbox("ResetConstraseña");
-        Button Btt_SalvarCatalogoUsuario = new Button("GUARDAR");
+        private Button Btt_SalvarCatalogoUsuario = new Button("GUARDAR");
+    private HorizontalLayout VL_separador = new HorizontalLayout();
 
 
     private VerticalLayout VL_CatalogoUnidadArea = new VerticalLayout();
@@ -54,9 +51,20 @@ public class Catalogos extends VerticalLayout{
         this.add(tabs, contenidoTab);
     }
 
+    public class Divider extends Span {
+        public Divider(){
+            getStyle().set("background-image", "linear-gradient(135deg, #777 , rgba(0, 0, 0, 0))");
+            getStyle().set("flex", "0 0 2px");
+            getStyle().set("align-self", "stretch");
+        }
+    }
+
     private void layoutCatalogousuario(){
         VL_CatalogoUsuairios.setMargin(false);
         VL_CatalogoUsuairios.setPadding(false);
+
+        Label label = new Label("Language <span style='color: red'>*</span>");
+
 
         FL_principal.setResponsiveSteps(
                 // Use one column by default
@@ -64,9 +72,11 @@ public class Catalogos extends VerticalLayout{
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        FL_principal.add(CB_Unidad,TF_userName,CKB_resetPassword);
 
-        VL_CatalogoUsuairios.add(FL_principal,Btt_SalvarCatalogoUsuario);
+
+        FL_principal.add(CB_usuario,TF_userName,CKB_resetPassword);
+
+        VL_CatalogoUsuairios.add(label,FL_principal,Btt_SalvarCatalogoUsuario,new Divider());
     }
     private void layoutTabs(){
         tabUsuario = new Tab("USUARIO");
