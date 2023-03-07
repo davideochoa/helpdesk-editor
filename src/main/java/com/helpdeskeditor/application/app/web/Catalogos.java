@@ -1,10 +1,18 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
+import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.FolioService;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -18,95 +26,72 @@ import javax.annotation.security.RolesAllowed;
 //@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 public class Catalogos extends VerticalLayout{
-    private Grid<FolioDAO> grid;
-    private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
-            numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
 
-    private final FolioService folioService;
+    private Tabs tabs;
+    private Tab tabUsuario;
+    private Tab tabUnidadArea;
+    private Tab tabIncideciaBien;
+    private VerticalLayout contenidoTab;
 
-    public Catalogos(FolioService folioService) {
-        this.folioService = folioService;
+    private VerticalLayout VL_CatalogoUsuairios = new VerticalLayout();
+        private FormLayout FL_principal = new FormLayout();
+            private ComboBox<UsuarioSoporteEntity> CB_Unidad = new ComboBox<UsuarioSoporteEntity>("Usuario");
+            private TextField TF_userName = new TextField("User Name");
+            private Checkbox CKB_resetPassword = new Checkbox("ResetConstraseña");
+        Button Btt_SalvarCatalogoUsuario = new Button("GUARDAR");
 
-        grid = new Grid<>(FolioDAO.class, false);
-        grid.setItems(folioService.getAll());
 
-        grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
-        grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
-        grid.addColumn(FolioDAO :: getUsuarioReporta).setHeader("Usuario Reporta").setKey("usuarioReporta").setResizable(true);
-        grid.addColumn(FolioDAO :: getMarca).setHeader("Marca").setKey("marca").setResizable(true);
-        grid.addColumn(FolioDAO :: getModelo).setHeader("Modelo").setKey("modelo").setResizable(true);
-        grid.addColumn(FolioDAO :: getNumeroSerie).setHeader("Numero Serie").setKey("numeroSerie").setResizable(true);
-        grid.addColumn(FolioDAO :: getNumeroInventario).setHeader("Numero Inventario").setKey("numeroInventario").setResizable(true);
-        grid.addColumn(FolioDAO :: getEstado).setHeader("Estado").setKey("estado").setResizable(true);
+    private VerticalLayout VL_CatalogoUnidadArea = new VerticalLayout();
+    private VerticalLayout VL_CatalogoIncidenciaBien = new VerticalLayout();
 
-        prepareFilterFields();
-        add(grid);
+    public Catalogos() {
+        layoutCatalogousuario();
 
         this.setHeight("100%");
-    }
-    private void prepareFilterFields() {
-        HeaderRow headerRow = grid.appendHeaderRow();
 
-        folioFilter = gridTextFieldFilter("id", headerRow);
-        unidadFilter = gridTextFieldFilter("unidad", headerRow);
-        usuarioreportaFilter = gridTextFieldFilter("usuarioReporta", headerRow);
-        marcaFilter = gridTextFieldFilter("marca", headerRow);
-        modeloFilter = gridTextFieldFilter("modelo", headerRow);
-        numeroSerieFilter = gridTextFieldFilter("numeroSerie", headerRow);
-        numeroInventarioFilter = gridTextFieldFilter("numeroInventario", headerRow);
-        estadoFilter = gridTextFieldFilter("estado", headerRow);
+        layoutTabs();
+
+        this.add(tabs, contenidoTab);
     }
 
-    private TextField gridTextFieldFilter(String columnKey, HeaderRow headerRow) {
-        TextField filter = new TextField();
-        filter.setValueChangeMode(ValueChangeMode.TIMEOUT);
+    private void layoutCatalogousuario(){
+        VL_CatalogoUsuairios.setMargin(false);
+        VL_CatalogoUsuairios.setPadding(false);
 
-        filter.setClearButtonVisible(true);
-        filter.addValueChangeListener(event -> this.onFilterChange());
-        filter.setWidthFull();
-        headerRow.getCell(grid.getColumnByKey(columnKey)).setComponent(filter);
-        return filter;
+        FL_principal.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_principal.add(CB_Unidad,TF_userName,CKB_resetPassword);
+
+        VL_CatalogoUsuairios.add(FL_principal,Btt_SalvarCatalogoUsuario);
     }
+    private void layoutTabs(){
+        tabUsuario = new Tab("USUARIO");
+        tabUnidadArea = new Tab("UNIDAD - AREA");
+        tabIncideciaBien = new Tab("INCIDENCIA - BIEN");
 
-    private void onFilterChange(){
-        ListDataProvider<FolioDAO> listDataProvider = (ListDataProvider<FolioDAO>) grid.getDataProvider();
-        listDataProvider.setFilter(item -> {
-            boolean folioFilterMatch = true;
-            boolean unidadFilterMatch = true;
-            boolean usuarioreportaFilterMatch = true;
-            boolean marcaFilterMatch = true;
-            boolean modeloFilterMatch = true;
-            boolean numeroSerieFilterMatch = true;
-            boolean numeroInventarioFilterMatch = true;
-            boolean estadoFilterMatch = true;
+        tabs = new Tabs(tabUsuario, tabUnidadArea,tabIncideciaBien);
 
-            if(!folioFilter.isEmpty())
-                folioFilterMatch = item.toString().contains(folioFilter.getValue().toUpperCase());
+        tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
-            if(!unidadFilter.isEmpty())
-                unidadFilterMatch = item.toString().contains(unidadFilter.getValue().toUpperCase());
+        contenidoTab = new VerticalLayout();
+        contenidoTab.setSpacing(false);
+        setContent(tabs.getSelectedTab());
+    }
+    private void setContent(Tab tab) {
+        contenidoTab.removeAll();
 
-            if(!usuarioreportaFilter.isEmpty())
-                usuarioreportaFilterMatch = item.toString().contains(usuarioreportaFilter.getValue().toUpperCase());
-
-            if(!marcaFilter.isEmpty())
-                marcaFilterMatch = item.toString().contains(marcaFilter.getValue().toUpperCase());
-
-            if(!modeloFilter.isEmpty())
-                modeloFilterMatch = item.toString().contains(modeloFilter.getValue().toUpperCase());
-
-            if(!numeroSerieFilter.isEmpty())
-                numeroSerieFilterMatch = item.toString().contains(numeroSerieFilter.getValue().toUpperCase());
-
-            if(!numeroInventarioFilter.isEmpty())
-                numeroInventarioFilterMatch = item.toString().contains(numeroInventarioFilter.getValue().toUpperCase());
-
-            if(!estadoFilter.isEmpty())
-                estadoFilterMatch = item.toString().contains(estadoFilter.getValue().toUpperCase());
-
-            return folioFilterMatch && unidadFilterMatch && usuarioreportaFilterMatch && marcaFilterMatch &&
-                    modeloFilterMatch && numeroSerieFilterMatch && numeroInventarioFilterMatch && estadoFilterMatch;
-        });
+        if (tab.equals(tabUsuario))
+            contenidoTab.add(VL_CatalogoUsuairios);
+        else
+            if (tab.equals(tabUnidadArea))
+                contenidoTab.add(VL_CatalogoUnidadArea);
+            else
+                if (tab.equals(tabIncideciaBien))
+                    contenidoTab.add(VL_CatalogoIncidenciaBien);
     }
 
 }

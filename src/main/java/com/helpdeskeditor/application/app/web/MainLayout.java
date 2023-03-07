@@ -92,8 +92,14 @@ public class MainLayout extends AppLayout {
             nav.addItem(new AppNavItem("Listado de Folios", FoliosGrid.class, "la la-globe"));
 
         }
+        if (accessChecker.hasAccess(Catalogos.class)) {
+            nav.addItem(new AppNavItem("Catalogos", Catalogos.class, "la la-globe"));
+
+        }
+
+
         if (accessChecker.hasAccess(FoliosGrid2.class)) {
-            nav.addItem(new AppNavItem("Listado de Folios", FoliosGrid2.class, "la la-globe"));
+            nav.addItem(new AppNavItem("Listado de Folios2", FoliosGrid2.class, "la la-globe"));
 
         }
         if (accessChecker.hasAccess(EstatusView.class)) {
