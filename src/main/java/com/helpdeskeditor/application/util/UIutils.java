@@ -2,11 +2,21 @@ package com.helpdeskeditor.application.util;
 
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 
-public class DisplayInfo {
+public class UIutils {
+
+    public static Span lineaDivision(){
+        Span span = new Span();
+        span.getStyle().set("background-image", "linear-gradient(135deg, #777 , rgba(0, 0, 0, 0))");
+        span.getStyle().set("flex", "0 0 2px");
+        span.getStyle().set("align-self", "stretch");
+
+        return span;
+    }
 
     public static Notification notificacionEventoERROR(String texto){
         Notification notification = new Notification(texto);

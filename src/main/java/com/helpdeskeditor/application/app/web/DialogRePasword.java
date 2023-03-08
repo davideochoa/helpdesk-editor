@@ -4,17 +4,13 @@ import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
-import com.helpdeskeditor.application.util.DisplayInfo;
+import com.helpdeskeditor.application.util.UIutils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,13 +63,13 @@ public class DialogRePasword extends Dialog {
                         authenticatedUser.logout();
                     }
                     else
-                        DisplayInfo.notificacionEventoERROR("Las contaseñas deben ser iguales!").open();
+                        UIutils.notificacionEventoERROR("Las contaseñas deben ser iguales!").open();
                 }
                 else
-                    DisplayInfo.notificacionEventoERROR("Las contaseñas deben de contener mas de tres caracteres!").open();
+                    UIutils.notificacionEventoERROR("Las contaseñas deben de contener mas de tres caracteres!").open();
             }
             else
-                DisplayInfo.notificacionEventoERROR("Las contaseñas no pueden ser vacias!").open();
+                UIutils.notificacionEventoERROR("Las contaseñas no pueden ser vacias!").open();
 
 
 

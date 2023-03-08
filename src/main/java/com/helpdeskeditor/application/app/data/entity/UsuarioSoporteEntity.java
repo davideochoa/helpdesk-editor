@@ -45,4 +45,9 @@ public class UsuarioSoporteEntity {
 */
     @Column(name = "rol")
     private String rol;
+
+    @Override
+    public String toString(){
+        return getId()+" : "+getNombreUsuario()+" : "+getNombrePropio()+" : "+getRol()+" : "+getEsReseteadoPassword();
+    }
 }

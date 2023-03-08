@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-@Transactional(readOnly = true)
 public class UsuarioSoporteFacade {
     private final UsuarioSoporteRepository usuarioSoporteRepository;
 
@@ -19,10 +18,12 @@ public class UsuarioSoporteFacade {
         this.usuarioSoporteRepository = usuarioSoporteRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioSoporteEntity> findByOrderBynombreUsuarioAsc(){
         return usuarioSoporteRepository.findAll(Sort.by(Sort.Direction.ASC,"nombrePropio"));
     }
 
+    @Transactional
     public UsuarioSoporteEntity save(UsuarioSoporteEntity usuarioSoporteEntity){
         return usuarioSoporteRepository.save(usuarioSoporteEntity);
     }

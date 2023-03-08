@@ -20,8 +20,7 @@ import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
-import com.helpdeskeditor.application.util.DisplayInfo;
-import com.vaadin.flow.component.ItemLabelGenerator;
+import com.helpdeskeditor.application.util.UIutils;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -128,7 +127,7 @@ public class FoliosView extends VerticalLayout {
     List<EstatusDAO> estatusEntityList = null;
 
     FolioEntity folioEntity = null;
-    Dialog dialogProgressBarModificandoFolio = DisplayInfo.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
+    Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
     @Autowired
     public FoliosView(UnidadService unidadService,
@@ -272,7 +271,7 @@ public class FoliosView extends VerticalLayout {
             }
         }
         else{
-            DisplayInfo.confirmDialog("Error al cargar el Folio!","El folio no fue encontrado").open();
+            UIutils.confirmDialog("Error al cargar el Folio!","El folio no fue encontrado").open();
             borrar();
             folioEntity = new FolioEntity();
         }
@@ -282,7 +281,7 @@ public class FoliosView extends VerticalLayout {
 
     private void guardar(){
         if(folioEntity != null){
-            DisplayInfo.notificacionEventoNeutro("Guardando Folio!").open();
+            UIutils.notificacionEventoNeutro("Guardando Folio!").open();
 
             //****************** UNIDAD ******************************************************
             UnidadEntity unidadEntity = CB_Unidad.getValue();
@@ -401,10 +400,10 @@ public class FoliosView extends VerticalLayout {
                     }
                 }
                 borrar();
-                DisplayInfo.notificacionEventoSUCCESS("Folio creado/modificado: "+folioEntity.getId()).setVisible(true);
+                UIutils.notificacionEventoSUCCESS("Folio creado/modificado: "+folioEntity.getId()).setVisible(true);
             }
             else{
-                DisplayInfo.notificacionEventoERROR("Error al crear/modificar Folio!").open();
+                UIutils.notificacionEventoERROR("Error al crear/modificar Folio!").open();
 
             }
         }
@@ -739,7 +738,7 @@ public class FoliosView extends VerticalLayout {
                     agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                 }
                 else
-                    DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                    UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
             }
             else{
                 if(catalogoEstatusEntity.getId() == idDiagnosticoInicial){
@@ -747,7 +746,7 @@ public class FoliosView extends VerticalLayout {
                         agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                     }
                     else
-                        DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe, falta su correlativo anterior o falta la anotacion").open();
+                        UIutils.confirmDialog("Error en Estatus","El estatus ya existe, falta su correlativo anterior o falta la anotacion").open();
                 }
                 else{
                     if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
@@ -755,7 +754,7 @@ public class FoliosView extends VerticalLayout {
                             agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                         }
                         else
-                            DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                            UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                     }
                     else{
                         if(catalogoEstatusEntity.getId() == idCerrar){
@@ -763,7 +762,7 @@ public class FoliosView extends VerticalLayout {
                                 agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                             }
                             else
-                                DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                                UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                         }
                         else{
                             if(catalogoEstatusEntity.getId() == idReasignar){
@@ -774,14 +773,14 @@ public class FoliosView extends VerticalLayout {
                                     agregarEstatus(catalogoEstatusEntity.getId(), "Nuevo usuario de soporte asignado"+usuarioSoporteEntity.getNombrePropio(),DtePikr_fechaMovimiento.getValue());
                                 }
                                 else
-                                    DisplayInfo.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
+                                    UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
                             }
                             else{
                                 if(existeApertura && !existeCerrar && anotacion.length() > 0){
                                     agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                                 }
                                 else
-                                    DisplayInfo.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
+                                    UIutils.confirmDialog("Error en Estatus","El folio no tiene apertura o ya esta cerrado").open();
                             }
                         }
                     }
@@ -858,7 +857,7 @@ public class FoliosView extends VerticalLayout {
                                 GridEstatus.setItems(estatusEntityList);
                             }
                             else
-                                DisplayInfo.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
+                                UIutils.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
                         }
                         else{
                             if(estatus.getIdEstatus() == idDiagnosticoInicial){
@@ -869,7 +868,7 @@ public class FoliosView extends VerticalLayout {
                                     GridEstatus.setItems(estatusEntityList);
                                 }
                                 else
-                                    DisplayInfo.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
+                                    UIutils.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
                             }
                             else{
                                 if(estatus.getIdEstatus() == idDiagnosticoFinal){
@@ -880,7 +879,7 @@ public class FoliosView extends VerticalLayout {
                                         GridEstatus.setItems(estatusEntityList);
                                     }
                                     else
-                                        DisplayInfo.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
+                                        UIutils.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
                                 }
                                 else{
                                     EstatusEntity estatusEntity = estatus.getEntity();
