@@ -2,6 +2,7 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.helpdeskeditor.application.util.UIutils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -70,6 +71,8 @@ public class Catalogos extends VerticalLayout{
         this.add(tabs, contenidoTab);
     }
 
+    @Autowired
+    SecurityConfiguration securityConfiguration;
     private void layoutCatalogousuario(){
         VL_CatalogoUsuairios.setMargin(false);
         VL_CatalogoUsuairios.setPadding(false);
@@ -99,13 +102,18 @@ public class Catalogos extends VerticalLayout{
                 if(TF_userName.getValue() != null) {
                     if(!usuarioSoporteEntity.getNombreUsuario().equals(TF_userName.getValue())){
                         usuarioSoporteEntity.setNombreUsuario(TF_userName.getValue());
+                        usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(TF_userName.getValue()));
                         usuarioSoporteEntity.setEsReseteadoPassword(true);
                     }
-                    else {
-                        usuarioSoporteEntity.setEsReseteadoPassword(CKB_resetPassword.getValue());
-                    }
-                    usuarioSoporteEntity.setRol(CB_tipoUsuario.getValue());
 
+                    if(CKB_resetPassword.getValue()) {
+                        usuarioSoporteEntity.setEsReseteadoPassword(true);
+                        usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(usuarioSoporteEntity.getNombreUsuario()));
+                    }
+
+                    if(CB_tipoUsuario.getValue() != null)
+                        if(!usuarioSoporteEntity.getRol().equals(CB_tipoUsuario.getValue()))
+                            usuarioSoporteEntity.setRol(CB_tipoUsuario.getValue());
 
                     log.info(usuarioSoporteEntity.toString());
 

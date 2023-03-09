@@ -51,9 +51,9 @@ public class MainLayout extends AppLayout {
 
         UsuarioSoporteEntity usuarioSoporteEntity = authenticatedUser.get().get();
 
-        if(false){//usuarioSoporteEntity.getEsReseteadoPassword()){
+        if(usuarioSoporteEntity.getEsReseteadoPassword()){
             this.setVisible(false);
-            DialogRePasword dr = new DialogRePasword(securityConfiguration,authenticatedUser);
+            DialogRePasword dr = new DialogRePasword(securityConfiguration,authenticatedUser,usuarioSoporteService);
             dr.open();
         }
 

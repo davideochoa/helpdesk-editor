@@ -19,14 +19,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class DialogRePasword extends Dialog {
     private PasswordField passwordField1 = new PasswordField();
     private PasswordField passwordField2 = new PasswordField();
-    @Autowired
-    private UsuarioSoporteService usuarioSoporteService;
 
+    private UsuarioSoporteService usuarioSoporteService;
     private SecurityConfiguration securityConfiguration;
     private AuthenticatedUser authenticatedUser;
-    public DialogRePasword(SecurityConfiguration securityConfiguration, AuthenticatedUser authenticatedUser) {
+    public DialogRePasword(SecurityConfiguration securityConfiguration,
+                           AuthenticatedUser authenticatedUser,
+                           UsuarioSoporteService usuarioSoporteService) {
         super.setModal(false);
         this.setModal(false);
+
+        this.usuarioSoporteService = usuarioSoporteService;
 
         this.securityConfiguration = securityConfiguration;
         this.authenticatedUser = authenticatedUser;
@@ -36,7 +39,7 @@ public class DialogRePasword extends Dialog {
         this.setHeaderTitle("Nueva contraseña");
 
         passwordField1.setRevealButtonVisible(true);
-        passwordField1.setLabel("Contraseña");
+        passwordField1.setLabel("Nueva Contraseña");
 
         passwordField2.setRevealButtonVisible(true);
         passwordField2.setLabel("Repite Contraseña");
@@ -59,7 +62,10 @@ public class DialogRePasword extends Dialog {
                     if(password1.equals(password2)){
                         UsuarioSoporteEntity usuarioSoporteEntity = authenticatedUser.get().get();
                         usuarioSoporteEntity.setPassword(passwordEncoder.encode(password1));
-                        //usuarioSoporteService.save(usuarioSoporteEntity);
+                        usuarioSoporteEntity.setEsReseteadoPassword(false);
+
+                        usuarioSoporteService.save(usuarioSoporteEntity);
+
                         authenticatedUser.logout();
                     }
                     else
