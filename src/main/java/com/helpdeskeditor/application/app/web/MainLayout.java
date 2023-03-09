@@ -2,9 +2,9 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
-import com.helpdeskeditor.application.app.web.antigua.AcercaDeView;
-import com.helpdeskeditor.application.app.web.antigua.AutorizacionView;
-import com.helpdeskeditor.application.app.web.antigua.EstatusView;
+import com.helpdeskeditor.application.old.antigua.AcercaDeView;
+import com.helpdeskeditor.application.old.antigua.AutorizacionView;
+import com.helpdeskeditor.application.old.antigua.EstatusView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;

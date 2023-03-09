@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.antigua;
+package com.helpdeskeditor.application.old.antigua;
 
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.vaadin.flow.component.html.H2;
@@ -7,14 +7,13 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Acerca De")
 @Route(value = "acerca-de", layout = MainLayout.class)
 //@AnonymousAllowed
-@RolesAllowed("USER")
+//@RolesAllowed("USER")
 public class AcercaDeView extends VerticalLayout {
 
     public AcercaDeView() {

@@ -22,7 +22,7 @@ import java.util.List;
 @PageTitle("Listado de Folios2")
 @Route(value = "foliosgrid2", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
-@RolesAllowed("USER")
+//@RolesAllowed("USER")
 public class FoliosGrid2 extends HorizontalLayout {
     private Grid<LocalDate> grid;
     private TextField toStringFilter, yearFilter;

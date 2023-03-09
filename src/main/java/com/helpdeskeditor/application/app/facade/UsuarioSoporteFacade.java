@@ -23,6 +23,11 @@ public class UsuarioSoporteFacade {
         return usuarioSoporteRepository.findAll(Sort.by(Sort.Direction.ASC,"nombrePropio"));
     }
 
+    @Transactional(readOnly = true)
+    public UsuarioSoporteEntity findByNombreUsuario(String NombreUsuarioa){
+        return usuarioSoporteRepository.findByNombreUsuario(NombreUsuarioa);
+    }
+
     @Transactional
     public UsuarioSoporteEntity save(UsuarioSoporteEntity usuarioSoporteEntity){
         return usuarioSoporteRepository.save(usuarioSoporteEntity);

@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.antigua;
+package com.helpdeskeditor.application.old.antigua;
 
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.old.SampleAddress;
@@ -21,7 +21,7 @@ import javax.annotation.security.RolesAllowed;
 @PageTitle("Autorizacion")
 @Route(value = "autorizacion", layout = MainLayout.class)
 //@RolesAllowed("ADMIN")
-@RolesAllowed("USER")
+//@RolesAllowed("USER")
 public class AutorizacionView extends Div {
 
     private TextField street = new TextField("Street address");

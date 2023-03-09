@@ -16,7 +16,14 @@ public class UsuarioSoporteService {
     public List<UsuarioSoporteEntity> findByOrderBynombreUsuarioAsc(){
         return usuarioSoporteFacade.findByOrderBynombreUsuarioAsc();
     }
+
+    public UsuarioSoporteEntity findByNombreUsuario(String NombreUsuarioa){
+        return usuarioSoporteFacade.findByNombreUsuario(NombreUsuarioa);
+    }
+
     public UsuarioSoporteEntity save(UsuarioSoporteEntity usuarioSoporteEntity){
         return usuarioSoporteFacade.save(usuarioSoporteEntity);
     }
+
+
 }

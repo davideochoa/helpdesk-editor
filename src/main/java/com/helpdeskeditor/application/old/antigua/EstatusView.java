@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.antigua;
+package com.helpdeskeditor.application.old.antigua;
 
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.old.SamplePerson;
@@ -25,7 +25,7 @@ import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Estatus")
 @Route(value = "estatus", layout = MainLayout.class)
-@RolesAllowed("USER")
+//@RolesAllowed("USER")
 @Uses(Icon.class)
 public class EstatusView extends Div {
 

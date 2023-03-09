@@ -105,15 +105,19 @@ public class Catalogos extends VerticalLayout{
                         usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(TF_userName.getValue()));
                         usuarioSoporteEntity.setEsReseteadoPassword(true);
                     }
-
-                    if(CKB_resetPassword.getValue()) {
-                        usuarioSoporteEntity.setEsReseteadoPassword(true);
-                        usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(usuarioSoporteEntity.getNombreUsuario()));
+                    else{
+                        if(CKB_resetPassword.getValue()) {
+                            usuarioSoporteEntity.setEsReseteadoPassword(true);
+                            usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(usuarioSoporteEntity.getNombreUsuario()));
+                        }
+                        if(CB_tipoUsuario.getValue() != null)
+                            if(!usuarioSoporteEntity.getRol().equals(CB_tipoUsuario.getValue()))
+                                usuarioSoporteEntity.setRol(CB_tipoUsuario.getValue());
                     }
 
-                    if(CB_tipoUsuario.getValue() != null)
-                        if(!usuarioSoporteEntity.getRol().equals(CB_tipoUsuario.getValue()))
-                            usuarioSoporteEntity.setRol(CB_tipoUsuario.getValue());
+
+
+
 
                     log.info(usuarioSoporteEntity.toString());
 
@@ -137,6 +141,14 @@ public class Catalogos extends VerticalLayout{
         FL_principal2.add(TF_nuevoUsuario,TF_nuevoUserName);
 
         VL_CatalogoUsuairios.add(new H3("Nuevo Usuario"),FL_principal2,Btt_salvarNuevoUsuario);
+    }
+    private Boolean verificarExisteUsername(String userName){
+        UsuarioSoporteEntity usuario = usuarioSoporteService.findByNombreUsuario(userName);
+
+        if(usuario != null)
+            return true;
+        else
+            return false;
     }
 
     private void layoutTabs(){
