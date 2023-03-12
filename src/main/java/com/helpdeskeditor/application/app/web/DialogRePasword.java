@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
@@ -69,13 +68,13 @@ public class DialogRePasword extends Dialog {
                         authenticatedUser.logout();
                     }
                     else
-                        UIutils.notificacionEventoERROR("Las contaseñas deben ser iguales!").open();
+                        UIutils.notificacionERROR("Las contaseñas deben ser iguales!").open();
                 }
                 else
-                    UIutils.notificacionEventoERROR("Las contaseñas deben de contener mas de tres caracteres!").open();
+                    UIutils.notificacionERROR("Las contaseñas deben de contener mas de tres caracteres!").open();
             }
             else
-                UIutils.notificacionEventoERROR("Las contaseñas no pueden ser vacias!").open();
+                UIutils.notificacionERROR("Las contaseñas no pueden ser vacias!").open();
 
 
 

@@ -88,12 +88,12 @@ public class MainLayout extends AppLayout {
             nav.addItem(new AppNavItem("Folios", FoliosView.class, "la la-globe"));
 
         }
-        if (accessChecker.hasAccess(FoliosGrid.class)) {
-            nav.addItem(new AppNavItem("Listado de Folios", FoliosGrid.class, "la la-globe"));
+        if (accessChecker.hasAccess(FoliosGridView.class)) {
+            nav.addItem(new AppNavItem("Listado de Folios", FoliosGridView.class, "la la-globe"));
 
         }
-        if (accessChecker.hasAccess(Catalogos.class)) {
-            nav.addItem(new AppNavItem("Catalogos", Catalogos.class, "la la-globe"));
+        if (accessChecker.hasAccess(CatalogosView.class)) {
+            nav.addItem(new AppNavItem("Catalogos", CatalogosView.class, "la la-globe"));
 
         }
 

@@ -3,32 +3,37 @@ package com.helpdeskeditor.application.app.facade;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.repository.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
-@Transactional(readOnly = true)
 public class AreaFacade {
-    private AreaRepository areasRepository;
+    private final AreaRepository areaRepository;
 
     @Autowired
-    public AreaFacade(AreaRepository areasRepository) {
-        this.areasRepository = areasRepository;
+    public AreaFacade(AreaRepository areaRepository) {
+        this.areaRepository = areaRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<AreaEntity> findAll(){
-        return areasRepository.findAll();
+        return areaRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<AreaEntity> findByidUnidad(int idUnidad){
-        return areasRepository.findByIdUnidadOrderByNombre(idUnidad);
+        return areaRepository.findByIdUnidadOrderByNombre(idUnidad);
     }
 
+    @Transactional(readOnly = true)
     public AreaEntity findByIdAndIdUnidad(int IdUnidad, int Id){
-        return areasRepository.findByIdAndIdUnidad(IdUnidad,Id);
+        return areaRepository.findByIdAndIdUnidad(IdUnidad,Id);
+    }
+    @Transactional
+    public AreaEntity save(AreaEntity areaEntity){
+        return areaRepository.save(areaEntity);
     }
 
 }

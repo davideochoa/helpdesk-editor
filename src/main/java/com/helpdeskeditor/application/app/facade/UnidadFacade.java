@@ -11,20 +11,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Transactional(readOnly = true)
 public class UnidadFacade {
-    private UnidadRepository unidadRepository;
+    private final UnidadRepository unidadRepository;
 
     @Autowired
     public UnidadFacade(UnidadRepository unidadRepository) {
         this.unidadRepository = unidadRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<UnidadEntity> findAll(){
         return unidadRepository.findAll(Sort.by(Sort.Direction.ASC,"Nombre"));
     }
 
+    @Transactional(readOnly = true)
     public Optional<UnidadEntity> findById(Integer Id){
         return unidadRepository.findById(Id);
+    }
+
+    @Transactional
+    public UnidadEntity save(UnidadEntity unidadEntity){
+        return unidadRepository.save(unidadEntity);
     }
 }

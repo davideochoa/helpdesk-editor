@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class AreaService {
-    private AreaFacade areaFacade;
+    private final AreaFacade areaFacade;
     public AreaService(AreaFacade areaFacade) {
         this.areaFacade = areaFacade;
     }
@@ -23,5 +23,9 @@ public class AreaService {
 
     public AreaEntity findByIdAndIdUnidad(Integer IdUnidad,Integer IdArea){
         return areaFacade.findByIdAndIdUnidad(IdUnidad,IdArea);
+    }
+
+    public AreaEntity save(AreaEntity areaEntity){
+        return areaFacade.save(areaEntity);
     }
 }

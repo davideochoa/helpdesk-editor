@@ -22,4 +22,7 @@ public class IncidenciaService {
         return incidenciaFacade.findById(Id);
     }
 
+    public IncidenciaEntity save(IncidenciaEntity incidenciaEntity){
+        return incidenciaFacade.save(incidenciaEntity);
+    }
 }

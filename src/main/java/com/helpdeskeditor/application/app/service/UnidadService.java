@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Service
 public class UnidadService {
-    private UnidadFacade unidadFacade;
+    private static UnidadFacade unidadFacade;
     public UnidadService(UnidadFacade unidadFacade) {
         this.unidadFacade = unidadFacade;
     }
@@ -20,5 +20,9 @@ public class UnidadService {
 
     public Optional<UnidadEntity> findById(Integer Id){
         return unidadFacade.findById(Id);
+    }
+
+    public UnidadEntity save(UnidadEntity unidadEntity){
+        return unidadFacade.save(unidadEntity);
     }
 }

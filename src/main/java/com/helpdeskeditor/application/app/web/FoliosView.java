@@ -281,7 +281,7 @@ public class FoliosView extends VerticalLayout {
 
     private void guardar(){
         if(folioEntity != null){
-            UIutils.notificacionEventoNeutro("Guardando Folio!").open();
+            UIutils.notificacionNeutral("Guardando Folio!").open();
 
             //****************** UNIDAD ******************************************************
             UnidadEntity unidadEntity = CB_Unidad.getValue();
@@ -400,10 +400,10 @@ public class FoliosView extends VerticalLayout {
                     }
                 }
                 borrar();
-                UIutils.notificacionEventoSUCCESS("Folio creado/modificado: "+folioEntity.getId()).setVisible(true);
+                UIutils.notificacionSUCCESS("Folio creado/modificado: "+folioEntity.getId()).setVisible(true);
             }
             else{
-                UIutils.notificacionEventoERROR("Error al crear/modificar Folio!").open();
+                UIutils.notificacionERROR("Error al crear/modificar Folio!").open();
 
             }
         }

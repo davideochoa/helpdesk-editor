@@ -18,7 +18,7 @@ public class UIutils {
         return span;
     }
 
-    public static Notification notificacionEventoERROR(String texto){
+    public static Notification notificacionERROR(String texto){
         Notification notification = new Notification(texto);
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         notification.setPosition(Notification.Position.MIDDLE);
@@ -26,7 +26,7 @@ public class UIutils {
         return notification;
     }
 
-    public static Notification notificacionEventoSUCCESS(String texto){
+    public static Notification notificacionSUCCESS(String texto){
         Notification notification = new Notification(texto);
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         notification.setPosition(Notification.Position.MIDDLE);
@@ -34,7 +34,7 @@ public class UIutils {
         return notification;
     }
 
-    public static Notification notificacionEventoNeutro(String texto){
+    public static Notification notificacionNeutral(String texto){
         Notification notification = new Notification(texto);
         notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
         notification.setPosition(Notification.Position.MIDDLE);

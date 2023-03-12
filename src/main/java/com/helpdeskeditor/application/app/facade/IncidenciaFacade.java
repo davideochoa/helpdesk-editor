@@ -20,12 +20,18 @@ public class IncidenciaFacade {
         this.incidenciaRepository = incidenciaRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<IncidenciaEntity> findAll(){
         return incidenciaRepository.findAll(Sort.by(Sort.Direction.ASC,"Nombre"));
     }
 
+    @Transactional(readOnly = true)
     public Optional<IncidenciaEntity> findById(Integer Id){
         return incidenciaRepository.findById(Id);
     }
 
+    @Transactional
+    public IncidenciaEntity save(IncidenciaEntity incidenciaEntity){
+        return incidenciaRepository.save(incidenciaEntity);
+    }
 }
