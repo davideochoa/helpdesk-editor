@@ -84,8 +84,8 @@ public class MainLayout extends AppLayout {
         // For documentation, visit https://github.com/vaadin/vcf-nav#readme
         AppNav nav = new AppNav();
 
-        if (accessChecker.hasAccess(FoliosView.class)) {
-            nav.addItem(new AppNavItem("Folios", FoliosView.class, "la la-globe"));
+        if (accessChecker.hasAccess(FolioView.class)) {
+            nav.addItem(new AppNavItem("Folio", FolioView.class, "la la-globe"));
 
         }
         if (accessChecker.hasAccess(FoliosGridView.class)) {

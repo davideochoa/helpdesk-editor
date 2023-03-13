@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-@Transactional(readOnly = true)
 public class BienFacade {
     private BienRepository bienRepository;
 
@@ -18,16 +17,23 @@ public class BienFacade {
         this.bienRepository = bienRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<BienEntity> findAll(){
         return bienRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<BienEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
         return bienRepository.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
 
+    @Transactional(readOnly = true)
     public BienEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
         return bienRepository.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
+    }
+    @Transactional
+    public BienEntity save(BienEntity bienEntity){
+        return bienRepository.save(bienEntity);
     }
 
 }

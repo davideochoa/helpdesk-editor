@@ -146,7 +146,11 @@ public class CatalogosView extends VerticalLayout{
         CB_incidencia.setItems(incidenciaService.findAll());
         CB_incidencia.addValueChangeListener(e ->{
             if(e != null){
-                TF_nombreIncidencia.setValue(e.getValue().getNombre());
+                IncidenciaEntity incidenciaEntity = e.getValue();
+                if(incidenciaEntity != null) {
+                    TF_nombreIncidencia.setValue(e.getValue().getNombre());
+                    CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(incidenciaEntity.getId()));
+                }
             }
         });
 
@@ -165,22 +169,30 @@ public class CatalogosView extends VerticalLayout{
 
                         limpiarlayoutCatalogoIncidenciaBien();
 
-                        UIutils.notificacionSUCCESS("Se agrego el nombre de la Incidencia").open();
+                        UIutils.notificacionSUCCESS("Se modifico el nombre de la Incidencia").open();
                     }
+                    else
+                        UIutils.notificacionERROR("Se debe escribir el nombre de la Incidencia").open();
                 }
+                else
+                    UIutils.notificacionERROR("Se debe escribir el nombre de la Incidencia").open();
             }
             else{
                 if(nombreIncidencia != null){
                     if(nombreIncidencia.length() > 0){
                         IncidenciaEntity newIncidenciaEntity = new IncidenciaEntity();
                         newIncidenciaEntity.setNombre(nombreIncidencia.toUpperCase());
-                        incidenciaService.save(incidenciaEntity);
+                        incidenciaService.save(newIncidenciaEntity);
 
                         limpiarlayoutCatalogoIncidenciaBien();
 
-                        UIutils.notificacionSUCCESS("Se modifico el nombre de la Incidencia").open();
+                        UIutils.notificacionSUCCESS("Se agrego el nombre de la Incidencia").open();
                     }
+                    else
+                        UIutils.notificacionERROR("Se debe escribir el nombre de la Incidencia").open();
                 }
+                else
+                    UIutils.notificacionERROR("Se debe escribir el nombre de la Incidencia").open();
             }
 
         });
@@ -193,9 +205,64 @@ public class CatalogosView extends VerticalLayout{
 
         VL_CatalogoIncidenciaBien.add(new H3("INCIDENCIA"), FL_principalIncidencia,HL_botonesIncidencia,UIutils.lineaDivision());
 
+        CB_Bien.setItemLabelGenerator(BienEntity::getNombre);
+        CB_Bien.addValueChangeListener(e ->{
+            if(e != null){
+                BienEntity bienEntity = e.getValue();
+                if(bienEntity != null){
+                    TF_nombreBien.setValue(bienEntity.getNombre());
+                }
+            }
+        });
+
         FL_principalCatalogoBien.add(CB_Bien,TF_nombreBien);
 
         Btt_salvarBien.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Btt_salvarBien.addClickListener(e -> {
+            IncidenciaEntity incidenciaEntity = CB_incidencia.getValue();
+            BienEntity bienEntity = CB_Bien.getValue();
+            String nombreBienValue = TF_nombreBien.getValue();
+
+            if(bienEntity != null){
+                if(nombreBienValue != null){
+                    if(!bienEntity.getNombre().equals(nombreBienValue)){
+                        if(nombreBienValue.length() > 0){
+                            bienEntity.setNombre(nombreBienValue.toUpperCase());
+                            bienService.save(bienEntity);
+
+                            limpiarlayoutCatalogoIncidenciaBien();
+
+                            UIutils.notificacionSUCCESS("Se modifico el nombre del Bien").open();
+                        }
+                        else
+                            UIutils.notificacionERROR("Se debe escribir el nombre del Bien").open();
+                    }
+                    else
+                        UIutils.notificacionERROR("Se debe escribir el nombre del Bien diferente").open();
+                }
+                else
+                    UIutils.notificacionERROR("Se debe escribir el nombre del Bien").open();
+            }
+            else{
+                if(nombreBienValue != null){
+                    if(nombreBienValue.length() > 0){
+                        BienEntity bienEntitynuevo = new BienEntity();
+                        bienEntitynuevo.setIdTipoIncidencia(CB_incidencia.getValue().getId());
+                        bienEntitynuevo.setNombre(nombreBienValue.toUpperCase());
+                        bienService.save(bienEntitynuevo);
+
+                        limpiarlayoutCatalogoIncidenciaBien();
+
+                        UIutils.notificacionSUCCESS("Se agrega el nombre del Bien").open();
+                    }
+                }
+            }
+
+        });
+
+        Btt_limpiarBien.addClickListener(e -> {
+            limpiarlayoutCatalogoIncidenciaBien();
+        });
 
         HL_botonesBien.add(Btt_salvarBien,Btt_limpiarBien);
 

@@ -46,11 +46,13 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.StreamResource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
+import javax.xml.transform.stream.StreamSource;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -62,7 +64,7 @@ import java.util.Optional;
 @RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @Slf4j
-public class FoliosView extends VerticalLayout {
+public class FolioView extends VerticalLayout {
     private VerticalLayout VL_Unidad = new VerticalLayout();
         private IntegerField IF_Folio = new IntegerField();
         private FormLayout FL_Unidad = new FormLayout();
@@ -130,17 +132,17 @@ public class FoliosView extends VerticalLayout {
     Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
     @Autowired
-    public FoliosView(UnidadService unidadService,
-                      AreaService areaService,
-                      FolioService folioService,
-                      IncidenciaService incidenciaService,
-                      BienService bienService,
-                      PrioridadService prioridadService,
-                      EstatusService estatusService,
-                      CatalogoEstatusService catalogoEstatusService,
-                      UsuarioSoporteService usuarioSoporteService,
-                      IncidenciaService incidenciaServiceFinal,
-                      AuthenticatedUser authenticatedUser) {
+    public FolioView(UnidadService unidadService,
+                     AreaService areaService,
+                     FolioService folioService,
+                     IncidenciaService incidenciaService,
+                     BienService bienService,
+                     PrioridadService prioridadService,
+                     EstatusService estatusService,
+                     CatalogoEstatusService catalogoEstatusService,
+                     UsuarioSoporteService usuarioSoporteService,
+                     IncidenciaService incidenciaServiceFinal,
+                     AuthenticatedUser authenticatedUser) {
 
         this.unidadService = unidadService;
         this.areaService = areaService;
@@ -432,13 +434,18 @@ public class FoliosView extends VerticalLayout {
         });
         B_cargar.addClickShortcut(Key.ENTER);
 
+        Button Btt_imprimir = new Button ("Imprimir");
+        Btt_imprimir.addClickListener(e -> {
+
+        });
+
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
             borrar();
         });
 
-        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_nuevo);
+        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
 
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");

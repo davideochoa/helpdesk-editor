@@ -26,4 +26,8 @@ public class BienService {
         return bienFacade.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
     }
 
+    public BienEntity save(BienEntity bienEntity){
+        return bienFacade.save(bienEntity);
+    }
+
 }
