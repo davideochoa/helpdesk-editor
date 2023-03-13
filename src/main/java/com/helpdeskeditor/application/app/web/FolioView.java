@@ -48,6 +48,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -56,7 +59,9 @@ import javax.xml.transform.stream.StreamSource;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @PageTitle("Folios")
@@ -436,6 +441,12 @@ public class FolioView extends VerticalLayout {
 
         Button Btt_imprimir = new Button ("Imprimir");
         Btt_imprimir.addClickListener(e -> {
+
+            Map<String, Integer> parameters = new HashMap<String, Integer>();
+            JasperReport jasperReport  = (JasperReport) JRLoader.loadObject("C:/reportes/HelpDeskRPTIncidencia.jasper");
+            parameters.put("Folio", 300);
+
+            byte[] fichero = JasperRunManager.runReportToPdf (jasperReport, parameters, conexion.conexion);
 
         });
 
