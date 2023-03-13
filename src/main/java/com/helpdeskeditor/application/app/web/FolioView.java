@@ -441,13 +441,13 @@ public class FolioView extends VerticalLayout {
 
         Button Btt_imprimir = new Button ("Imprimir");
         Btt_imprimir.addClickListener(e -> {
-
+/*
             Map<String, Integer> parameters = new HashMap<String, Integer>();
             JasperReport jasperReport  = (JasperReport) JRLoader.loadObject("C:/reportes/HelpDeskRPTIncidencia.jasper");
             parameters.put("Folio", 300);
 
             byte[] fichero = JasperRunManager.runReportToPdf (jasperReport, parameters, conexion.conexion);
-
+*/
         });
 
         Button Btt_nuevo = new Button ("Nuevo");
@@ -456,7 +456,7 @@ public class FolioView extends VerticalLayout {
         });
 
         HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_nuevo);
 
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
