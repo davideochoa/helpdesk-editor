@@ -47,15 +47,31 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.annotation.security.RolesAllowed;
+import javax.sql.DataSource;
 import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -131,10 +147,13 @@ public class FolioView extends VerticalLayout {
     @Value("${charLimit}")
     private int charLimit;
 
+    private final JdbcTemplate jdbcTemplate;
+
     List<EstatusDAO> estatusEntityList = null;
 
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
+
 
     @Autowired
     public FolioView(UnidadService unidadService,
@@ -147,7 +166,8 @@ public class FolioView extends VerticalLayout {
                      CatalogoEstatusService catalogoEstatusService,
                      UsuarioSoporteService usuarioSoporteService,
                      IncidenciaService incidenciaServiceFinal,
-                     AuthenticatedUser authenticatedUser) {
+                     AuthenticatedUser authenticatedUser,
+                     JdbcTemplate jdbcTemplate) {
 
         this.unidadService = unidadService;
         this.areaService = areaService;
@@ -160,6 +180,7 @@ public class FolioView extends VerticalLayout {
         this.usuarioSoporteService = usuarioSoporteService;
         this.incidenciaServiceFinal = incidenciaServiceFinal;
         this.authenticatedUser = authenticatedUser;
+        this.jdbcTemplate = jdbcTemplate;
 
         folioEntity = new FolioEntity();
 
@@ -416,6 +437,7 @@ public class FolioView extends VerticalLayout {
         }
     }
 
+
     private void layoutUnidad(){
         VL_Unidad.setMargin(false);
         VL_Unidad.setPadding(false);
@@ -441,12 +463,35 @@ public class FolioView extends VerticalLayout {
 
         Button Btt_imprimir = new Button ("Imprimir");
         Btt_imprimir.addClickListener(e -> {
-/*
-            Map<String, Integer> parameters = new HashMap<String, Integer>();
-            JasperReport jasperReport  = (JasperReport) JRLoader.loadObject("C:/reportes/HelpDeskRPTIncidencia.jasper");
-            parameters.put("Folio", 300);
 
-            byte[] fichero = JasperRunManager.runReportToPdf (jasperReport, parameters, conexion.conexion);
+            Connection conexion = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
+
+
+
+
+            try {
+                Map<String, Integer> parameters = new HashMap<String, Integer>();
+                JasperReport jasperReport = (JasperReport) JRLoader.loadObject(new File("C:/reportes/HelpDeskRPTIncidencia.jasper"));
+
+                parameters.put("Folio", 300);
+
+                byte[] fichero = JasperRunManager.runReportToPdf(jasperReport, null, conexion);
+            } catch (JRException ex) {
+                throw new RuntimeException(ex);
+            }
+/*
+            //*****************************************************************************************
+
+            try {
+                bytes = JasperRunManager.runReportToPdf(getClass().getResourceAsStream(searchpath), null, DataSource);
+                byte[] finalBytes = bytes;
+                streamResource1 = new StreamResource("?.pdf", () ->new ByteArrayInputStream(finalBytes));
+            } catch (JRException e) {
+                e.printStackTrace();
+            }
+            PdfBrowserViewer viewer= new PdfBrowserViewer(streamResource1);
+            viewer.setHeight("100%");
+            add(viewer);
 */
         });
 
@@ -456,7 +501,7 @@ public class FolioView extends VerticalLayout {
         });
 
         HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
 
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");

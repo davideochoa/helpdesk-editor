@@ -155,6 +155,12 @@
             <version>11.2.1.jre11</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.framework}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
