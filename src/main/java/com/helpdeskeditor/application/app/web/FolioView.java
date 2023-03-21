@@ -21,9 +21,7 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.UIutils;
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Tag;
@@ -54,7 +52,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.server.AbstractClientConnector;
 import com.vaadin.server.EventTrigger;
 import com.vaadin.server.Resource;
 import com.whitestein.vaadin.widgets.wtpdfviewer.WTPdfViewer;
@@ -69,6 +66,9 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.vaadin.alejandro.PdfBrowserViewer;
+
+
+import com.vaadin.server.BrowserWindowOpener;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
@@ -458,10 +458,10 @@ public class FolioView extends VerticalLayout {
         IF_Folio.setLabel("Folio");
         IF_Folio.setHelperText("Numero de folio a cargar");
 
-        Button Btt_imprimir = new Button ("Imprimir");
+        //Button Btt_imprimir = new Button ("Imprimir");
 
         Button B_cargar = new Button ("Cargar");
-        //com.vaadin.ui.Button Btt_imprimir = new com.vaadin.ui.Button("Imprimir");
+        com.vaadin.ui.Button Btt_imprimir = new com.vaadin.ui.Button("Imprimir");
         B_cargar.addClickListener(e -> {
             cargarFolio(IF_Folio.getValue());
 
@@ -476,7 +476,7 @@ public class FolioView extends VerticalLayout {
             JasperPrint print = JasperFillManager.fillReport("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
             byte[] output = JasperExportManager.exportReportToPdf(print);
 
-            StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
+            com.vaadin.server.StreamResource.StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
                 public InputStream getStream() {
                     byte[] b = null;
                     try{
@@ -491,9 +491,12 @@ public class FolioView extends VerticalLayout {
             };
 
             Dialog dialog = new Dialog();
-            StreamResource resourcesReport = new StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
+            com.vaadin.server.StreamResource resourcesReport = new com.vaadin.server.StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
             BrowserWindowOpener opener =  new BrowserWindowOpener((Resource) resourcesReport);
-            //opener.extend(vento);
+
+            //FIXME fazer abrir janela automaticamente
+            opener.extend((EventTrigger) Btt_imprimir);
+
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (JRException ex) {
@@ -518,20 +521,6 @@ public class FolioView extends VerticalLayout {
                     File archivo = new File("C:/reportes/HelpDeskRPTIncidencia.jasper");
                     JasperPrint print = JasperFillManager.fillReport("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
                     byte[] output = JasperExportManager.exportReportToPdf(print);
-
-                    com.vaadin.server.StreamResource.StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
-                        public InputStream getStream() {
-                            byte[] b = null;
-                            try{
-                                b = JasperRunManager.runReportToPdf("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
-
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-
-                            }
-                            return new ByteArrayInputStream(b);
-                        }
-                    };
 
                     Dialog dialog = new Dialog();
                     com.vaadin.server.StreamResource resourcesReport = new com.vaadin.server.StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
@@ -583,9 +572,9 @@ public class FolioView extends VerticalLayout {
             borrar();
         });
 
-        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(Btt_imprimir);
+        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
+
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
         TF_Telefono.setLabel("Numero Telefonico");
