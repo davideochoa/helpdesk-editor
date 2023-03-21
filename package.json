@@ -2,6 +2,7 @@
   "name": "no-name",
   "license": "UNLICENSED",
   "dependencies": {
+    "@lrnwebcomponents/pdf-browser-viewer": "2.7.10",
     "@polymer/iron-icon": "3.0.1",
     "@polymer/iron-iconset-svg": "3.0.1",
     "@polymer/iron-list": "3.1.0",
@@ -141,6 +142,7 @@
   },
   "vaadin": {
     "dependencies": {
+      "@lrnwebcomponents/pdf-browser-viewer": "2.7.10",
       "@polymer/iron-icon": "3.0.1",
       "@polymer/iron-iconset-svg": "3.0.1",
       "@polymer/iron-list": "3.1.0",
@@ -277,7 +279,7 @@
       "workbox-core": "6.5.0",
       "workbox-precaching": "6.5.0"
     },
-    "hash": "278dba82756742d842a633d9de1aee7ec50db925374c27df60325967df59c2d7"
+    "hash": "276f6e217f73d183b0f3e1d28776ca40ad96bc9c994fe03feea7f21fb169cc32"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -397,6 +399,7 @@
     "@polymer/polymer": "$@polymer/polymer",
     "proj4": "$proj4",
     "date-fns": "$date-fns",
+    "@lrnwebcomponents/pdf-browser-viewer": "$@lrnwebcomponents/pdf-browser-viewer",
     "line-awesome": "$line-awesome",
     "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav"
   }

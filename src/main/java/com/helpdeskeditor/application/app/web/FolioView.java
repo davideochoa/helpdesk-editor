@@ -21,7 +21,13 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.UIutils;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -33,6 +39,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -47,38 +54,41 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.vaadin.server.AbstractClientConnector;
+import com.vaadin.server.EventTrigger;
+import com.vaadin.server.Resource;
+import com.whitestein.vaadin.widgets.wtpdfviewer.WTPdfViewer;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.vaadin.alejandro.PdfBrowserViewer;
+
+
+import com.vaadin.server.BrowserWindowOpener;
 
 import javax.annotation.security.RolesAllowed;
-import javax.sql.DataSource;
-import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.helpdeskeditor.application.configuration.DriverManagerDataSource.SQLDataSource;
 
 @PageTitle("Folios")
 @Route(value = "folios", layout = MainLayout.class)
@@ -147,8 +157,6 @@ public class FolioView extends VerticalLayout {
     @Value("${charLimit}")
     private int charLimit;
 
-    private final JdbcTemplate jdbcTemplate;
-
     List<EstatusDAO> estatusEntityList = null;
 
     FolioEntity folioEntity = null;
@@ -166,8 +174,7 @@ public class FolioView extends VerticalLayout {
                      CatalogoEstatusService catalogoEstatusService,
                      UsuarioSoporteService usuarioSoporteService,
                      IncidenciaService incidenciaServiceFinal,
-                     AuthenticatedUser authenticatedUser,
-                     JdbcTemplate jdbcTemplate) {
+                     AuthenticatedUser authenticatedUser) {
 
         this.unidadService = unidadService;
         this.areaService = areaService;
@@ -180,7 +187,6 @@ public class FolioView extends VerticalLayout {
         this.usuarioSoporteService = usuarioSoporteService;
         this.incidenciaServiceFinal = incidenciaServiceFinal;
         this.authenticatedUser = authenticatedUser;
-        this.jdbcTemplate = jdbcTemplate;
 
         folioEntity = new FolioEntity();
 
@@ -455,54 +461,135 @@ public class FolioView extends VerticalLayout {
         IF_Folio.setLabel("Folio");
         IF_Folio.setHelperText("Numero de folio a cargar");
 
+        Button Btt_imprimir = new Button ("Imprimir");
+
         Button B_cargar = new Button ("Cargar");
+        //com.vaadin.ui.Button Btt_imprimir = new com.vaadin.ui.Button("Imprimir");
         B_cargar.addClickListener(e -> {
             cargarFolio(IF_Folio.getValue());
-        });
-        B_cargar.addClickShortcut(Key.ENTER);
-
-        Button Btt_imprimir = new Button ("Imprimir");
-        Btt_imprimir.addClickListener(e -> {
-
-            Connection conexion = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
-
-
-
 
             try {
-                Map<String, Integer> parameters = new HashMap<String, Integer>();
-                JasperReport jasperReport = (JasperReport) JRLoader.loadObject(new File("C:/reportes/HelpDeskRPTIncidencia.jasper"));
+                Connection conn = SQLDataSource().getConnection();
 
-                parameters.put("Folio", 300);
 
-                byte[] fichero = JasperRunManager.runReportToPdf(jasperReport, null, conexion);
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("Folio", IF_Folio.getValue());
+
+            File archivo = new File("C:/reportes/HelpDeskRPTIncidencia.jasper");
+            JasperPrint print = JasperFillManager.fillReport("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
+            byte[] output = JasperExportManager.exportReportToPdf(print);
+
+            com.vaadin.server.StreamResource.StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
+                public InputStream getStream() {
+                    byte[] b = null;
+                    try{
+                        b = JasperRunManager.runReportToPdf("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+
+                    }
+                    return new ByteArrayInputStream(b);
+                }
+            };
+
+            Dialog dialog = new Dialog();
+            com.vaadin.server.StreamResource resourcesReport = new com.vaadin.server.StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
+            BrowserWindowOpener opener =  new BrowserWindowOpener((Resource) resourcesReport);
+            //opener.extend(vento);
+                opener.sh
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             } catch (JRException ex) {
                 throw new RuntimeException(ex);
             }
-/*
-            //*****************************************************************************************
-
-            try {
-                bytes = JasperRunManager.runReportToPdf(getClass().getResourceAsStream(searchpath), null, DataSource);
-                byte[] finalBytes = bytes;
-                streamResource1 = new StreamResource("?.pdf", () ->new ByteArrayInputStream(finalBytes));
-            } catch (JRException e) {
-                e.printStackTrace();
-            }
-            PdfBrowserViewer viewer= new PdfBrowserViewer(streamResource1);
-            viewer.setHeight("100%");
-            add(viewer);
-*/
         });
+        B_cargar.addClickShortcut(Key.ENTER);
 
+
+/*
+        Btt_imprimir.addClickListener(e -> {
+            Integer folio = IF_Folio.getValue();
+
+            if(folio != null){
+                log.info("FOLIO:"+folio);
+                try {
+                    Connection conn = SQLDataSource().getConnection();
+
+                    Map<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put("Folio", folio);
+
+                    File archivo = new File("C:/reportes/HelpDeskRPTIncidencia.jasper");
+                    JasperPrint print = JasperFillManager.fillReport("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
+                    byte[] output = JasperExportManager.exportReportToPdf(print);
+
+                    com.vaadin.server.StreamResource.StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
+                        public InputStream getStream() {
+                            byte[] b = null;
+                            try{
+                                b = JasperRunManager.runReportToPdf("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+
+                            }
+                            return new ByteArrayInputStream(b);
+                        }
+                    };
+
+                    Dialog dialog = new Dialog();
+                    com.vaadin.server.StreamResource resourcesReport = new com.vaadin.server.StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
+                    BrowserWindowOpener opener =  new BrowserWindowOpener((Resource) resourcesReport);
+
+                    //FIXME fazer abrir janela automaticamente
+                    opener.extend(Btt_imprimir);
+/*
+                    StreamResource streamResource1 = new .StreamResource("?.pdf", () ->new ByteArrayInputStream(output));
+                    streamResource1.setContentType("application/pdf")
+
+
+                    //Dialog dialog = new Dialog();
+
+                    VerticalLayout dialogLayout = new VerticalLayout();
+                    dialogLayout.setPadding(false);
+                    dialogLayout.setSpacing(false);
+                    dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+                    dialogLayout.getStyle().set("width", "18rem").set("max-width", "100%");
+                    //dialogLayout.add(opener);
+
+                    dialog.setHeight("80%");
+                    dialog.setWidth("80%");
+                    dialog.open();
+
+
+
+
+                } catch (JRException ex) {
+                    log.info(ex.getMessage());
+                    log.info(ex.getMessageKey());
+                    log.info(ex.getLocalizedMessage());
+                    throw new RuntimeException(ex);
+                } catch (SQLException ex) {
+                    log.info(ex.getMessage());
+                    log.info(ex.getSQLState());
+                    log.info(ex.getLocalizedMessage());
+                    log.info(ex.getErrorCode()+"");
+                    throw new RuntimeException(ex);
+                }
+
+            }
+
+
+        });
+*/
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
             borrar();
         });
 
-        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
-
+        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(Btt_imprimir);
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
         TF_Telefono.setLabel("Numero Telefonico");
