@@ -113,9 +113,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.whitestein.vaadin.widgets</groupId>
-            <artifactId>wt-pdf-viewer</artifactId>
-            <version>2.0.1</version>
+            <groupId>org.vaadin.olli</groupId>
+            <artifactId>browser-opener</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <dependency>

@@ -70,9 +70,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.vaadin.alejandro.PdfBrowserViewer;
 
-
-import com.vaadin.server.BrowserWindowOpener;
-
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -479,7 +476,7 @@ public class FolioView extends VerticalLayout {
             JasperPrint print = JasperFillManager.fillReport("C:/reportes/HelpDeskRPTIncidencia.jasper", parameters, conn);
             byte[] output = JasperExportManager.exportReportToPdf(print);
 
-            com.vaadin.server.StreamResource.StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
+            StreamSource source = new com.vaadin.server.StreamResource.StreamSource() {
                 public InputStream getStream() {
                     byte[] b = null;
                     try{
@@ -494,10 +491,9 @@ public class FolioView extends VerticalLayout {
             };
 
             Dialog dialog = new Dialog();
-            com.vaadin.server.StreamResource resourcesReport = new com.vaadin.server.StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
+            StreamResource resourcesReport = new StreamResource(source, "myreport_" + System.currentTimeMillis() + ".pdf");
             BrowserWindowOpener opener =  new BrowserWindowOpener((Resource) resourcesReport);
             //opener.extend(vento);
-                opener.sh
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (JRException ex) {
