@@ -452,13 +452,14 @@ public class FolioView extends VerticalLayout {
         IF_Folio.setLabel("Folio");
         IF_Folio.setHelperText("Numero de folio a cargar");
 
-        Button Btt_imprimir = new Button ("Imprimir");
-
         Button B_cargar = new Button ("Cargar");
-
         B_cargar.addClickListener(e -> {
             cargarFolio(IF_Folio.getValue());
+        });
+        B_cargar.addClickShortcut(Key.ENTER);
 
+        Button Btt_imprimir = new Button ("Imprimir");
+        Btt_imprimir.addClickListener(e -> {
             try {
                 Connection conn = SQLDataSource().getConnection();
 
@@ -472,7 +473,6 @@ public class FolioView extends VerticalLayout {
                 StreamResource streamResource = new StreamResource("?.pdf", () ->new ByteArrayInputStream(output));
                 streamResource.setContentType("application/pdf");
 
-
                 Dialog dialog = new Dialog();
                 dialog.setWidth("80%");
                 dialog.setHeight("80%");
@@ -484,15 +484,12 @@ public class FolioView extends VerticalLayout {
                 viewer.setHeight("100%");*/
                 dialog.add(pdfViewer);
                 dialog.open();
-
-
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (JRException ex) {
                 throw new RuntimeException(ex);
             }
         });
-        B_cargar.addClickShortcut(Key.ENTER);
 
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
