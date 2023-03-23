@@ -63,7 +63,6 @@ import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.vaadin.alejandro.PdfBrowserViewer;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
@@ -478,12 +477,12 @@ public class FolioView extends VerticalLayout {
                 dialog.setHeight("80%");
 
                 PdfViewer pdfViewer = new PdfViewer();
+                pdfViewer.setAddPrintButton(true);
                 pdfViewer.setSrc(streamResource);
-/*
-                PdfBrowserViewer viewer = new PdfBrowserViewer(streamResource);
-                viewer.setHeight("100%");*/
+
                 dialog.add(pdfViewer);
                 dialog.open();
+
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (JRException ex) {
