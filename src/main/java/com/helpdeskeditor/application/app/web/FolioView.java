@@ -48,6 +48,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -55,9 +56,15 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -75,6 +82,7 @@ import static com.helpdeskeditor.application.configuration.DriverManagerDataSour
 @RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @Slf4j
+@Component
 public class FolioView extends VerticalLayout {
     private VerticalLayout VL_Unidad = new VerticalLayout();
         private IntegerField IF_Folio = new IntegerField();
@@ -137,11 +145,22 @@ public class FolioView extends VerticalLayout {
     @Value("${charLimit}")
     private int charLimit;
 
+    @Value("${app.datasource.jdbc-url}")
+    private String url;
+
+    @Value("${app.datasource.username}")
+    private String userName;
+
+    @Value("${app.datasource.password}")
+    private String password;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String className;
+
     List<EstatusDAO> estatusEntityList = null;
 
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
-
 
     @Autowired
     public FolioView(UnidadService unidadService,
@@ -226,6 +245,7 @@ public class FolioView extends VerticalLayout {
     }
 
     private boolean cargarFolio(Integer folio){
+        log.info("charLimit:"+charLimit);
         Optional<FolioEntity> OptionalfolioEntity = folioService.findById(folio);
         if(!OptionalfolioEntity.isEmpty()){
             folioEntity = folioService.findById(folio).get();
@@ -449,16 +469,19 @@ public class FolioView extends VerticalLayout {
         Button Btt_imprimir = new Button ("Imprimir");
         Btt_imprimir.addClickListener(e -> {
             try {
-                Connection conn = SQLDataSource().getConnection();
+                Connection conn = SQLDataSource(className,url,userName,password).getConnection();
 
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("Folio", IF_Folio.getValue());
 
-                //JasperPrint print = JasperFillManager.fillReport("HelpDeskRPTIncidencia.jasper", parameters, conn);
-                JasperPrint print = JasperFillManager.fillReport("/HelpDeskRPTIncidencia.jasper", parameters, conn);
+                //FileInputStream fileInputStream = (FileInputStream) getClass().getResourceAsStream("reportes//HelpDeskRPTIncidencia.jasper");
+                //JasperPrint print = JasperFillManager.fillReport(fileInputStream, parameters, conn);
+
+                JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+
                 byte[] output = JasperExportManager.exportReportToPdf(print);
 
-                StreamResource streamResource = new StreamResource("?.pdf", () ->new ByteArrayInputStream(output));
+                StreamResource streamResource = new StreamResource("Folio "+IF_Folio.getValue()+".pdf", () ->new ByteArrayInputStream(output));
                 streamResource.setContentType("application/pdf");
 
                 Dialog dialog = new Dialog();
@@ -475,6 +498,8 @@ public class FolioView extends VerticalLayout {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (JRException ex) {
+                throw new RuntimeException(ex);
+            } catch (NullPointerException ex) {
                 throw new RuntimeException(ex);
             }
         });

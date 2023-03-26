@@ -7,19 +7,24 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
+import java.net.URISyntaxException;
 
+@Slf4j
 @PageTitle("Acerca De")
 @Route(value = "acerca-de", layout = MainLayout.class)
-//@AnonymousAllowed
+@AnonymousAllowed
 //@RolesAllowed("USER")
 public class AcercaDeView extends VerticalLayout {
 
-    public AcercaDeView() {
+    public AcercaDeView() throws URISyntaxException {
         setSpacing(false);
 
         Image img = new Image("images/empty-plant.png", "placeholder plant");
+
         img.setWidth("200px");
         add(img);
 
