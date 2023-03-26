@@ -2,14 +2,10 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
-import com.helpdeskeditor.application.old.antigua.AcercaDeView;
-import com.helpdeskeditor.application.old.antigua.AutorizacionView;
-import com.helpdeskeditor.application.old.antigua.EstatusView;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
-import com.helpdeskeditor.application.old.FoliosGrid2;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -94,20 +90,6 @@ public class MainLayout extends AppLayout {
         }
         if (accessChecker.hasAccess(CatalogosView.class)) {
             nav.addItem(new AppNavItem("Catalogos", CatalogosView.class, "la la-globe"));
-
-        }
-
-
-        if (accessChecker.hasAccess(FoliosGrid2.class)) {
-            nav.addItem(new AppNavItem("Listado de Folios2", FoliosGrid2.class, "la la-globe"));
-
-        }
-        if (accessChecker.hasAccess(EstatusView.class)) {
-            nav.addItem(new AppNavItem("Estatus", EstatusView.class, "la la-user"));
-
-        }
-        if (accessChecker.hasAccess(AutorizacionView.class)) {
-            nav.addItem(new AppNavItem("Autorizacion", AutorizacionView.class, "la la-map-marker"));
 
         }
         if (accessChecker.hasAccess(AcercaDeView.class)) {
