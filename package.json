@@ -401,9 +401,9 @@
     "@polymer/polymer": "$@polymer/polymer",
     "proj4": "$proj4",
     "date-fns": "$date-fns",
-    "line-awesome": "$line-awesome",
-    "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
     "print-js": "$print-js",
-    "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer"
+    "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer",
+    "line-awesome": "$line-awesome",
+    "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav"
   }
 }
