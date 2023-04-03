@@ -28,10 +28,9 @@ public class DialogRePasword extends Dialog {
         super.setModal(false);
         this.setModal(false);
 
-        this.usuarioSoporteService = usuarioSoporteService;
-
         this.securityConfiguration = securityConfiguration;
         this.authenticatedUser = authenticatedUser;
+        this.usuarioSoporteService = usuarioSoporteService;
 
         PasswordEncoder passwordEncoder = securityConfiguration.passwordEncoder();
 
