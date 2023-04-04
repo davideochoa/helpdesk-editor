@@ -123,7 +123,8 @@
     "line-awesome": "1.3.0",
     "lit": "2.3.0",
     "print-js": "1.6.0",
-    "proj4": "2.8.0"
+    "proj4": "2.8.0",
+    "signature_pad": "4.1.5"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "3.1.0",
@@ -262,7 +263,8 @@
     "line-awesome": "$line-awesome",
     "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer",
     "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
-    "date-fns": "$date-fns"
+    "date-fns": "$date-fns",
+    "signature_pad": "$signature_pad"
   },
   "vaadin": {
     "dependencies": {
@@ -386,7 +388,8 @@
       "line-awesome": "1.3.0",
       "lit": "2.3.0",
       "print-js": "1.6.0",
-      "proj4": "2.8.0"
+      "proj4": "2.8.0",
+      "signature_pad": "4.1.5"
     },
     "devDependencies": {
       "@rollup/plugin-replace": "3.1.0",
@@ -404,6 +407,6 @@
       "workbox-core": "6.5.0",
       "workbox-precaching": "6.5.0"
     },
-    "hash": "0bd65b7a75b38d557f8ac2c247a5622dad862509aeb0b9f55c572171cedbb5ee"
+    "hash": "9fc3f8c03f6f32c9b88341afb1be774c41d2a6401df71c48099d6073ea3b71aa"
   }
 }
