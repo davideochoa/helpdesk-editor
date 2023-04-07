@@ -82,7 +82,6 @@ import static com.helpdeskeditor.application.configuration.DriverManagerDataSour
 @RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @Slf4j
-@Component
 public class FolioView extends VerticalLayout {
     private VerticalLayout VL_Unidad = new VerticalLayout();
         private IntegerField IF_Folio = new IntegerField();
@@ -162,7 +161,6 @@ public class FolioView extends VerticalLayout {
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
-    @Autowired
     public FolioView(UnidadService unidadService,
                      AreaService areaService,
                      FolioService folioService,
