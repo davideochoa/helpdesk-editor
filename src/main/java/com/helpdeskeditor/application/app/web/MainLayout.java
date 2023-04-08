@@ -35,7 +35,9 @@ public class MainLayout extends AppLayout {
     private AuthenticatedUser authenticatedUser;
     private AccessAnnotationChecker accessChecker;
     public MainLayout(AuthenticatedUser authenticatedUser,
-                      AccessAnnotationChecker accessChecker) {
+                      AccessAnnotationChecker accessChecker,
+                      SecurityConfiguration securityConfiguration,
+                      UsuarioSoporteService usuarioSoporteService) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
 
@@ -44,6 +46,12 @@ public class MainLayout extends AppLayout {
         addHeaderContent();
 
         UsuarioSoporteEntity usuarioSoporteEntity = authenticatedUser.get().get();
+
+        if(usuarioSoporteEntity.getEsReseteadoPassword()){
+            this.setVisible(false);
+            DialogRePasword dr = new DialogRePasword(securityConfiguration,authenticatedUser,usuarioSoporteService);
+            dr.open();
+        }
     }
 
     private void addHeaderContent() {
