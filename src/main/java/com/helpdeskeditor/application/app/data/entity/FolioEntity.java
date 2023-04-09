@@ -3,12 +3,16 @@ package com.helpdeskeditor.application.app.data.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+import java.sql.Blob;
 import java.util.Date;
 
 @Getter
@@ -71,25 +75,10 @@ public class FolioEntity {
 
     @Column(name = "IdTipoIncidenciaFinal")
     private Integer idTipoIncidenciaFinal;
-/*
-    public void setInitValues(){
-        setId(0);
-        setIdUnidad(0);
-        setIdArea(0);
-        setUsuarioReporta("NO ESPECIFICADO");
-        setTelefonoContacto("NO ESPECIFICADO");
-        setReferenciaDocumental("NO ESPECIFICADO");
-        setIdTipoIncidencia(0);
-        setIdBien(0);
-        setMarca("NO ESPECIFICADO");
-        setModelo("NO ESPECIFICADO");
-        setNumeroSerie("NO ESPECIFICADO");
-        setNumeroInventario("NO ESPECIFICADO");
-        setMotivoReporte("");
-        setIdPrioridad(0);
-        setIdUsuarioSoporteAsignado(0);
-        setFecha(new Date());
-        setActivo(false);
-        setIdTipoIncidenciaFinal(0);
-    }*/
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "firma")
+    private byte[] firma;
+
 }

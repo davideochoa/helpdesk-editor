@@ -21,6 +21,7 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.UIutils;
+import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -32,6 +33,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -54,6 +56,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -61,10 +64,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.RolesAllowed;
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -121,12 +126,16 @@ public class FolioView extends VerticalLayout {
         private Button Btt_AgregarEstatus = new Button("AGREGAR");
         private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
         //private Button Btt_SalvarEstatus = new Button("GUARDAR");
+    private VerticalLayout VL_Firma = new VerticalLayout();
+        private FormLayout FL_Firma = new FormLayout();
+
 
     private Tabs tabs;
         private Tab tabUnidad;
         private Tab tabIncidencia;
         private Tab tabMotivo;
         private Tab tabEstatus;
+        private Tab tabFirma;
         private VerticalLayout contenidoTab;
 
     private UnidadService unidadService;
@@ -146,13 +155,10 @@ public class FolioView extends VerticalLayout {
 
     @Value("${app.datasource.jdbc-url}")
     private String url;
-
     @Value("${app.datasource.username}")
     private String userName;
-
     @Value("${app.datasource.password}")
     private String password;
-
     @Value("${spring.datasource.driver-class-name}")
     private String className;
 
@@ -191,12 +197,61 @@ public class FolioView extends VerticalLayout {
         layoutIncidencia();
         layoutMotivo();
         layoutEstatus();
+        layoutFirma();
 
         layoutTabs();
 
         this.add(tabs, contenidoTab);
 
         borrar();
+    }
+
+    private void layoutFirma(){
+        VL_Firma.setMargin(false);
+        VL_Firma.setPadding(false);
+
+        SignaturePad signature = new SignaturePad();
+        signature.setHeight("300px");
+        //signature.setWidth("300px");
+        signature.setBackgroundColor(0, 0, 0, 0);
+        signature.setPenColor("#000000");
+        signature.setVisible(true);
+
+        Button Btt_borrar = new Button ("Borrar");
+        Btt_borrar.addClickListener(e -> {
+            signature.clear();
+        });
+
+        Button Btt_guardar = new Button ("Guardar");
+        Btt_guardar.addClickListener(e -> {
+            byte[] firma = signature.getImageBase64();
+            Integer folio = IF_Folio.getValue();
+
+            if(firma.length > 0 && folio != null){
+                folioEntity = folioService.findById(folio).get();
+                folioEntity.setFirma(firma);
+                folioService.save(folioEntity);
+
+                signature.clear();
+            }
+            else
+                UIutils.notificacionERROR("No se encontro firma o folio!").open();
+
+        });
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(Btt_borrar,Btt_guardar);
+
+        FL_Firma.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_Firma.setColspan(signature, 2);
+        FL_Firma.add(signature);
+        FL_Firma.add(buttonLayout);
+
+        VL_Firma.add(FL_Firma);
     }
 
     private void borrar(){
@@ -466,40 +521,43 @@ public class FolioView extends VerticalLayout {
 
         Button Btt_imprimir = new Button ("Imprimir");
         Btt_imprimir.addClickListener(e -> {
-            try {
-                Connection conn = SQLDataSource(className,url,userName,password).getConnection();
+            Integer folio = IF_Folio.getValue();
 
-                Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("Folio", IF_Folio.getValue());
+            if(folio != null){
+                try {
+                    Connection conn = SQLDataSource(className,url,userName,password).getConnection();
 
-                //FileInputStream fileInputStream = (FileInputStream) getClass().getResourceAsStream("reportes//HelpDeskRPTIncidencia.jasper");
-                //JasperPrint print = JasperFillManager.fillReport(fileInputStream, parameters, conn);
+                    Map<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put("Folio", IF_Folio.getValue());
 
-                JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+                    JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
 
-                byte[] output = JasperExportManager.exportReportToPdf(print);
+                    byte[] output = JasperExportManager.exportReportToPdf(print);
 
-                StreamResource streamResource = new StreamResource("Folio "+IF_Folio.getValue()+".pdf", () ->new ByteArrayInputStream(output));
-                streamResource.setContentType("application/pdf");
+                    StreamResource streamResource = new StreamResource("Folio "+IF_Folio.getValue()+".pdf", () ->new ByteArrayInputStream(output));
+                    streamResource.setContentType("application/pdf");
 
-                Dialog dialog = new Dialog();
-                dialog.setWidth("80%");
-                dialog.setHeight("80%");
+                    Dialog dialog = new Dialog();
+                    dialog.setWidth("80%");
+                    dialog.setHeight("80%");
 
-                PdfViewer pdfViewer = new PdfViewer();
-                pdfViewer.setAddPrintButton(true);
-                pdfViewer.setSrc(streamResource);
+                    PdfViewer pdfViewer = new PdfViewer();
+                    pdfViewer.setAddPrintButton(true);
+                    pdfViewer.setSrc(streamResource);
 
-                dialog.add(pdfViewer);
-                dialog.open();
+                    dialog.add(pdfViewer);
+                    dialog.open();
 
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            } catch (JRException ex) {
-                throw new RuntimeException(ex);
-            } catch (NullPointerException ex) {
-                throw new RuntimeException(ex);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (JRException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NullPointerException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
+            else
+                UIutils.notificacionERROR("No se encontro o folio!").open();
         });
 
         Button Btt_nuevo = new Button ("Nuevo");
@@ -996,8 +1054,9 @@ public class FolioView extends VerticalLayout {
         tabIncidencia = new Tab("INCIDENCIA");
         tabMotivo = new Tab("MOTIVO");
         tabEstatus = new Tab("ESTATUS");
+        tabFirma = new Tab("FIRMA");
 
-        tabs = new Tabs(tabUnidad, tabIncidencia,tabMotivo,tabEstatus);
+        tabs = new Tabs(tabUnidad, tabIncidencia,tabMotivo,tabEstatus,tabFirma);
 
         tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
@@ -1020,7 +1079,9 @@ public class FolioView extends VerticalLayout {
                 else
                     if (tab.equals(tabEstatus))
                         contenidoTab.add(VL_Estatus);
-
+                    else
+                        if (tab.equals(tabFirma))
+                            contenidoTab.add(VL_Firma);
     }
 
 }
