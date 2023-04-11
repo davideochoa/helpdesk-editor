@@ -491,7 +491,7 @@ public class CatalogosView extends VerticalLayout{
 
         FL_principal.add(CB_usuario,TF_userName,CB_tipoUsuario,CKB_resetPassword);
 
-        VL_CatalogoUsuairios.add(new H3("Reset Datos"),FL_principal,Btt_SalvarCatalogoUsuario, UIutils.lineaDivision());
+        VL_CatalogoUsuairios.add(new H3("Modificar Datos Usuario"),FL_principal,Btt_SalvarCatalogoUsuario, UIutils.lineaDivision());
 
         FL_principal2.add(TF_nuevoUsuario,TF_nuevoUserName);
 

@@ -34,6 +34,8 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -193,11 +195,12 @@ public class FolioView extends VerticalLayout {
 
         folioEntity = new FolioEntity();
 
-        layoutUnidad();
-        layoutIncidencia();
         layoutMotivo();
-        layoutEstatus();
+        layoutIncidencia();
+        layoutUnidad();
+
         layoutFirma();
+        layoutEstatus();
 
         layoutTabs();
 
@@ -251,7 +254,7 @@ public class FolioView extends VerticalLayout {
         FL_Firma.add(signature);
         FL_Firma.add(buttonLayout);
 
-        VL_Firma.add(FL_Firma);
+        //VL_Firma.add(FL_Firma);
     }
 
     private void borrar(){
@@ -616,7 +619,13 @@ public class FolioView extends VerticalLayout {
         FL_Unidad.add(TF_ReferenciaDocumental);
         FL_Unidad.add(DtePikr_fechaApertura);
 
-        VL_Unidad.add(HL_Folio_BotnoCargar,FL_Unidad,Btt_SalvarUnidad);
+        VL_Unidad.add(HL_Folio_BotnoCargar,
+                    new H5("UNIDAD"),
+                    FL_Unidad,UIutils.lineaDivision(),
+                    new H5("INCIDENCIA"),
+                    FL_Incidencia,UIutils.lineaDivision(),
+                    new H5("MOTIVO"),
+                    FL_Motivo,Btt_SalvarUnidad);
     }
 
     private void layoutIncidencia(){
@@ -712,7 +721,7 @@ public class FolioView extends VerticalLayout {
         FL_Incidencia.add(TF_NumeroSerie);
         FL_Incidencia.add(TF_NumeroInventario);
 
-        VL_Incidencia.add(FL_Incidencia,Btt_SalvarIncidencia);
+        //VL_Incidencia.add(FL_Incidencia,Btt_SalvarIncidencia);
     }
 
     private void layoutMotivo(){
@@ -741,14 +750,14 @@ public class FolioView extends VerticalLayout {
             CB_UsuarioReporta.setValue(e.getValue());
         });
 
-        FL_Motivo.add(TA_MotivoReporte);
+        FL_Motivo.add(TA_MotivoReporte,CB_Prioridad);
 
         Btt_SalvarMotivo.addClickListener(e -> {
             guardar();
         });
         Btt_SalvarMotivo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        VL_Motivo.add(FL_Motivo,CB_Prioridad,Btt_SalvarMotivo);
+        //VL_Motivo.add(FL_Motivo,CB_Prioridad,Btt_SalvarMotivo);
 
     }
 
@@ -1027,7 +1036,8 @@ public class FolioView extends VerticalLayout {
 
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,DtePikr_fechaMovimiento);
 
-        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus);//,Btt_SalvarEstatus);
+        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus,UIutils.lineaDivision(),
+                        new H5("FIRMA"),FL_Firma);//,Btt_SalvarEstatus);
     }
 
     private void agregarEstatus(Integer idEstatus, String anotacion, LocalDate fecha){
@@ -1050,13 +1060,13 @@ public class FolioView extends VerticalLayout {
     }
 
     private void layoutTabs(){
-        tabUnidad = new Tab("UNIDAD");
-        tabIncidencia = new Tab("INCIDENCIA");
-        tabMotivo = new Tab("MOTIVO");
+        tabUnidad = new Tab("FOLIO");
+        //tabIncidencia = new Tab("INCIDENCIA");
+        //tabMotivo = new Tab("MOTIVO");
         tabEstatus = new Tab("ESTATUS");
-        tabFirma = new Tab("FIRMA");
+        //tabFirma = new Tab("FIRMA");
 
-        tabs = new Tabs(tabUnidad, tabIncidencia,tabMotivo,tabEstatus,tabFirma);
+        tabs = new Tabs(tabUnidad,tabEstatus);
 
         tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
@@ -1071,17 +1081,9 @@ public class FolioView extends VerticalLayout {
         if (tab.equals(tabUnidad))
             contenidoTab.add(VL_Unidad);
         else
-            if (tab.equals(tabIncidencia))
-                contenidoTab.add(VL_Incidencia);
-            else
-                if (tab.equals(tabMotivo))
-                    contenidoTab.add(VL_Motivo);
-                else
-                    if (tab.equals(tabEstatus))
-                        contenidoTab.add(VL_Estatus);
-                    else
-                        if (tab.equals(tabFirma))
-                            contenidoTab.add(VL_Firma);
+            if (tab.equals(tabEstatus))
+                contenidoTab.add(VL_Estatus);
+
     }
 
 }

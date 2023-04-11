@@ -81,4 +81,12 @@ public class FolioEntity {
     @Column(name = "firma")
     private byte[] firma;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "firma_tecnico")
+    private byte[] firma_tecnico;
+
+    @Column(name = "IdUsuarioSoporteAsignadoFirmo")
+    private Integer idUsuarioSoporteAsignadoFirmo;
+
 }
