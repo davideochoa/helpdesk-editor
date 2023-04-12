@@ -12,12 +12,14 @@ import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.helpdeskeditor.application.util.UIutils;
+import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -491,7 +493,7 @@ public class CatalogosView extends VerticalLayout{
 
         FL_principal.add(CB_usuario,TF_userName,CB_tipoUsuario,CKB_resetPassword);
 
-        VL_CatalogoUsuairios.add(new H3("Modificar Datos Usuario"),FL_principal,Btt_SalvarCatalogoUsuario, UIutils.lineaDivision());
+        VL_CatalogoUsuairios.add(new H5("MODIFICAR USUARIO"),FL_principal,Btt_SalvarCatalogoUsuario, UIutils.lineaDivision());
 
         FL_principal2.add(TF_nuevoUsuario,TF_nuevoUserName);
 
@@ -524,7 +526,53 @@ public class CatalogosView extends VerticalLayout{
                 UIutils.notificacionERROR("Falta el nombre propio o userName").open();
         });
 
-        VL_CatalogoUsuairios.add(new H3("Nuevo Usuario"),FL_principal2,Btt_salvarNuevoUsuario);
+        VL_CatalogoUsuairios.add(new H5("NUEVO USUARIO"),FL_principal2,Btt_salvarNuevoUsuario,UIutils.lineaDivision());
+
+
+
+
+        SignaturePad signature = new SignaturePad();
+        signature.setHeight("300px");
+        signature.setBackgroundColor(0, 0, 0, 0);
+        signature.setPenColor("#000000");
+        signature.setVisible(true);
+
+        Button Btt_borrar = new Button ("Borrar");
+        Btt_borrar.addClickListener(e -> {
+            signature.clear();
+        });
+
+        Button Btt_guardar = new Button ("Guardar");
+        Btt_guardar.addClickListener(e -> {
+            byte[] firma = signature.getImageBase64();
+/*
+            if(firma.length > 0 && folio != null){
+
+                folioEntity = folioService.findById(folio).get();
+                folioEntity.setFirma(firma);
+                folioService.save(folioEntity);
+
+                signature.clear();
+            }
+            else
+                UIutils.notificacionERROR("No se encontro firma o folio!").open();
+*/
+        });
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(Btt_borrar,Btt_guardar);
+
+        FormLayout FL_Firma = new FormLayout();
+        FL_Firma.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_Firma.setColspan(signature, 2);
+        FL_Firma.add(signature);
+        FL_Firma.add(buttonLayout);
+
+        VL_CatalogoUsuairios.add(new H5("FIRMA"),FL_Firma);
     }
 
     private Boolean verificarExisteUsername(String userName){

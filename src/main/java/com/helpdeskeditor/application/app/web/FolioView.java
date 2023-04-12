@@ -215,7 +215,6 @@ public class FolioView extends VerticalLayout {
 
         SignaturePad signature = new SignaturePad();
         signature.setHeight("300px");
-        //signature.setWidth("300px");
         signature.setBackgroundColor(0, 0, 0, 0);
         signature.setPenColor("#000000");
         signature.setVisible(true);
