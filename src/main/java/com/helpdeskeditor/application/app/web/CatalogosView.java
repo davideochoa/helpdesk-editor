@@ -52,12 +52,12 @@ public class CatalogosView extends VerticalLayout{
             private ComboBox<String> CB_tipoUsuario = new ComboBox<String>("Tipo Usuario");
             private Checkbox CKB_resetPassword = new Checkbox("ResetConstraseña");
 
-        private Button Btt_SalvarCatalogoUsuario = new Button("GUARDAR");
+        private Button Btt_guardarUsuarioModificado = new Button("GUARDAR");
         private HorizontalLayout VL_separador = new HorizontalLayout();
         private FormLayout FL_principal2 = new FormLayout();
             private TextField TF_nuevoUsuario = new TextField("Nombre Usuario");
             private TextField TF_nuevoUserName = new TextField("UserName");
-        private Button Btt_salvarNuevoUsuario = new Button("GUARDAR");
+        private Button Btt_guardarNuevoUsuario = new Button("GUARDAR");
 
     private VerticalLayout VL_CatalogoUnidadArea = new VerticalLayout();
         private FormLayout FL_principalCatalogoUnidad = new FormLayout();
@@ -86,6 +86,8 @@ public class CatalogosView extends VerticalLayout{
         private HorizontalLayout HL_botonesBien = new HorizontalLayout();
             private Button Btt_salvarBien = new Button("GUARDAR");
             private Button Btt_limpiarBien = new Button("LIMPIAR");
+
+    SignaturePad signature = new SignaturePad();
 
     private UsuarioSoporteService usuarioSoporteService;
     private UnidadService unidadService;
@@ -436,72 +438,72 @@ public class CatalogosView extends VerticalLayout{
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
+        signature.setHeight("300px");
+        signature.setBackgroundColor(0, 0, 0, 0);
+        signature.setPenColor("#000000");
+        signature.setVisible(true);
+
         CB_usuario.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
         CB_usuario.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
         CB_usuario.addValueChangeListener(e -> {
             if(e.getValue() != null){
+                signature.clear();
                 usuarioSoporteEntity = e.getValue();
                 TF_userName.setValue(usuarioSoporteEntity.getNombreUsuario());
                 CB_tipoUsuario.setValue(usuarioSoporteEntity.getRol());
                 CKB_resetPassword.setValue(usuarioSoporteEntity.getEsReseteadoPassword());
+
+                if(usuarioSoporteEntity.getFirma() != null){
+                    signature.setImage(signature.getImagen642URI(usuarioSoporteEntity.getFirma()));
+                }
             }
         });
 
         CB_tipoUsuario.setItems("ADMIN","USER");
 
-        Btt_SalvarCatalogoUsuario.addClickListener(e -> {
+        Btt_guardarUsuarioModificado.addClickListener(e -> {
             usuarioSoporteEntity = CB_usuario.getValue();
+
             if(usuarioSoporteEntity != null){
-                if(TF_userName.getValue() != null) {
-                    if(!usuarioSoporteEntity.getNombreUsuario().equals(TF_userName.getValue())){
-                        if(!verificarExisteUsername(TF_userName.getValue())){
-                            usuarioSoporteEntity.setNombreUsuario(TF_userName.getValue());
-                            usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(TF_userName.getValue()));
-                            usuarioSoporteEntity.setEsReseteadoPassword(true);
+                if(TF_userName.getValue() != null)
+                    usuarioSoporteEntity.setNombreUsuario(TF_userName.getValue());
 
-                            usuarioSoporteService.save(usuarioSoporteEntity);
-                            limpiarLayoutCatalogoUsuario();
-                            UIutils.notificacionSUCCESS("El userName fue modificado").open();
-                        }
-                        else
-                            UIutils.notificacionERROR("El userName ya existe").open();
-                    }
-                    else{
-                        if(CKB_resetPassword.getValue()) {
-                            usuarioSoporteEntity.setEsReseteadoPassword(true);
-                            usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(usuarioSoporteEntity.getNombreUsuario()));
+                if(CKB_resetPassword.getValue() && TF_userName.getValue() != null) {
+                    usuarioSoporteEntity.setEsReseteadoPassword(true);
+                    usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(TF_userName.getValue()));
+                }
 
-                            usuarioSoporteService.save(usuarioSoporteEntity);
-                            limpiarLayoutCatalogoUsuario();
-                            UIutils.notificacionSUCCESS("El usuario fue seteado a teclear una nueva contraseña").open();
-                        }
-                        if(CB_tipoUsuario.getValue() != null)
-                            if(!usuarioSoporteEntity.getRol().equals(CB_tipoUsuario.getValue())) {
-                                usuarioSoporteEntity.setRol(CB_tipoUsuario.getValue());
+                if(CB_tipoUsuario.getValue() != null)
+                    usuarioSoporteEntity.setRol(CB_tipoUsuario.getValue());
 
-                                usuarioSoporteService.save(usuarioSoporteEntity);
-                                limpiarLayoutCatalogoUsuario();
-                                UIutils.notificacionSUCCESS("Se cambio el tipo de usuario").open();
-                            }
-                    }
+                byte[] firma = signature.getImageBase64();
+                if(firma.length > 0)
+                    usuarioSoporteEntity.setFirma(firma);
+
+                if(TF_userName.getValue() != null && CB_tipoUsuario.getValue() != null && firma.length > 0){
+                    usuarioSoporteService.save(usuarioSoporteEntity);
+                    limpiarLayoutCatalogoUsuario();
+                    UIutils.notificacionSUCCESS("El usuario fue modificado").open();
+                    signature.clear();
                 }
             }
         });
 
-        Btt_SalvarCatalogoUsuario.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Btt_salvarNuevoUsuario.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Btt_guardarUsuarioModificado.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Btt_guardarNuevoUsuario.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         FL_principal.add(CB_usuario,TF_userName,CB_tipoUsuario,CKB_resetPassword);
 
-        VL_CatalogoUsuairios.add(new H5("MODIFICAR USUARIO"),FL_principal,Btt_SalvarCatalogoUsuario, UIutils.lineaDivision());
+        VL_CatalogoUsuairios.add(new H5("MODIFICAR USUARIO"),FL_principal, Btt_guardarUsuarioModificado, UIutils.lineaDivision());
 
         FL_principal2.add(TF_nuevoUsuario,TF_nuevoUserName);
 
-        Btt_salvarNuevoUsuario.addClickListener(e -> {
+        Btt_guardarNuevoUsuario.addClickListener(e -> {
             String nombrePropio = TF_nuevoUsuario.getValue();
             String userName = TF_nuevoUserName.getValue();
+            byte[] firma = signature.getImageBase64();
 
-            if(nombrePropio != null && userName != null){
+            if(nombrePropio != null && userName != null && firma.length > 0){
                 if(!verificarExisteUsername(TF_userName.getValue())){
                     usuarioSoporteEntity = new UsuarioSoporteEntity();
                     usuarioSoporteEntity.setNombrePropio(nombrePropio.toUpperCase());
@@ -509,11 +511,13 @@ public class CatalogosView extends VerticalLayout{
                     usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(userName));
                     usuarioSoporteEntity.setEsReseteadoPassword(true);
                     usuarioSoporteEntity.setRol("USER");
-
+                    usuarioSoporteEntity.setFirma(firma);
                     usuarioSoporteEntity.setCorreo("NO ESPECIFICAOO");
                     usuarioSoporteEntity.setEsAdministrador(false);
 
                     usuarioSoporteService.save(usuarioSoporteEntity);
+
+                    signature.clear();
 
                     UIutils.notificacionSUCCESS("Se creo el nuevo usuario").open();
 
@@ -523,43 +527,17 @@ public class CatalogosView extends VerticalLayout{
                     UIutils.notificacionERROR("El userName ya existe").open();
             }
             else
-                UIutils.notificacionERROR("Falta el nombre propio o userName").open();
+                UIutils.notificacionERROR("Falta el nombre propio, userName o firma").open();
         });
 
-        VL_CatalogoUsuairios.add(new H5("NUEVO USUARIO"),FL_principal2,Btt_salvarNuevoUsuario,UIutils.lineaDivision());
+        VL_CatalogoUsuairios.add(new H5("NUEVO USUARIO"),FL_principal2, Btt_guardarNuevoUsuario,UIutils.lineaDivision());
 
-
-
-
-        SignaturePad signature = new SignaturePad();
-        signature.setHeight("300px");
-        signature.setBackgroundColor(0, 0, 0, 0);
-        signature.setPenColor("#000000");
-        signature.setVisible(true);
-
-        Button Btt_borrar = new Button ("Borrar");
-        Btt_borrar.addClickListener(e -> {
+        Button Btt_borrarFirma = new Button ("Borrar");
+        Btt_borrarFirma.addClickListener(e -> {
             signature.clear();
         });
 
-        Button Btt_guardar = new Button ("Guardar");
-        Btt_guardar.addClickListener(e -> {
-            byte[] firma = signature.getImageBase64();
-/*
-            if(firma.length > 0 && folio != null){
-
-                folioEntity = folioService.findById(folio).get();
-                folioEntity.setFirma(firma);
-                folioService.save(folioEntity);
-
-                signature.clear();
-            }
-            else
-                UIutils.notificacionERROR("No se encontro firma o folio!").open();
-*/
-        });
-
-        HorizontalLayout buttonLayout = new HorizontalLayout(Btt_borrar,Btt_guardar);
+        HorizontalLayout buttonLayout = new HorizontalLayout(Btt_borrarFirma);
 
         FormLayout FL_Firma = new FormLayout();
         FL_Firma.setResponsiveSteps(

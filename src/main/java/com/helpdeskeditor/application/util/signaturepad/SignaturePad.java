@@ -5,6 +5,7 @@ import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -13,8 +14,8 @@ import java.util.Base64;
 @Tag("lit-signature-pad")
 @JsModule("signature-widget.js")
 @NpmPackage(value = "signature_pad", version = "4.0.4")
+@Slf4j
 public class SignaturePad extends Component implements HasSize {
-
   private double dotSize;
   private double lineMinWidth = 0.5;
   private double lineMaxWidth = 2.5;
@@ -307,8 +308,15 @@ public class SignaturePad extends Component implements HasSize {
     if (this.imageUri.equals("")) {
       return null;
     }
+
     String split = this.imageUri.split(",")[1];
     return Base64.getDecoder().decode(split.getBytes(StandardCharsets.UTF_8));
+  }
+
+  public String getImagen642URI(byte[] imagen){
+    String imagendecode = Base64.getEncoder().encodeToString(imagen);
+
+    return new String("data:image/png;base64,"+imagendecode);
   }
 
   /**

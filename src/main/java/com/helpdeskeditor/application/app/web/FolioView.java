@@ -130,6 +130,7 @@ public class FolioView extends VerticalLayout {
         //private Button Btt_SalvarEstatus = new Button("GUARDAR");
     private VerticalLayout VL_Firma = new VerticalLayout();
         private FormLayout FL_Firma = new FormLayout();
+            SignaturePad signature = new SignaturePad();
 
 
     private Tabs tabs;
@@ -213,7 +214,6 @@ public class FolioView extends VerticalLayout {
         VL_Firma.setMargin(false);
         VL_Firma.setPadding(false);
 
-        SignaturePad signature = new SignaturePad();
         signature.setHeight("300px");
         signature.setBackgroundColor(0, 0, 0, 0);
         signature.setPenColor("#000000");
@@ -227,6 +227,7 @@ public class FolioView extends VerticalLayout {
         Button Btt_guardar = new Button ("Guardar");
         Btt_guardar.addClickListener(e -> {
             byte[] firma = signature.getImageBase64();
+
             Integer folio = IF_Folio.getValue();
 
             if(firma.length > 0 && folio != null){
@@ -234,7 +235,7 @@ public class FolioView extends VerticalLayout {
                 folioEntity.setFirma(firma);
                 folioService.save(folioEntity);
 
-                signature.clear();
+                UIutils.notificacionSUCCESS("La firma fue guardada en el folio!").open();
             }
             else
                 UIutils.notificacionERROR("No se encontro firma o folio!").open();
@@ -357,6 +358,10 @@ public class FolioView extends VerticalLayout {
                 CB_Prioridad.setValue(prioridad);
 
                 GridEstatus.setItems(estatusEntityList);
+
+                if(folioEntity.getFirma() != null)
+                    signature.setImage(signature.getImagen642URI(folioEntity.getFirma()));
+
             }
         }
         else{
@@ -531,6 +536,7 @@ public class FolioView extends VerticalLayout {
 
                     Map<String, Object> parameters = new HashMap<String, Object>();
                     parameters.put("Folio", IF_Folio.getValue());
+                    parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
                     JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
 

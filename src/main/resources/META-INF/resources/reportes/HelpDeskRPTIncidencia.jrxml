@@ -5,13 +5,22 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="497"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="491"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="86"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="903"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="Folio" class="java.lang.Integer"/>
+	<parameter name="IdUsuarioSoporte" class="java.lang.Integer"/>
 	<queryString>
-		<![CDATA[SELECT
+		<![CDATA[SELECT tabla1.*,
+catalogo_usuarios_soporte.NombrePropio AS NombreSoporte,
+catalogo_usuarios_soporte.firma AS firmaSoporte
+FROM 
+(SELECT
 concentrado_folios_incidencias.IdUnidad,
 catalogo_unidades.Nombre AS Unidad,
 concentrado_folios_incidencias.IdArea,
@@ -34,7 +43,7 @@ concentrado_folios_incidencias.IdUsuarioSoporteAsignado,
 catalogo_usuarios_soporte.NombrePropio AS SoporteAsignado,
 concentrado_folios_incidencias.fecha AS FechaCaptura,
 CASE concentrado_folios_incidencias.Activo WHEN 0 THEN 'false' ELSE 'true' END AS Activo,
-firma
+concentrado_folios_incidencias.firma
 FROM concentrado_folios_incidencias,
 catalogo_unidades,
 catalogo_areas,
@@ -48,7 +57,9 @@ AND concentrado_folios_incidencias.IdArea = catalogo_areas.Id
 AND concentrado_folios_incidencias.IdTipoIncidencia = catalogo_tipo_incidencias.Id
 AND concentrado_folios_incidencias.IdBien = catalogo_bien.Id
 AND concentrado_folios_incidencias.IdPrioridad = catalogo_prioridad.Id
-AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_soporte.Id]]>
+AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_soporte.Id) as tabla1,
+catalogo_usuarios_soporte
+WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 	</queryString>
 	<field name="IdUnidad" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="IdUnidad"/>
@@ -156,6 +167,16 @@ AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_
 		<property name="com.jaspersoft.studio.field.name" value="firma"/>
 		<property name="com.jaspersoft.studio.field.label" value="firma"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="concentrado_folios_incidencias"/>
+	</field>
+	<field name="NombreSoporte" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NombreSoporte"/>
+		<property name="com.jaspersoft.studio.field.label" value="NombreSoporte"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_usuarios_soporte"/>
+	</field>
+	<field name="firmaSoporte" class="java.io.InputStream">
+		<property name="com.jaspersoft.studio.field.name" value="firmaSoporte"/>
+		<property name="com.jaspersoft.studio.field.label" value="firmaSoporte"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_usuarios_soporte"/>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -619,7 +640,7 @@ AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="106" splitType="Stretch">
+		<band height="117" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-9" x="7" y="17" width="257" height="86" uuid="ca4e9bfb-380f-410e-9b13-05896487b703"/>
 				<box>
@@ -632,7 +653,7 @@ AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Nombre, Puesto y Firma]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="staticText-10" x="7" y="7" width="257" height="10" uuid="ea210c47-b267-4b0f-9311-d1181cee2ca2"/>
@@ -662,10 +683,21 @@ AND concentrado_folios_incidencias.IdUsuarioSoporteAsignado = catalogo_usuarios_
 				</textElement>
 				<text><![CDATA[RECIBIO]]></text>
 			</staticText>
-			<image>
+			<image onErrorType="Icon">
 				<reportElement x="285" y="20" width="255" height="82" uuid="af3ebaf7-ebba-4345-a8bf-9b8f1b4b2c9a"/>
 				<imageExpression><![CDATA[$F{firma}]]></imageExpression>
 			</image>
+			<image>
+				<reportElement x="10" y="20" width="250" height="70" uuid="958fc290-d0f3-4e2f-863c-1cffc31b9da8"/>
+				<imageExpression><![CDATA[$F{firmaSoporte}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="10" y="90" width="254" height="12" uuid="37774f67-2ebe-40d6-9257-af953e7fd222"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NombreSoporte}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>
