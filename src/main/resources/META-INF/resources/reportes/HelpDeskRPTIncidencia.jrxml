@@ -687,7 +687,7 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 				<reportElement x="285" y="20" width="255" height="82" uuid="af3ebaf7-ebba-4345-a8bf-9b8f1b4b2c9a"/>
 				<imageExpression><![CDATA[$F{firma}]]></imageExpression>
 			</image>
-			<image>
+			<image onErrorType="Icon">
 				<reportElement x="10" y="20" width="250" height="70" uuid="958fc290-d0f3-4e2f-863c-1cffc31b9da8"/>
 				<imageExpression><![CDATA[$F{firmaSoporte}]]></imageExpression>
 			</image>
