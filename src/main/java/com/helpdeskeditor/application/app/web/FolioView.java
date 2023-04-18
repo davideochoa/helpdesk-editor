@@ -296,8 +296,8 @@ public class FolioView extends VerticalLayout {
 
         DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
 
-        folioEntity = new FolioEntity();
-        //folioEntity.setInitValues();
+        //folioEntity = new FolioEntity();
+        folioEntity = null;
     }
 
     private boolean cargarFolio(Integer folio){
@@ -597,10 +597,11 @@ public class FolioView extends VerticalLayout {
 
         CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
 
+
         CB_UsuarioReporta.addValueChangeListener(e -> {
             CB_UsuarioReporta.setValue(e.getValue());
         });
-
+/*
         CB_UsuarioReporta.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_UsuarioReporta.getDataProvider()).getItems();
             String customValue = e.getDetail();
@@ -608,7 +609,7 @@ public class FolioView extends VerticalLayout {
             CB_UsuarioReporta.setItems(allItems);
             CB_UsuarioReporta.setValue(customValue);
         });
-
+        */
         TF_ReferenciaDocumental.setLabel("Referencia Documental");
         TF_ReferenciaDocumental.setHelperText("Numero de oficio/orden/folio de seguimiento");
 
@@ -647,10 +648,10 @@ public class FolioView extends VerticalLayout {
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                CB_Incidencia.setValue(e.getValue());
-                folioEntity.setIdBien(0);
-                folioEntity.setMarca("NO ESPECIFICADO");
-                folioEntity.setModelo("NO ESPECIFICADO");
+                //CB_Incidencia.setValue(e.getValue());
+                //folioEntity.setIdBien(0);
+                //folioEntity.setMarca("NO ESPECIFICADO");
+                //folioEntity.setModelo("NO ESPECIFICADO");
 
                 CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(CB_Incidencia.getValue().getId()));
 
@@ -664,9 +665,9 @@ public class FolioView extends VerticalLayout {
         CB_Bien.setItemLabelGenerator(BienEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                CB_Bien.setValue(e.getValue());
-                folioEntity.setMarca("NO ESPECIFICADO");
-                folioEntity.setModelo("NO ESPECIFICADO");
+                //CB_Bien.setValue(e.getValue());
+                //folioEntity.setMarca("NO ESPECIFICADO");
+                //folioEntity.setModelo("NO ESPECIFICADO");
 
                 CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(CB_Incidencia.getValue().getId(),
                                                                                 e.getValue().getId()));
@@ -679,7 +680,7 @@ public class FolioView extends VerticalLayout {
 
         CB_Marca.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                CB_Marca.setValue(e.getValue());
+                //CB_Marca.setValue(e.getValue());
 
                 CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
                                     CB_Incidencia.getValue().getId(),
@@ -689,30 +690,30 @@ public class FolioView extends VerticalLayout {
                 TF_NumeroInventario.clear();
             }
         });
-
+/*
         CB_Marca.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_Marca.getDataProvider()).getItems();
             String customValue = e.getDetail();
             allItems.add(customValue);
             CB_Marca.setItems(allItems);
             CB_Marca.setValue(customValue);
-        });
+        });*/
 
         CB_Modelo.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                CB_Modelo.setValue(e.getValue());
+                //CB_Modelo.setValue(e.getValue());
                 TF_NumeroSerie.clear();
                 TF_NumeroInventario.clear();
             }
         });
-
+/*
         CB_Modelo.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_Modelo.getDataProvider()).getItems();
             String customValue = e.getDetail();
             allItems.add(customValue);
             CB_Modelo.setItems(allItems);
             CB_Modelo.setValue(customValue);
-        });
+        });*/
 
         Btt_SalvarIncidencia.addClickListener(e -> {
             guardar();
@@ -752,7 +753,7 @@ public class FolioView extends VerticalLayout {
         CB_Prioridad.setItems(prioridadService.findAll());
         CB_Prioridad.setItemLabelGenerator(PrioridadEntity::getNombre);
         CB_UsuarioReporta.addValueChangeListener(e -> {
-            CB_UsuarioReporta.setValue(e.getValue());
+            //CB_UsuarioReporta.setValue(e.getValue());
         });
 
         FL_Motivo.add(TA_MotivoReporte,CB_Prioridad);
