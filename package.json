@@ -260,11 +260,11 @@
     "@polymer/polymer": "$@polymer/polymer",
     "print-js": "$print-js",
     "proj4": "$proj4",
-    "line-awesome": "$line-awesome",
     "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer",
-    "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
     "date-fns": "$date-fns",
-    "signature_pad": "$signature_pad"
+    "signature_pad": "$signature_pad",
+    "line-awesome": "$line-awesome",
+    "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav"
   },
   "vaadin": {
     "dependencies": {
@@ -407,6 +407,6 @@
       "workbox-core": "6.5.0",
       "workbox-precaching": "6.5.0"
     },
-    "hash": "5cf0d128299cc4a388b60a3071230d4a35b95db5867d4a6f2845467d0a9847ec"
+    "hash": "dbf5a792319437de26e423b58a82e917141acf41809ed527a923f3a72b82cc14"
   }
 }
