@@ -48,18 +48,28 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
     List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca);
 
     @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO( "+
-
             "fe.id,"+
             "ue.nombre AS unidad,"+
             "fe.usuarioReporta, fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
             "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado "+
-
             ") " +
-
             "FROM FolioEntity fe,UnidadEntity ue "+
             "WHERE fe.idUnidad = ue.id "+
             "ORDER BY fe.id DESC", nativeQuery=false)
     List<FolioDAO> getAll();
+
+
+    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO( "+
+            "fe.id,"+
+            "ue.nombre AS unidad,"+
+            "fe.usuarioReporta, fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
+            "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado "+
+            ") " +
+            "FROM FolioEntity fe,UnidadEntity ue "+
+            "WHERE fe.idUnidad = ue.id "+
+            "AND fe.idUsuarioSoporteAsignado = :idUsuarioSoporteAsignado "+
+            "ORDER BY fe.id DESC", nativeQuery=false)
+    List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado);
 
     /*
       @Query(value="SELECT Folio,Unidad,Area,Incidencia,Bien,Marca,Modelo,NumeroSerie,NumeroInventario,MotivoReporte,Estado

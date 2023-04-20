@@ -59,4 +59,9 @@ public class FolioFacade {
     public List<FolioDAO> getAll(){
         return folioRepository.getAll();
     }
+
+    @Transactional(readOnly = true)
+    public List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado){
+        return folioRepository.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
+    }
 }

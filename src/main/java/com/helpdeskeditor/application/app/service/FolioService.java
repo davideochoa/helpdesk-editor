@@ -53,4 +53,8 @@ public class FolioService {
     public List<FolioDAO> getAll(){
         return folioFacade.getAll();
     }
+
+    public List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado){
+        return folioFacade.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
+    }
 }

@@ -2,6 +2,8 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,9 +24,29 @@ public class FoliosGridView extends VerticalLayout{
     private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
             numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
 
+    private ComboBox<String> CB_UsuarioSoporte = new ComboBox<String>("Soporte");
+
     private final FolioService folioService;
 
-    public FoliosGridView(FolioService folioService) {
+    public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser) {
+
+        if(authenticatedUser.get().get().getRol().equals("ADMIN")){
+            CB_UsuarioSoporte.setItems("Todos",authenticatedUser.get().get().getNombrePropio());
+        }
+
+        CB_UsuarioSoporte.setItems("Todos",authenticatedUser.get().get().getNombrePropio());
+
+        CB_UsuarioSoporte.addValueChangeListener(e -> {
+            if(e.getValue() != null){
+                String valor = e.getValue();
+
+                if(!valor.equals("Todos"))
+                    grid.setItems(folioService.getByIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId()));
+                else
+                    grid.setItems(folioService.getAll());
+            }
+        });
+
         this.folioService = folioService;
 
         grid = new Grid<>(FolioDAO.class, false);
@@ -40,6 +62,9 @@ public class FoliosGridView extends VerticalLayout{
         grid.addColumn(FolioDAO :: getEstado).setHeader("Estado").setKey("estado").setResizable(true);
 
         prepareFilterFields();
+
+        add(CB_UsuarioSoporte);
+
         add(grid);
 
         this.setHeight("100%");
