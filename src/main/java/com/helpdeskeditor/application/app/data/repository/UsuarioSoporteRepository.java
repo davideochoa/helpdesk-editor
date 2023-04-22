@@ -12,6 +12,8 @@ import java.util.List;
 public interface UsuarioSoporteRepository extends CrudRepository<UsuarioSoporteEntity, Integer> {
     List<UsuarioSoporteEntity> findAll(Sort sort);
 
+    List<UsuarioSoporteEntity> findAll();
+
     UsuarioSoporteEntity findByNombreUsuario(String nombreUsuario);
 
 }

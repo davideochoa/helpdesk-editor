@@ -25,5 +25,8 @@ public class UsuarioSoporteService {
         return usuarioSoporteFacade.save(usuarioSoporteEntity);
     }
 
+    public List<UsuarioSoporteEntity> findAll(){
+        return usuarioSoporteFacade.findAll();
+    }
 
 }

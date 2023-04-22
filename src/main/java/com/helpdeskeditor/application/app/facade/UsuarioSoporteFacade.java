@@ -33,4 +33,9 @@ public class UsuarioSoporteFacade {
         return usuarioSoporteRepository.save(usuarioSoporteEntity);
     }
 
+    @Transactional(readOnly = true)
+    public List<UsuarioSoporteEntity> findAll(){
+        return usuarioSoporteRepository.findAll();
+    }
+
 }

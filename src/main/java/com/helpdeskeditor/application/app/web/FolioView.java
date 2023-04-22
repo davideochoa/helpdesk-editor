@@ -592,10 +592,6 @@ public class FolioView extends VerticalLayout {
         });
 
         CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
-        /*
-        CB_UsuarioReporta.addValueChangeListener(e -> {
-            CB_UsuarioReporta.setValue(e.getValue());
-        });*/
 
         CB_UsuarioReporta.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_UsuarioReporta.getDataProvider()).getItems();

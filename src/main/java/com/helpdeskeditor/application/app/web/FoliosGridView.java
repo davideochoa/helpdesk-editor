@@ -1,11 +1,16 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
+import com.helpdeskeditor.application.app.data.entity.AreaEntity;
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -14,6 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @PageTitle("Listado de Folios")
 @Route(value = "foliosgrid", layout = MainLayout.class)
@@ -24,33 +30,46 @@ public class FoliosGridView extends VerticalLayout{
     private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
             numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
 
-    private ComboBox<String> CB_UsuarioSoporte = new ComboBox<String>("Soporte");
+    private ComboBox<UsuarioSoporteEntity> CB_UsuarioSoporte = new ComboBox<UsuarioSoporteEntity>("Soporte");
 
     private final FolioService folioService;
 
-    public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser) {
+    public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser, UsuarioSoporteService usuarioSoporteService) {
 
         if(authenticatedUser.get().get().getRol().equals("ADMIN")){
-            CB_UsuarioSoporte.setItems("Todos",authenticatedUser.get().get().getNombrePropio());
+            List<UsuarioSoporteEntity> usuarioSoporteEntities = usuarioSoporteService.findAll();
+            CB_UsuarioSoporte.setItems(usuarioSoporteEntities);
+        }
+        else{
+            CB_UsuarioSoporte.setItems(authenticatedUser.get().get());
         }
 
-        CB_UsuarioSoporte.setItems("Todos",authenticatedUser.get().get().getNombrePropio());
+        CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombreUsuario);
 
         CB_UsuarioSoporte.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                String valor = e.getValue();
-
-                if(!valor.equals("Todos"))
-                    grid.setItems(folioService.getByIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId()));
-                else
-                    grid.setItems(folioService.getAll());
+                Integer Id = e.getValue().getId();
+                grid.setItems(folioService.getByIdUsuarioSoporteAsignado(Id));
             }
         });
+
+        Button B_allFolios = new Button ("Todos los Folios");
+        B_allFolios.addClickListener(e -> {
+            grid.setItems(folioService.getAll());
+        });
+
+        HorizontalLayout horizontalLayoutComboTecnicos = new HorizontalLayout();
+        horizontalLayoutComboTecnicos.setVerticalComponentAlignment(Alignment.BASELINE,CB_UsuarioSoporte,B_allFolios);
+        horizontalLayoutComboTecnicos.setPadding(false);
+        horizontalLayoutComboTecnicos.setMargin(false);
+        horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
         this.folioService = folioService;
 
         grid = new Grid<>(FolioDAO.class, false);
+
         grid.setItems(folioService.getAll());
+        
 
         grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
@@ -63,7 +82,7 @@ public class FoliosGridView extends VerticalLayout{
 
         prepareFilterFields();
 
-        add(CB_UsuarioSoporte);
+        add(horizontalLayoutComboTecnicos);
 
         add(grid);
 
