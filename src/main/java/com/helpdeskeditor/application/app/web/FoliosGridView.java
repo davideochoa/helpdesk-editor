@@ -35,16 +35,22 @@ public class FoliosGridView extends VerticalLayout{
     private final FolioService folioService;
 
     public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser, UsuarioSoporteService usuarioSoporteService) {
+        this.folioService = folioService;
+
+        grid = new Grid<>(FolioDAO.class, false);
 
         if(authenticatedUser.get().get().getRol().equals("ADMIN")){
             List<UsuarioSoporteEntity> usuarioSoporteEntities = usuarioSoporteService.findAll();
             CB_UsuarioSoporte.setItems(usuarioSoporteEntities);
+            grid.setItems(folioService.getAll());
         }
         else{
             CB_UsuarioSoporte.setItems(authenticatedUser.get().get());
+            CB_UsuarioSoporte.setValue(authenticatedUser.get().get());
+            grid.setItems(folioService.getByIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId()));
         }
 
-        CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombreUsuario);
+        CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
 
         CB_UsuarioSoporte.addValueChangeListener(e -> {
             if(e.getValue() != null){
@@ -56,6 +62,7 @@ public class FoliosGridView extends VerticalLayout{
         Button B_allFolios = new Button ("Todos los Folios");
         B_allFolios.addClickListener(e -> {
             grid.setItems(folioService.getAll());
+            CB_UsuarioSoporte.clear();
         });
 
         HorizontalLayout horizontalLayoutComboTecnicos = new HorizontalLayout();
@@ -64,12 +71,7 @@ public class FoliosGridView extends VerticalLayout{
         horizontalLayoutComboTecnicos.setMargin(false);
         horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
-        this.folioService = folioService;
 
-        grid = new Grid<>(FolioDAO.class, false);
-
-        grid.setItems(folioService.getAll());
-        
 
         grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
