@@ -880,6 +880,7 @@ public class FolioView extends VerticalLayout {
                     if(catalogoEstatusEntity.getId() == idDiagnosticoFinal){
                         if(existeApertura && existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                             agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
+
                         }
                         else
                             UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -888,6 +889,8 @@ public class FolioView extends VerticalLayout {
                         if(catalogoEstatusEntity.getId() == idCerrar){
                             if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                                 agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
+                                folioEntity.setActivo(false);
+                                folioService.save(folioEntity);
                             }
                             else
                                 UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
