@@ -6,10 +6,13 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
@@ -32,14 +35,6 @@ import static com.helpdeskeditor.application.configuration.DriverManagerDataSour
 @AnonymousAllowed
 //@RolesAllowed("USER")
 public class AcercaDeView extends VerticalLayout {
-    @Value("${app.datasource.jdbc-url}")
-    private String url;
-    @Value("${app.datasource.username}")
-    private String userName;
-    @Value("${app.datasource.password}")
-    private String password;
-    @Value("${spring.datasource.driver-class-name}")
-    private String className;
     public AcercaDeView() throws URISyntaxException {
         setSpacing(false);
 
@@ -50,6 +45,19 @@ public class AcercaDeView extends VerticalLayout {
 
         add(new H2("This place intentionally left empty"));
         add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+
+        Icon vaadinIcon = new Icon(VaadinIcon.HOME);
+        RouterLink link = new RouterLink("FOLIO 100",FolioView.class);
+        link.add(vaadinIcon);
+        add(link);
+
+        Button B_allFolios = new Button ("LINK");
+        B_allFolios.addClickListener(e -> {
+            B_allFolios.getUI().ifPresent(ui ->
+                    ui.navigate("folios"));
+        });
+
+        add(B_allFolios);
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);

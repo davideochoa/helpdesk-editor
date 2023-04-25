@@ -14,13 +14,17 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
+@Slf4j
 @PageTitle("Listado de Folios")
 @Route(value = "foliosgrid", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
@@ -51,6 +55,7 @@ public class FoliosGridView extends VerticalLayout{
         }
 
         CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
+        CB_UsuarioSoporte.setWidth("400px");
 
         CB_UsuarioSoporte.addValueChangeListener(e -> {
             if(e.getValue() != null){
@@ -71,9 +76,13 @@ public class FoliosGridView extends VerticalLayout{
         horizontalLayoutComboTecnicos.setMargin(false);
         horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
+        //grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
 
+        grid.addColumn(new ComponentRenderer<>(RouterLink::new, (routerLink, folioDAO) -> {
+            routerLink.setRoute(FolioView.class);
+            routerLink.setText(folioDAO.getId()+"");
+        })).setHeader("FOLIO").setKey("id").setResizable(true);
 
-        grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
         grid.addColumn(FolioDAO :: getUsuarioReporta).setHeader("Usuario Reporta").setKey("usuarioReporta").setResizable(true);
         grid.addColumn(FolioDAO :: getMarca).setHeader("Marca").setKey("marca").setResizable(true);
@@ -127,28 +136,28 @@ public class FoliosGridView extends VerticalLayout{
             boolean estadoFilterMatch = true;
 
             if(!folioFilter.isEmpty())
-                folioFilterMatch = item.toString().contains(folioFilter.getValue().toUpperCase());
+                folioFilterMatch = item.getId().toString().contains(folioFilter.getValue().toUpperCase());
 
             if(!unidadFilter.isEmpty())
-                unidadFilterMatch = item.toString().contains(unidadFilter.getValue().toUpperCase());
+                unidadFilterMatch = item.getUnidad().contains(unidadFilter.getValue().toUpperCase());
 
             if(!usuarioreportaFilter.isEmpty())
-                usuarioreportaFilterMatch = item.toString().contains(usuarioreportaFilter.getValue().toUpperCase());
+                usuarioreportaFilterMatch = item.getUsuarioReporta().contains(usuarioreportaFilter.getValue().toUpperCase());
 
             if(!marcaFilter.isEmpty())
-                marcaFilterMatch = item.toString().contains(marcaFilter.getValue().toUpperCase());
+                marcaFilterMatch = item.getMarca().contains(marcaFilter.getValue().toUpperCase());
 
             if(!modeloFilter.isEmpty())
-                modeloFilterMatch = item.toString().contains(modeloFilter.getValue().toUpperCase());
+                modeloFilterMatch = item.getModelo().contains(modeloFilter.getValue().toUpperCase());
 
             if(!numeroSerieFilter.isEmpty())
-                numeroSerieFilterMatch = item.toString().contains(numeroSerieFilter.getValue().toUpperCase());
+                numeroSerieFilterMatch = item.getNumeroSerie().contains(numeroSerieFilter.getValue().toUpperCase());
 
             if(!numeroInventarioFilter.isEmpty())
-                numeroInventarioFilterMatch = item.toString().contains(numeroInventarioFilter.getValue().toUpperCase());
+                numeroInventarioFilterMatch = item.getNumeroInventario().contains(numeroInventarioFilter.getValue().toUpperCase());
 
             if(!estadoFilter.isEmpty())
-                estadoFilterMatch = item.toString().contains(estadoFilter.getValue().toUpperCase());
+                estadoFilterMatch = item.getEstado().contains(estadoFilter.getValue().toUpperCase());
 
             return folioFilterMatch && unidadFilterMatch && usuarioreportaFilterMatch && marcaFilterMatch &&
                     modeloFilterMatch && numeroSerieFilterMatch && numeroInventarioFilterMatch && estadoFilterMatch;

@@ -26,6 +26,8 @@ import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.charts.Chart;
+import com.vaadin.flow.component.charts.model.ChartType;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -33,8 +35,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -52,26 +52,15 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.VaadinService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.security.RolesAllowed;
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -208,6 +197,8 @@ public class FolioView extends VerticalLayout {
         this.add(tabs, contenidoTab);
 
         borrar();
+
+        Chart chart = new Chart(ChartType.COLUMN);
     }
 
     private void layoutFirma(){
@@ -929,7 +920,6 @@ public class FolioView extends VerticalLayout {
                             ButtonVariant.LUMO_ERROR,
                             ButtonVariant.LUMO_TERTIARY);
                     button.addClickListener(e -> {
-
                         Integer idApertura = 0;
                         Integer idDiagnosticoInicial = 0;
                         Integer idDiagnosticoFinal = 0;
@@ -1013,6 +1003,10 @@ public class FolioView extends VerticalLayout {
                                         UIutils.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
                                 }
                                 else{
+                                    if(estatus.getIdEstatus() == idDiagnosticoFinal){
+                                        folioEntity.setActivo(true);
+                                        folioService.save(folioEntity);
+                                    }
                                     EstatusEntity estatusEntity = estatus.getEntity();
                                     estatusService.delete(estatusEntity);
                                     estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
