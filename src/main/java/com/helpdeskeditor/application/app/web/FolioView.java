@@ -48,9 +48,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
@@ -78,7 +76,7 @@ import static com.helpdeskeditor.application.configuration.DriverManagerDataSour
 @RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @Slf4j
-public class FolioView extends VerticalLayout {
+public class FolioView extends VerticalLayout implements HasUrlParameter<String> {
     private VerticalLayout VL_Unidad = new VerticalLayout();
         private IntegerField IF_Folio = new IntegerField();
         private FormLayout FL_Unidad = new FormLayout();
@@ -1074,4 +1072,12 @@ public class FolioView extends VerticalLayout {
 
     }
 
+    @Override
+    public void setParameter(BeforeEvent event, @WildcardParameter String parameter) {
+        if (!parameter.isEmpty()) {
+            String params[] = parameter.split("/");
+            cargarFolio(Integer.parseInt(params[0]));
+            IF_Folio.setValue(Integer.parseInt(params[0]));
+        }
+    }
 }

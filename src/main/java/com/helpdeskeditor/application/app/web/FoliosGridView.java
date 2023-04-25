@@ -59,6 +59,16 @@ public class FoliosGridView extends VerticalLayout{
 
         CB_UsuarioSoporte.addValueChangeListener(e -> {
             if(e.getValue() != null){
+                folioFilter.clear();
+                folioFilter.clear();
+                usuarioreportaFilter.clear();
+                marcaFilter.clear();
+                modeloFilter.clear();
+                numeroSerieFilter.clear();
+                numeroInventarioFilter.clear();
+                estadoFilter.clear();
+                unidadFilter.clear();
+
                 Integer Id = e.getValue().getId();
                 grid.setItems(folioService.getByIdUsuarioSoporteAsignado(Id));
             }
@@ -66,6 +76,16 @@ public class FoliosGridView extends VerticalLayout{
 
         Button B_allFolios = new Button ("Todos los Folios");
         B_allFolios.addClickListener(e -> {
+            folioFilter.clear();
+            folioFilter.clear();
+            usuarioreportaFilter.clear();
+            marcaFilter.clear();
+            modeloFilter.clear();
+            numeroSerieFilter.clear();
+            numeroInventarioFilter.clear();
+            estadoFilter.clear();
+            unidadFilter.clear();
+
             grid.setItems(folioService.getAll());
             CB_UsuarioSoporte.clear();
         });
@@ -79,8 +99,9 @@ public class FoliosGridView extends VerticalLayout{
         //grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
 
         grid.addColumn(new ComponentRenderer<>(RouterLink::new, (routerLink, folioDAO) -> {
-            routerLink.setRoute(FolioView.class);
+            routerLink.setRoute(FolioView.class,folioDAO.getId()+"");
             routerLink.setText(folioDAO.getId()+"");
+
         })).setHeader("FOLIO").setKey("id").setResizable(true);
 
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
