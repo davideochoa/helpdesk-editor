@@ -46,19 +46,6 @@ public class AcercaDeView extends VerticalLayout {
         add(new H2("This place intentionally left empty"));
         add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
 
-        Icon vaadinIcon = new Icon(VaadinIcon.HOME);
-        RouterLink link = new RouterLink("FOLIO 100",FolioView.class);
-        link.add(vaadinIcon);
-        add(link);
-
-        Button B_allFolios = new Button ("LINK");
-        B_allFolios.addClickListener(e -> {
-            B_allFolios.getUI().ifPresent(ui ->
-                    ui.navigate("folios"));
-        });
-
-        add(B_allFolios);
-
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
