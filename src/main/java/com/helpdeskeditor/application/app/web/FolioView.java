@@ -1075,9 +1075,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     @Override
     public void setParameter(BeforeEvent event, @WildcardParameter String parameter) {
         if (!parameter.isEmpty()) {
-            String params[] = parameter.split("/");
-            cargarFolio(Integer.parseInt(params[0]));
-            IF_Folio.setValue(Integer.parseInt(params[0]));
+            //String params[] = parameter.split("/");
+            cargarFolio(Integer.parseInt(parameter));
+            IF_Folio.setValue(Integer.parseInt(parameter));
         }
     }
 }

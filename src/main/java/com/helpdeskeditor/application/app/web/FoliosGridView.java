@@ -10,6 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -97,11 +98,18 @@ public class FoliosGridView extends VerticalLayout{
         horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
         //grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
-
+/*
         grid.addColumn(new ComponentRenderer<>(RouterLink::new, (routerLink, folioDAO) -> {
             routerLink.setRoute(FolioView.class,folioDAO.getId()+"");
             routerLink.setText(folioDAO.getId()+"");
 
+        })).setHeader("FOLIO").setKey("id").setResizable(true);
+*/
+
+        grid.addColumn(new ComponentRenderer<>(Anchor::new, (anchor, folioDAO) -> {
+            anchor.setHref("/folios/"+folioDAO.getId()+"");
+            anchor.setText(folioDAO.getId()+"");
+            anchor.getElement().setAttribute("target", "_blank");
         })).setHeader("FOLIO").setKey("id").setResizable(true);
 
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
