@@ -8,6 +8,7 @@ import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Anchor;
@@ -34,6 +35,7 @@ import java.util.List;
 @Route(value = "foliosgrid", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
+@CssImport(themeFor = "vaadin-grid", value = "recipe/densegrid/densegrid.css")
 public class FoliosGridView extends VerticalLayout{
     private Grid<FolioDAO> grid;
     private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
@@ -124,22 +126,23 @@ public class FoliosGridView extends VerticalLayout{
         grid.addColumn(FolioDAO :: getNumeroSerie).setHeader("Numero Serie").setKey("numeroSerie").setResizable(true);
         grid.addColumn(FolioDAO :: getNumeroInventario).setHeader("Numero Inventario").setKey("numeroInventario").setResizable(true);
         grid.addColumn(FolioDAO :: getEstado).setHeader("Estado").setKey("estado").setResizable(true);
-
-
+        grid.addColumn(FolioDAO :: diasActivo).setHeader("Dias Activo").setKey("dias").setResizable(true);
 
         grid.setClassNameGenerator(folio -> {
             if(folio.getEstado().equals("ABIERTO")){
-                LocalDate fechaInicial = folio.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                LocalDate fechaActual = LocalDate.now();
-
-                Integer noOfDaysBetween = Math.toIntExact(ChronoUnit.DAYS.between(fechaInicial, fechaActual));
-
-                log.info("fechaInicial:"+fechaInicial);
-                log.info("fechaActual:"+fechaActual);
-                log.info("noOfDaysBetween:"+noOfDaysBetween);
-
-                if (noOfDaysBetween >= 5 && noOfDaysBetween <= 9) return "low-rating";
-                if (noOfDaysBetween > 9) return "high-rating";
+                if (folio.diasActivo() >= 5 && folio.diasActivo() <= 9){
+                    log.info("low-rating");
+                    return "low-rating";
+                }
+                else
+                    if (folio.diasActivo() > 9){
+                        log.info("high-rating");
+                        return "high-rating";
+                    }
+                    else{
+                        log.info("null");
+                        return null;
+                    }
             }
             return null;
         });

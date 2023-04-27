@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -21,5 +24,13 @@ public class FolioDAO {
     String numeroSerie;
     String numeroInventario;
     String estado;
+
+    public Integer diasActivo(){
+        LocalDate fechaInicial = getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate fechaActual = LocalDate.now();
+
+        Integer noOfDaysBetween = (Integer) Math.toIntExact(ChronoUnit.DAYS.between(fechaInicial, fechaActual));
+        return noOfDaysBetween;
+    }
 
 }
