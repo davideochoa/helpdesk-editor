@@ -23,6 +23,10 @@ import com.vaadin.flow.router.RouterLink;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -109,7 +113,8 @@ public class FoliosGridView extends VerticalLayout{
         grid.addColumn(new ComponentRenderer<>(Anchor::new, (anchor, folioDAO) -> {
             anchor.setHref("/folios/"+folioDAO.getId()+"");
             anchor.setText(folioDAO.getId()+"");
-            anchor.getElement().setAttribute("target", "_blank");
+            //anchor.getElement().setAttribute("target", "_blank");
+            anchor.getElement().setAttribute("router-ignore", "");
         })).setHeader("FOLIO").setKey("id").setResizable(true);
 
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
@@ -119,6 +124,25 @@ public class FoliosGridView extends VerticalLayout{
         grid.addColumn(FolioDAO :: getNumeroSerie).setHeader("Numero Serie").setKey("numeroSerie").setResizable(true);
         grid.addColumn(FolioDAO :: getNumeroInventario).setHeader("Numero Inventario").setKey("numeroInventario").setResizable(true);
         grid.addColumn(FolioDAO :: getEstado).setHeader("Estado").setKey("estado").setResizable(true);
+
+
+
+        grid.setClassNameGenerator(folio -> {
+            if(folio.getEstado().equals("ABIERTO")){
+                LocalDate fechaInicial = folio.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate fechaActual = LocalDate.now();
+
+                Integer noOfDaysBetween = Math.toIntExact(ChronoUnit.DAYS.between(fechaInicial, fechaActual));
+
+                log.info("fechaInicial:"+fechaInicial);
+                log.info("fechaActual:"+fechaActual);
+                log.info("noOfDaysBetween:"+noOfDaysBetween);
+
+                if (noOfDaysBetween >= 5 && noOfDaysBetween <= 9) return "low-rating";
+                if (noOfDaysBetween > 9) return "high-rating";
+            }
+            return null;
+        });
 
         prepareFilterFields();
 

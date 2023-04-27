@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
-@NoArgsConstructor
+import java.util.Date;
+
 @AllArgsConstructor
 @Getter
 @Setter
 public class FolioDAO {
     Integer id;
+    Date fecha;
     String unidad;
     String usuarioReporta;
     String marca;
@@ -21,10 +22,4 @@ public class FolioDAO {
     String numeroInventario;
     String estado;
 
-    /*
-
-    String  Area;
-    String Incidencia;
-    String Bien;
-     */
 }

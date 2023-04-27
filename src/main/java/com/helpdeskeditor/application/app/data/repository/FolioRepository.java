@@ -47,11 +47,12 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca);
 
-    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO( "+
+    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO("+
             "fe.id,"+
+            "fe.fecha,"+
             "ue.nombre AS unidad,"+
             "fe.usuarioReporta, fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
-            "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado "+
+            "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado"+
             ") " +
             "FROM FolioEntity fe,UnidadEntity ue "+
             "WHERE fe.idUnidad = ue.id "+
@@ -59,11 +60,12 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
     List<FolioDAO> getAll();
 
 
-    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO( "+
+    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO("+
             "fe.id,"+
+            "fe.fecha,"+
             "ue.nombre AS unidad,"+
             "fe.usuarioReporta, fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
-            "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado "+
+            "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado"+
             ") " +
             "FROM FolioEntity fe,UnidadEntity ue "+
             "WHERE fe.idUnidad = ue.id "+
