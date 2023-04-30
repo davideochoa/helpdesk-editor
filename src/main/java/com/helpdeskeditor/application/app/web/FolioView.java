@@ -117,7 +117,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         //private Button Btt_SalvarEstatus = new Button("GUARDAR");
     private VerticalLayout VL_Firma = new VerticalLayout();
         private FormLayout FL_Firma = new FormLayout();
-            SignaturePad signature = new SignaturePad();
+            private TextField TF_nombreFirma = new TextField("Nombre de quien firma");
+            private TextField TF_cargo = new TextField("Cargo");
+            private TextField TF_email = new TextField("Email");
+            private SignaturePad signature = new SignaturePad();
 
 
     private Tabs tabs;
@@ -215,19 +218,35 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         Button Btt_guardar = new Button ("Guardar");
         Btt_guardar.addClickListener(e -> {
+            String nombre = TF_nombreFirma.getValue();
+            String cargo = TF_cargo.getValue();
+            String email = TF_email.getValue();
+
             byte[] firma = signature.getImageBase64();
 
             Integer folio = IF_Folio.getValue();
 
-            if(firma.length > 0 && folio != null){
-                folioEntity = folioService.findById(folio).get();
-                folioEntity.setFirma(firma);
-                folioService.save(folioEntity);
+            if(nombre != null && cargo != null && email != null &&
+                    folio != null && firma != null){
+                if(nombre.length() > 0 && cargo.length() > 0 && email.length() > 0 &&
+                        folio > 0 && firma.length > 0){
+                    folioEntity = folioService.findById(folio).get();
 
-                UIutils.notificacionSUCCESS("La firma fue guardada en el folio!").open();
+                    folioEntity.setNombreFirma(nombre);
+                    folioEntity.setCargoFirma(cargo);
+                    folioEntity.setEmail(email);
+                    folioEntity.setFirma(firma);
+
+                    folioService.save(folioEntity);
+
+                    UIutils.notificacionSUCCESS("La firma fue guardada en el folio!").open();
+                }
+                else
+                    UIutils.notificacionERROR("Faltan datos!").open();
             }
             else
-                UIutils.notificacionERROR("No se encontro firma o folio!").open();
+                UIutils.notificacionERROR("Faltan datos!").open();
+
 
         });
 
@@ -240,10 +259,12 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 new FormLayout.ResponsiveStep("500px", 2));
 
         FL_Firma.setColspan(signature, 2);
+
+        FL_Firma.add(TF_nombreFirma,TF_cargo,TF_email);
         FL_Firma.add(signature);
         FL_Firma.add(buttonLayout);
 
-        //VL_Firma.add(FL_Firma);
+        VL_Firma.add(FL_Firma);
     }
 
     private void borrar(){
@@ -285,7 +306,11 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         DtePikr_fechaApertura.setValue(LocalDate.now(ZoneId.systemDefault()));
 
-        //folioEntity = new FolioEntity();
+        TF_nombreFirma.clear();
+        TF_cargo.clear();
+        TF_email.clear();
+        signature.clear();
+
         folioEntity = null;
     }
 
@@ -346,6 +371,15 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 CB_Prioridad.setValue(prioridad);
 
                 GridEstatus.setItems(estatusEntityList);
+
+                if(folioEntity.getNombreFirma() != null)
+                    TF_nombreFirma.setValue(folioEntity.getNombreFirma());
+
+                if(folioEntity.getCargoFirma() != null)
+                    TF_cargo.setValue(folioEntity.getCargoFirma());
+
+                if(folioEntity.getEmail() != null)
+                    TF_email.setValue(folioEntity.getEmail());
 
                 if(folioEntity.getFirma() != null)
                     signature.setImage(signature.getImagen642URI(folioEntity.getFirma()));
@@ -553,13 +587,18 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 UIutils.notificacionERROR("No se encontro o folio!").open();
         });
 
+        Button Btt_enviarEmail = new Button ("Enviar por Email");
+        Btt_enviarEmail.addClickListener(e -> {
+
+        });
+
         Button Btt_nuevo = new Button ("Nuevo");
         Btt_nuevo.addClickListener(e -> {
             borrar();
         });
 
-        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
-        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_nuevo);
+        HL_Folio_BotnoCargar.setVerticalComponentAlignment(Alignment.BASELINE,IF_Folio,B_cargar,Btt_imprimir,Btt_enviarEmail,Btt_nuevo);
+        HL_Folio_BotnoCargar.add(IF_Folio,B_cargar,Btt_imprimir,Btt_enviarEmail,Btt_nuevo);
 
         //TF_Telefono.setAllowedCharPattern("^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$");
         TF_Telefono.setHelperText("Formato:+(123)456-7890");
@@ -1022,8 +1061,8 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,DtePikr_fechaMovimiento);
 
-        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus,UIutils.lineaDivision(),
-                        new H5("FIRMA"),FL_Firma);//,Btt_SalvarEstatus);
+        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus);//,UIutils.lineaDivision(),
+                        //new H5("FIRMA"),FL_Firma);//,Btt_SalvarEstatus);
     }
 
     private void agregarEstatus(Integer idEstatus, String anotacion, LocalDate fecha){
@@ -1050,9 +1089,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         //tabIncidencia = new Tab("INCIDENCIA");
         //tabMotivo = new Tab("MOTIVO");
         tabEstatus = new Tab("ESTATUS");
-        //tabFirma = new Tab("FIRMA");
+        tabFirma = new Tab("FIRMA");
 
-        tabs = new Tabs(tabUnidad,tabEstatus);
+        tabs = new Tabs(tabUnidad,tabEstatus,tabFirma);
 
         tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
 
@@ -1069,6 +1108,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         else
             if (tab.equals(tabEstatus))
                 contenidoTab.add(VL_Estatus);
+            else
+                if (tab.equals(tabFirma))
+                    contenidoTab.add(VL_Firma);
 
     }
 

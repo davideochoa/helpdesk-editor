@@ -35,7 +35,7 @@ import java.util.List;
 @Route(value = "foliosgrid", layout = MainLayout.class)
 //@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
-@CssImport(themeFor = "vaadin-grid", value = "recipe/densegrid/densegrid.css")
+@CssImport(themeFor = "vaadin-grid", value = "vaadin-grid.css")
 public class FoliosGridView extends VerticalLayout{
     private Grid<FolioDAO> grid;
     private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
@@ -126,7 +126,7 @@ public class FoliosGridView extends VerticalLayout{
         grid.addColumn(FolioDAO :: getNumeroSerie).setHeader("Numero Serie").setKey("numeroSerie").setResizable(true);
         grid.addColumn(FolioDAO :: getNumeroInventario).setHeader("Numero Inventario").setKey("numeroInventario").setResizable(true);
         grid.addColumn(FolioDAO :: getEstado).setHeader("Estado").setKey("estado").setResizable(true);
-        grid.addColumn(FolioDAO :: diasActivo).setHeader("Dias Activo").setKey("dias").setResizable(true);
+        //grid.addColumn(FolioDAO :: diasActivo).setHeader("Dias Activo").setKey("dias").setResizable(true);
 
         grid.setClassNameGenerator(folio -> {
             if(folio.getEstado().equals("ABIERTO")){

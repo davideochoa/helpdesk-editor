@@ -80,4 +80,13 @@ public class FolioEntity {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "firma")
     private byte[] firma;
+
+    @Column(name = "nombreFirma")
+    String nombreFirma;
+
+    @Column(name = "cargoFirma")
+    String cargoFirma;
+
+    @Column(name = "email")
+    String email;
 }
