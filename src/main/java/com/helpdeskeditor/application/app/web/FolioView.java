@@ -20,6 +20,7 @@ import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.helpdeskeditor.application.util.EmailService;
 import com.helpdeskeditor.application.util.UIutils;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
@@ -55,6 +56,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
@@ -145,7 +147,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
     @Value("${charLimit}")
     private int charLimit;
-
     @Value("${app.datasource.jdbc-url}")
     private String url;
     @Value("${app.datasource.username}")
@@ -154,6 +155,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     private String password;
     @Value("${spring.datasource.driver-class-name}")
     private String className;
+
+    @Autowired
+    private EmailService emailService;
 
     List<EstatusDAO> estatusEntityList = null;
 
@@ -589,7 +593,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         Button Btt_enviarEmail = new Button ("Enviar por Email");
         Btt_enviarEmail.addClickListener(e -> {
-
+            emailService.send("david@davidochoa.info","davideochoa@gmail.com","PRUEBA subject","PRUEBA BODY");
         });
 
         Button Btt_nuevo = new Button ("Nuevo");
