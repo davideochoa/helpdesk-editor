@@ -1,6 +1,7 @@
 package com.helpdeskeditor.application.util;
 
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -27,14 +28,25 @@ public class EmailService {
 
     public void sendWithAttach(String from, String to, String subject,
                                String text, String attachName,
-                               InputStreamSource inputStream) throws MessagingException {
+                               InputStreamSource inputStream) {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(from);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text, true);
-        helper.addAttachment(attachName, inputStream);
-        mailSender.send(message);
+        MimeMessageHelper helper = null;
+        try {
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+            helper.addAttachment(attachName, inputStream);
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            UIutils.notificacionERROR("Error al enviar correo!").open();
+            throw new RuntimeException(e);
+        } catch (MailSendException e) {
+            UIutils.notificacionERROR("Error al enviar correo!").open();
+            throw new RuntimeException(e);
+        }
+
+
     }
 }

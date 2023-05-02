@@ -42,8 +42,8 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         i18n.setErrorMessage(i18nErrorMessage);
 
         i18n.setHeader(new LoginI18n.Header());
-        i18n.getHeader().setTitle("HelpDesk");
-        i18n.getHeader().setDescription("Registro de incidencias de TI");
+        i18n.getHeader().setTitle("Biomedicos - Incidencias");
+        i18n.getHeader().setDescription("Registro de incidencias de Biomedicos");
         i18n.setForm(i18nForm);
         i18n.setAdditionalInformation(null);
 

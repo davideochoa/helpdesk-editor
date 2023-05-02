@@ -58,9 +58,14 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.InputStreamSource;
 
 import javax.annotation.security.RolesAllowed;
+import javax.mail.MessagingException;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -593,7 +598,35 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         Button Btt_enviarEmail = new Button ("Enviar por Email");
         Btt_enviarEmail.addClickListener(e -> {
-            emailService.send("david@davidochoa.info","davideochoa@gmail.com","PRUEBA subject","PRUEBA BODY");
+            UIutils.notificacionNeutral("Enviando correo!").open();
+            Connection conn = null;
+            try {
+                conn = SQLDataSource(className,url,userName,password).getConnection();
+
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put("Folio", IF_Folio.getValue());
+                parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
+
+                JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+
+                byte[] output = JasperExportManager.exportReportToPdf(print);
+
+                InputStreamSource attachment = new ByteArrayResource(output);
+                emailService.sendWithAttach("davideochoa@gmail.com",
+                                        folioEntity.getEmail()+"",
+                                        "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                        "Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                        "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",
+                                        attachment);
+                UIutils.notificacionSUCCESS("Correo enviado!").open();
+
+            } catch (SQLException ex) {
+                UIutils.notificacionERROR("Error al enviar correo!").open();
+                throw new RuntimeException(ex);
+            } catch (JRException ex) {
+                UIutils.notificacionERROR("Error al enviar correo!").open();
+                throw new RuntimeException(ex);
+            }
         });
 
         Button Btt_nuevo = new Button ("Nuevo");
