@@ -36,6 +36,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -46,6 +47,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -79,7 +81,7 @@ import java.util.Optional;
 import static com.helpdeskeditor.application.configuration.DriverManagerDataSource.SQLDataSource;
 
 @PageTitle("Folios")
-@Route(value = "folios", layout = MainLayout.class)
+@Route(value = "folio", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @Slf4j
@@ -985,9 +987,40 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         });
 
         GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus").setResizable(true);//.setAutoWidth(true);
-        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion").setResizable(true);//.setAutoWidth(true);
+        Grid.Column<EstatusDAO> columnAnotacion = GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion").setResizable(true);//.setAutoWidth(true);
         GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setResizable(true);
         GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
+
+        Editor<EstatusDAO> editor = GridEstatus.getEditor();
+
+        Grid.Column<EstatusDAO> editColumn = GridEstatus.addComponentColumn(estatusDAO -> {
+            Button editButton = new Button("Edit");
+            editButton.addClickListener(e -> {
+                if (editor.isOpen())
+                    editor.cancel();
+                GridEstatus.getEditor().editItem(estatusDAO);
+            });
+            return editButton;
+        }).setWidth("150px").setFlexGrow(0);
+
+        Binder<EstatusDAO> binder = new Binder<>(EstatusDAO.class);
+        editor.setBinder(binder);
+        editor.setBuffered(false);
+
+        TextField lastNameField = new TextField();
+        lastNameField.setWidthFull();
+        binder.forField(lastNameField).asRequired("Last name must not be empty")
+                //.withStatusLabel("lastNameValidationMessage")
+                .bind(EstatusDAO::getAnotacion, EstatusDAO::setAnotacion);
+        columnAnotacion.setEditorComponent(lastNameField);
+
+        Button saveButton = new Button("Save", e -> editor.save());
+        Button cancelButton = new Button(VaadinIcon.CLOSE.create(),e -> editor.cancel());
+        cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON,ButtonVariant.LUMO_ERROR);
+        HorizontalLayout actions = new HorizontalLayout(saveButton,cancelButton);
+        actions.setPadding(false);
+        editColumn.setEditorComponent(actions);
+
         GridEstatus.addColumn(
                 new ComponentRenderer<>(Button::new, (button, estatus) -> {
                     button.addThemeVariants(ButtonVariant.LUMO_ICON,
@@ -1090,7 +1123,8 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                         }
                     });
                     button.setIcon(new Icon(VaadinIcon.TRASH));
-                })).setHeader("Eliminar").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
+                })
+        ).setHeader("Eliminar").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
 
         GridEstatus.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         GridEstatus.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);

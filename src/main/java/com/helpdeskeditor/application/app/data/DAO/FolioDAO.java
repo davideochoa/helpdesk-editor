@@ -19,6 +19,7 @@ public class FolioDAO {
     Date fecha;
     String unidad;
     String usuarioReporta;
+    String bien;
     String marca;
     String modelo;
     String numeroSerie;

@@ -38,7 +38,7 @@ import java.util.List;
 @CssImport(themeFor = "vaadin-grid", value = "vaadin-grid.css")
 public class FoliosGridView extends VerticalLayout{
     private Grid<FolioDAO> grid;
-    private TextField folioFilter,usuarioreportaFilter,marcaFilter,modeloFilter,
+    private TextField folioFilter,usuarioreportaFilter,bienFilter,marcaFilter,modeloFilter,
             numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
 
     private ComboBox<UsuarioSoporteEntity> CB_UsuarioSoporte = new ComboBox<UsuarioSoporteEntity>("Soporte");
@@ -69,6 +69,7 @@ public class FoliosGridView extends VerticalLayout{
                 folioFilter.clear();
                 folioFilter.clear();
                 usuarioreportaFilter.clear();
+                bienFilter.clear();
                 marcaFilter.clear();
                 modeloFilter.clear();
                 numeroSerieFilter.clear();
@@ -86,6 +87,7 @@ public class FoliosGridView extends VerticalLayout{
             folioFilter.clear();
             folioFilter.clear();
             usuarioreportaFilter.clear();
+            bienFilter.clear();
             marcaFilter.clear();
             modeloFilter.clear();
             numeroSerieFilter.clear();
@@ -103,24 +105,15 @@ public class FoliosGridView extends VerticalLayout{
         horizontalLayoutComboTecnicos.setMargin(false);
         horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
-        //grid.addColumn(FolioDAO :: getId).setHeader("Folio").setKey("id").setResizable(true);
-/*
-        grid.addColumn(new ComponentRenderer<>(RouterLink::new, (routerLink, folioDAO) -> {
-            routerLink.setRoute(FolioView.class,folioDAO.getId()+"");
-            routerLink.setText(folioDAO.getId()+"");
-
-        })).setHeader("FOLIO").setKey("id").setResizable(true);
-*/
-
         grid.addColumn(new ComponentRenderer<>(Anchor::new, (anchor, folioDAO) -> {
-            anchor.setHref("/folios/"+folioDAO.getId()+"");
+            anchor.setHref("/folio/"+folioDAO.getId()+"");
             anchor.setText(folioDAO.getId()+"");
-            //anchor.getElement().setAttribute("target", "_blank");
             anchor.getElement().setAttribute("router-ignore", "");
         })).setHeader("FOLIO").setKey("id").setResizable(true);
 
         grid.addColumn(FolioDAO :: getUnidad).setHeader("Unidad").setKey("unidad").setResizable(true);
         grid.addColumn(FolioDAO :: getUsuarioReporta).setHeader("Usuario Reporta").setKey("usuarioReporta").setResizable(true);
+        grid.addColumn(FolioDAO :: getBien).setHeader("Bien").setKey("bien").setResizable(true);
         grid.addColumn(FolioDAO :: getMarca).setHeader("Marca").setKey("marca").setResizable(true);
         grid.addColumn(FolioDAO :: getModelo).setHeader("Modelo").setKey("modelo").setResizable(true);
         grid.addColumn(FolioDAO :: getNumeroSerie).setHeader("Numero Serie").setKey("numeroSerie").setResizable(true);
@@ -161,6 +154,7 @@ public class FoliosGridView extends VerticalLayout{
         folioFilter = gridTextFieldFilter("id", headerRow);
         unidadFilter = gridTextFieldFilter("unidad", headerRow);
         usuarioreportaFilter = gridTextFieldFilter("usuarioReporta", headerRow);
+        bienFilter = gridTextFieldFilter("bien", headerRow);
         marcaFilter = gridTextFieldFilter("marca", headerRow);
         modeloFilter = gridTextFieldFilter("modelo", headerRow);
         numeroSerieFilter = gridTextFieldFilter("numeroSerie", headerRow);
@@ -185,6 +179,7 @@ public class FoliosGridView extends VerticalLayout{
             boolean folioFilterMatch = true;
             boolean unidadFilterMatch = true;
             boolean usuarioreportaFilterMatch = true;
+            boolean bienFilterMatch = true;
             boolean marcaFilterMatch = true;
             boolean modeloFilterMatch = true;
             boolean numeroSerieFilterMatch = true;
@@ -199,6 +194,9 @@ public class FoliosGridView extends VerticalLayout{
 
             if(!usuarioreportaFilter.isEmpty())
                 usuarioreportaFilterMatch = item.getUsuarioReporta().contains(usuarioreportaFilter.getValue().toUpperCase());
+
+            if(!bienFilter.isEmpty())
+                bienFilterMatch = item.getBien().contains(bienFilter.getValue().toUpperCase());
 
             if(!marcaFilter.isEmpty())
                 marcaFilterMatch = item.getMarca().contains(marcaFilter.getValue().toUpperCase());
@@ -215,8 +213,9 @@ public class FoliosGridView extends VerticalLayout{
             if(!estadoFilter.isEmpty())
                 estadoFilterMatch = item.getEstado().contains(estadoFilter.getValue().toUpperCase());
 
-            return folioFilterMatch && unidadFilterMatch && usuarioreportaFilterMatch && marcaFilterMatch &&
-                    modeloFilterMatch && numeroSerieFilterMatch && numeroInventarioFilterMatch && estadoFilterMatch;
+            return folioFilterMatch && unidadFilterMatch && usuarioreportaFilterMatch && bienFilterMatch &&
+                    marcaFilterMatch && modeloFilterMatch && numeroSerieFilterMatch && numeroInventarioFilterMatch &&
+                    estadoFilterMatch;
         });
     }
 

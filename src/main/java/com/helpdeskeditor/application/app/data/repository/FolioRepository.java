@@ -51,11 +51,14 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "fe.id,"+
             "fe.fecha,"+
             "ue.nombre AS unidad,"+
-            "fe.usuarioReporta, fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
+            "fe.usuarioReporta, "+
+            "be.nombre AS bien,"+
+            "fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
             "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado"+
             ") " +
-            "FROM FolioEntity fe,UnidadEntity ue "+
+            "FROM FolioEntity fe,UnidadEntity ue, BienEntity be "+
             "WHERE fe.idUnidad = ue.id "+
+            "AND fe.idBien = be.id "+
             "ORDER BY fe.id DESC", nativeQuery=false)
     List<FolioDAO> getAll();
 
@@ -64,35 +67,15 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "fe.id,"+
             "fe.fecha,"+
             "ue.nombre AS unidad,"+
-            "fe.usuarioReporta, fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
+            "fe.usuarioReporta, "+
+            "be.nombre AS bien,"+
+            "fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
             "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado"+
             ") " +
-            "FROM FolioEntity fe,UnidadEntity ue "+
+            "FROM FolioEntity fe,UnidadEntity ue, BienEntity be "+
             "WHERE fe.idUnidad = ue.id "+
             "AND fe.idUsuarioSoporteAsignado = :idUsuarioSoporteAsignado "+
+            "AND fe.idBien = be.id "+
             "ORDER BY fe.id DESC", nativeQuery=false)
     List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado);
-
-    /*
-      @Query(value="SELECT Folio,Unidad,Area,Incidencia,Bien,Marca,Modelo,NumeroSerie,NumeroInventario,MotivoReporte,Estado
-        FROM
-        (select
-        concentrado_folios_incidencias.Folio,
-        catalogo_unidades.Nombre AS Unidad,
-        catalogo_areas.Nombre AS Area,
-        catalogo_tipo_incidencias.Nombre AS Incidencia,
-        catalogo_bien.Nombre AS Bien,
-        Marca,
-        Modelo,
-        NumeroSerie,
-        NumeroInventario,
-        MotivoReporte,
-        CASE Activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS Estado
-        FROM concentrado_folios_incidencias,catalogo_unidades, catalogo_areas,catalogo_tipo_incidencias, catalogo_bien
-        WHERE concentrado_folios_incidencias.IdUnidad = catalogo_unidades.Id
-        AND concentrado_folios_incidencias.IdArea = catalogo_areas.Id
-        AND concentrado_folios_incidencias.IdTipoIncidencia = catalogo_tipo_incidencias.Id
-        AND concentrado_folios_incidencias.IdBien = catalogo_bien.Id) AS tabla
-        ORDER BY Folio DESC", nativeQuery=true)
-    */
 }
