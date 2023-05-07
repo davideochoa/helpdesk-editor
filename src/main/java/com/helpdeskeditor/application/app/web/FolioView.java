@@ -22,8 +22,11 @@ import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.EmailService;
 import com.helpdeskeditor.application.util.UIutils;
+import com.helpdeskeditor.application.util.ValidationMessage;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -122,6 +125,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             private ComboBox<IncidenciaEntity> CB_TipoIncidenciaFinal = new ComboBox<IncidenciaEntity>("Incidencia Final");
             private DatePicker DtePikr_fechaMovimiento = new DatePicker("Fecha Movimiento");
         private Button Btt_AgregarEstatus = new Button("AGREGAR");
+        private Button Btt_ModificarAnotacion = new Button("Modificar Anotacion");
         private Grid<EstatusDAO> GridEstatus = new Grid<>(EstatusDAO.class, false);
         //private Button Btt_SalvarEstatus = new Button("GUARDAR");
     private VerticalLayout VL_Firma = new VerticalLayout();
@@ -167,7 +171,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     private EmailService emailService;
 
     List<EstatusDAO> estatusEntityList = null;
-
+    EstatusDAO estatusDAO;
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
 
@@ -394,7 +398,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
                 if(folioEntity.getFirma() != null)
                     signature.setImage(signature.getImagen642URI(folioEntity.getFirma()));
-
             }
         }
         else{
@@ -987,39 +990,26 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         });
 
         GridEstatus.addColumn(EstatusDAO::getNombre).setHeader("Estatus").setResizable(true);//.setAutoWidth(true);
-        Grid.Column<EstatusDAO> columnAnotacion = GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion").setResizable(true);//.setAutoWidth(true);
+        GridEstatus.addColumn(EstatusDAO::getAnotacion).setHeader("Anotacion").setResizable(true);//.setAutoWidth(true);
         GridEstatus.addColumn(EstatusDAO::getNombrePropio).setHeader("Usuario").setResizable(true);
         GridEstatus.addColumn(EstatusDAO::getFecha).setHeader("Fecha").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true).setFlexGrow(0);
 
-        Editor<EstatusDAO> editor = GridEstatus.getEditor();
+        GridEstatus.addCellFocusListener(event -> {
+            estatusDAO = event.getItem().get();
+            TA_Anotacion.setValue(estatusDAO.getAnotacion());
+        });
 
-        Grid.Column<EstatusDAO> editColumn = GridEstatus.addComponentColumn(estatusDAO -> {
-            Button editButton = new Button("Edit");
-            editButton.addClickListener(e -> {
-                if (editor.isOpen())
-                    editor.cancel();
-                GridEstatus.getEditor().editItem(estatusDAO);
-            });
-            return editButton;
-        }).setWidth("150px").setFlexGrow(0);
+        Btt_ModificarAnotacion.addClickListener(e -> {
+            if(TA_Anotacion.getValue() != null){
+                EstatusEntity estatusEntity = estatusService.findById(estatusDAO.getId()).get();
+                estatusEntity.setAnotacion(TA_Anotacion.getValue());
+                estatusService.save(estatusEntity);
 
-        Binder<EstatusDAO> binder = new Binder<>(EstatusDAO.class);
-        editor.setBinder(binder);
-        editor.setBuffered(false);
-
-        TextField lastNameField = new TextField();
-        lastNameField.setWidthFull();
-        binder.forField(lastNameField).asRequired("Last name must not be empty")
-                //.withStatusLabel("lastNameValidationMessage")
-                .bind(EstatusDAO::getAnotacion, EstatusDAO::setAnotacion);
-        columnAnotacion.setEditorComponent(lastNameField);
-
-        Button saveButton = new Button("Save", e -> editor.save());
-        Button cancelButton = new Button(VaadinIcon.CLOSE.create(),e -> editor.cancel());
-        cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON,ButtonVariant.LUMO_ERROR);
-        HorizontalLayout actions = new HorizontalLayout(saveButton,cancelButton);
-        actions.setPadding(false);
-        editColumn.setEditorComponent(actions);
+                estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
+                GridEstatus.setItems(estatusEntityList);
+                TA_Anotacion.clear();
+            }
+        });
 
         GridEstatus.addColumn(
                 new ComponentRenderer<>(Button::new, (button, estatus) -> {
@@ -1132,7 +1122,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         FL_Estatus.add(CB_Estaus,TA_Anotacion,CB_SoporteAsignado,CB_TipoIncidenciaFinal,DtePikr_fechaMovimiento);
 
-        VL_Estatus.add(FL_Estatus,Btt_AgregarEstatus,GridEstatus);//,UIutils.lineaDivision(),
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(Btt_AgregarEstatus,Btt_ModificarAnotacion);
+
+        VL_Estatus.add(FL_Estatus,horizontalLayout,GridEstatus);//,UIutils.lineaDivision(),
                         //new H5("FIRMA"),FL_Firma);//,Btt_SalvarEstatus);
     }
 

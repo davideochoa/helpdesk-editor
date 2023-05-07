@@ -18,8 +18,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class EstatusDAO{
     Integer id;
     Integer folio;

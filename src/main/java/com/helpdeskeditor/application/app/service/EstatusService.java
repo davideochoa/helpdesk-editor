@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class EstatusService {
@@ -39,6 +41,10 @@ public class EstatusService {
     public void delete(EstatusEntity entity){
         log.info("EstatusService:public void delete(EstatusEntity entity)");
         estatusFacade.delete(entity);
+    }
+
+    public Optional<EstatusEntity> findById(Integer Id){
+        return estatusFacade.findById(Id);
     }
 
 }
