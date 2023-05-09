@@ -12,7 +12,7 @@ import java.util.Base64;
 
 /** @author David "F0rce" Dodlek */
 @Tag("lit-signature-pad")
-@JsModule("signature-widget.js")
+@JsModule("./signature-widget.js")
 @NpmPackage(value = "signature_pad", version = "4.0.4")
 @Slf4j
 public class SignaturePad extends Component implements HasSize {
