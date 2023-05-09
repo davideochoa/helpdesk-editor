@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<!-- Created with Jaspersoft Studio version 6.20.3.final using JasperReports Library version 6.20.3-415f9428cffdb6805c6f85bbb29ebaf18813a2ab  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="HelpDeskRPTIncidencia" pageWidth="612" pageHeight="792" whenNoDataType="NoPages" columnWidth="552" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="b107dece-19e8-42ee-99bd-92fde8d8dbf1">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MSSQLServer"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="497"/>
-	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="491"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="462"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="526"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="86"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="903"/>
 	<import value="net.sf.jasperreports.engine.*"/>
@@ -43,7 +43,10 @@ concentrado_folios_incidencias.IdUsuarioSoporteAsignado,
 catalogo_usuarios_soporte.NombrePropio AS SoporteAsignado,
 concentrado_folios_incidencias.fecha AS FechaCaptura,
 CASE concentrado_folios_incidencias.Activo WHEN 0 THEN 'false' ELSE 'true' END AS Activo,
-concentrado_folios_incidencias.firma
+concentrado_folios_incidencias.firma,
+concentrado_folios_incidencias.nombreFirma,
+concentrado_folios_incidencias.cargoFirma,
+concentrado_folios_incidencias.email
 FROM concentrado_folios_incidencias,
 catalogo_unidades,
 catalogo_areas,
@@ -163,17 +166,29 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 		<property name="com.jaspersoft.studio.field.name" value="Activo"/>
 		<property name="com.jaspersoft.studio.field.label" value="Activo"/>
 	</field>
-	<field name="firma" class="java.io.InputStream">
+	<field name="firma" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="firma"/>
 		<property name="com.jaspersoft.studio.field.label" value="firma"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="concentrado_folios_incidencias"/>
+	</field>
+	<field name="nombreFirma" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombreFirma"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombreFirma"/>
+	</field>
+	<field name="cargoFirma" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cargoFirma"/>
+		<property name="com.jaspersoft.studio.field.label" value="cargoFirma"/>
+	</field>
+	<field name="email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="email"/>
+		<property name="com.jaspersoft.studio.field.label" value="email"/>
 	</field>
 	<field name="NombreSoporte" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="NombreSoporte"/>
 		<property name="com.jaspersoft.studio.field.label" value="NombreSoporte"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_usuarios_soporte"/>
 	</field>
-	<field name="firmaSoporte" class="java.io.InputStream">
+	<field name="firmaSoporte" class="byte[]">
 		<property name="com.jaspersoft.studio.field.name" value="firmaSoporte"/>
 		<property name="com.jaspersoft.studio.field.label" value="firmaSoporte"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="catalogo_usuarios_soporte"/>
@@ -566,7 +581,7 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[DICTAMEN TÉCNICO ]]></text>
+				<text><![CDATA[HOJA DE SERVICIO]]></text>
 			</staticText>
 			<textField pattern="#,##0" isBlankWhenNull="true">
 				<reportElement key="textField" x="24" y="80" width="80" height="10" uuid="ceddb46e-a5dc-4306-bd61-2bbb40900bc3"/>
@@ -640,7 +655,7 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="117" splitType="Stretch">
+		<band height="122" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-9" x="7" y="17" width="257" height="86" uuid="ca4e9bfb-380f-410e-9b13-05896487b703"/>
 				<box>
@@ -683,12 +698,12 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 				</textElement>
 				<text><![CDATA[RECIBIO]]></text>
 			</staticText>
-			<image onErrorType="Icon">
-				<reportElement x="285" y="20" width="255" height="82" uuid="af3ebaf7-ebba-4345-a8bf-9b8f1b4b2c9a"/>
+			<image onErrorType="Blank">
+				<reportElement x="286" y="18" width="255" height="62" uuid="af3ebaf7-ebba-4345-a8bf-9b8f1b4b2c9a"/>
 				<imageExpression><![CDATA[$F{firma}]]></imageExpression>
 			</image>
-			<image onErrorType="Icon">
-				<reportElement x="10" y="20" width="250" height="70" uuid="958fc290-d0f3-4e2f-863c-1cffc31b9da8"/>
+			<image onErrorType="Blank">
+				<reportElement x="10" y="19" width="254" height="70" uuid="958fc290-d0f3-4e2f-863c-1cffc31b9da8"/>
 				<imageExpression><![CDATA[$F{firmaSoporte}]]></imageExpression>
 			</image>
 			<textField>
@@ -697,6 +712,20 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NombreSoporte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="74" width="255" height="14" uuid="98570972-e2d6-49d9-ab20-2f362a825e53">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombreFirma}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="88" width="255" height="14" uuid="45b60544-204d-430e-a6cf-982c6f2674d6">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cargoFirma}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>
