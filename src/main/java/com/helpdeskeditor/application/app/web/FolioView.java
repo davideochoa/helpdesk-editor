@@ -22,11 +22,8 @@ import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.EmailService;
 import com.helpdeskeditor.application.util.UIutils;
-import com.helpdeskeditor.application.util.ValidationMessage;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -39,7 +36,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -50,7 +46,6 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -64,13 +59,10 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
 
 import javax.annotation.security.RolesAllowed;
-import javax.mail.MessagingException;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -133,6 +125,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             private TextField TF_nombreFirma = new TextField("Nombre de quien firma");
             private TextField TF_cargo = new TextField("Cargo");
             private TextField TF_email = new TextField("Email");
+            private TextField TF_email2 = new TextField("copia Email");
             private SignaturePad signature = new SignaturePad();
 
 
@@ -213,8 +206,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         this.add(tabs, contenidoTab);
 
         borrar();
-
-        Chart chart = new Chart(ChartType.COLUMN);
     }
 
     private void layoutFirma(){
@@ -236,6 +227,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             String nombre = TF_nombreFirma.getValue();
             String cargo = TF_cargo.getValue();
             String email = TF_email.getValue();
+            String email2 = TF_email2.getValue();
 
             byte[] firma = signature.getImageBase64();
 
@@ -250,6 +242,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     folioEntity.setNombreFirma(nombre);
                     folioEntity.setCargoFirma(cargo);
                     folioEntity.setEmail(email);
+                    folioEntity.setEmail2(email2);
                     folioEntity.setFirma(firma);
 
                     folioService.save(folioEntity);
@@ -275,7 +268,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
         FL_Firma.setColspan(signature, 2);
 
-        FL_Firma.add(TF_nombreFirma,TF_cargo,TF_email);
+        FL_Firma.add(TF_nombreFirma,TF_cargo,TF_email,TF_email2);
         FL_Firma.add(signature);
         FL_Firma.add(buttonLayout);
 
@@ -617,8 +610,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 byte[] output = JasperExportManager.exportReportToPdf(print);
 
                 InputStreamSource attachment = new ByteArrayResource(output);
-                emailService.sendWithAttach("davideochoa@gmail.com",
+                emailService.sendWithAttach("ti.indesalud@gmail.com",
                                         folioEntity.getEmail()+"",
+                                        folioEntity.getEmail2()+"",
                                         "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
                                         "Folio de Servicio: "+IF_Folio.getValue().toString(),
                                         "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",
@@ -819,27 +813,14 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         Btt_SalvarMotivo.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         //VL_Motivo.add(FL_Motivo,CB_Prioridad,Btt_SalvarMotivo);
-
     }
 
     private void layoutEstatus(){
-       /* Folios pruebs: 10686 10685 10682 10675 10674
-        1:Apertura
-        2:Confirman Entrega/Solucion-Cierre
-        3:En espera de refacciones
-        4:En Atencion
-        5:Lista para entrega
-        6:Reasignar
-        7:Diagnostico Inicial
-        8:Diagnostico Final*/
-
         VL_Estatus.setMargin(false);
         VL_Estatus.setPadding(false);
 
         FL_Estatus.setResponsiveSteps(
-                // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
-                // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
         CB_Estaus.setItems(catalogoEstatusService.findAll());
@@ -920,16 +901,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                             if(estatusDAO.getIdEstatus() == idCerrar)
                                 existeCerrar = true;
             }
-
-            /* Folios pruebs: 10686 10685 10682 10675 10674
-            1:Apertura
-            2:Confirman Entrega/Solucion-Cierre
-            3:En espera de refacciones
-            4:En Atencion
-            5:Lista para entrega
-            6:Reasignar
-            7:Diagnostico Inicial
-            8:Diagnostico Final*/
 
             if(catalogoEstatusEntity.getId() == idApertura){
                 if(!existeApertura && !existeDiagnosticoInicial && !existeDiagnosticoFinal && !existeCerrar){
@@ -1186,4 +1157,5 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             IF_Folio.setValue(Integer.parseInt(parameter));
         }
     }
+
 }

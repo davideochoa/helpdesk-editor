@@ -89,4 +89,7 @@ public class FolioEntity {
 
     @Column(name = "email")
     String email;
+
+    @Column(name = "email2")
+    String email2;
 }

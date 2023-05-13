@@ -33,10 +33,10 @@ import java.util.List;
 @Slf4j
 @PageTitle("Listado de Folios")
 @Route(value = "foliosgrid", layout = MainLayout.class)
-//@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @CssImport(themeFor = "vaadin-grid", value = "vaadin-grid.css")
 public class FoliosGridView extends VerticalLayout{
+
     private Grid<FolioDAO> grid;
     private TextField folioFilter,usuarioreportaFilter,bienFilter,marcaFilter,modeloFilter,
             numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
@@ -218,5 +218,4 @@ public class FoliosGridView extends VerticalLayout{
                     estadoFilterMatch;
         });
     }
-
 }

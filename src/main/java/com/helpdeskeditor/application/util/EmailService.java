@@ -26,7 +26,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendWithAttach(String from, String to, String subject,
+    public void sendWithAttach(String from, String to, String cc, String subject,
                                String text, String attachName,
                                InputStreamSource inputStream) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -35,6 +35,7 @@ public class EmailService {
             helper = new MimeMessageHelper(message, true);
             helper.setFrom(from);
             helper.setTo(to);
+            helper.addCc(cc);
             helper.setSubject(subject);
             helper.setText(text, true);
             helper.addAttachment(attachName, inputStream);
