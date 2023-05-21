@@ -35,11 +35,12 @@ public class EstatusService {
     public EstatusEntity save(EstatusEntity entity){
         return estatusFacade.save(entity);
     }
+
     public void deleteById(Integer Id){
         estatusFacade.deleteById(Id);
     }
+
     public void delete(EstatusEntity entity){
-        log.info("EstatusService:public void delete(EstatusEntity entity)");
         estatusFacade.delete(entity);
     }
 

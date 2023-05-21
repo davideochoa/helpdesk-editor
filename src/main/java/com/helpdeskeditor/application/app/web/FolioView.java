@@ -318,6 +318,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         TF_cargo.clear();
         TF_email.clear();
         signature.clear();
+        signature.setImage(null);
+
+        estatusEntityList = estatusService.findAllDAO(0);
+        GridEstatus.setItems(estatusEntityList);
 
         folioEntity = null;
     }
@@ -365,7 +369,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 String motivoReporte = folioEntity.getMotivoReporte();
                 PrioridadEntity prioridad = prioridadService.findById(folioEntity.getIdPrioridad()).get();
 
-                //List<EstatusDAO>
                 estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
                 CB_Incidencia.setValue(incidenciaEntity);
