@@ -47,7 +47,28 @@ public class EmailService {
             UIutils.notificacionERROR("Error al enviar correo!").open();
             throw new RuntimeException(e);
         }
-
-
     }
+
+    public void sendWithAttach(String from, String to, String subject,
+                               String text, String attachName,
+                               InputStreamSource inputStream) {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        try {
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+            helper.addAttachment(attachName, inputStream);
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            UIutils.notificacionERROR("Error al enviar correo!").open();
+            throw new RuntimeException(e);
+        } catch (MailSendException e) {
+            UIutils.notificacionERROR("Error al enviar correo!").open();
+            throw new RuntimeException(e);
+        }
+    }
+
 }

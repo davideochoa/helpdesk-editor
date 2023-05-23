@@ -613,13 +613,32 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 byte[] output = JasperExportManager.exportReportToPdf(print);
 
                 InputStreamSource attachment = new ByteArrayResource(output);
-                emailService.sendWithAttach("ti.indesalud@gmail.com",
-                                        folioEntity.getEmail()+"",
-                                        folioEntity.getEmail2()+"",
-                                        "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
-                                        "Folio de Servicio: "+IF_Folio.getValue().toString(),
-                                        "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",
-                                        attachment);
+
+                if(folioEntity.getEmail2() != null){
+                    if(folioEntity.getEmail2().length() > 0){
+                        emailService.sendWithAttach("ti.indesalud@gmail.com",
+                                folioEntity.getEmail()+"",
+                                folioEntity.getEmail2()+"",
+                                "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                "Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",attachment);
+                    }
+                    else{
+                        emailService.sendWithAttach("ti.indesalud@gmail.com",
+                                folioEntity.getEmail()+"",
+                                "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                "Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",attachment);
+                    }
+                }
+                else{
+                    emailService.sendWithAttach("ti.indesalud@gmail.com",
+                            folioEntity.getEmail()+"",
+                            "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                            "Folio de Servicio: "+IF_Folio.getValue().toString(),
+                            "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",attachment);
+                }
+
                 UIutils.notificacionSUCCESS("Correo enviado!").open();
 
             } catch (SQLException ex) {
