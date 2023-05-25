@@ -619,14 +619,14 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                         emailService.sendWithAttach("ti.indesalud@gmail.com",
                                 folioEntity.getEmail()+"",
                                 folioEntity.getEmail2()+"",
-                                "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                "HelpDesk - Folio de Servicio: "+IF_Folio.getValue().toString(),
                                 "Folio de Servicio: "+IF_Folio.getValue().toString(),
                                 "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",attachment);
                     }
                     else{
                         emailService.sendWithAttach("ti.indesalud@gmail.com",
                                 folioEntity.getEmail()+"",
-                                "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                                "HelpDesk - Folio de Servicio: "+IF_Folio.getValue().toString(),
                                 "Folio de Servicio: "+IF_Folio.getValue().toString(),
                                 "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",attachment);
                     }
@@ -634,7 +634,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 else{
                     emailService.sendWithAttach("ti.indesalud@gmail.com",
                             folioEntity.getEmail()+"",
-                            "Biomedicos - Folio de Servicio: "+IF_Folio.getValue().toString(),
+                            "HelpDesk - Folio de Servicio: "+IF_Folio.getValue().toString(),
                             "Folio de Servicio: "+IF_Folio.getValue().toString(),
                             "Folio de Servicio: "+IF_Folio.getValue().toString()+".pdf",attachment);
                 }
