@@ -123,19 +123,13 @@ public class FoliosGridView extends VerticalLayout{
 
         grid.setClassNameGenerator(folio -> {
             if(folio.getEstado().equals("ABIERTO")){
-                if (folio.diasActivo() >= 5 && folio.diasActivo() <= 9){
-                    log.info("low-rating");
+                if (folio.diasActivo() >= 5 && folio.diasActivo() <= 9)
                     return "low-rating";
-                }
                 else
-                    if (folio.diasActivo() > 9){
-                        log.info("high-rating");
+                    if (folio.diasActivo() > 9)
                         return "high-rating";
-                    }
-                    else{
-                        log.info("null");
+                    else
                         return null;
-                    }
             }
             return null;
         });
