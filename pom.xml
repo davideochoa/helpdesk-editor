@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/project/03b96ffa-597f-4b61-8ab6-cc9a7d0d7235 -->
     <groupId>com.helpdeskeditor.application</groupId>
-    <artifactId>HelpDesk</artifactId>
+    <artifactId>HelpDeskBiomedico</artifactId>
     <name>helpdeskeditor</name>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <vaadin.version>23.2.8</vaadin.version>
         <!-- this parameter is needed as spring-boot bom overwrites it -->
         <selenium.version>4.5.3</selenium.version>
@@ -169,13 +169,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
