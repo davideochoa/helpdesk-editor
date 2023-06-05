@@ -15,12 +15,22 @@ import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 @AnonymousAllowed
 @PageTitle("Login")
 @Route(value = "login")
 @Slf4j
+
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
+/*
+    private String Titulo = "Biomedicos - Incidencias";
+    private String Description= "Registro de incidencias de Biomedicos";
+*/
+
+    private String Titulo = "T.I. - Incidencias";
+    private String Description= "Registro de incidencias de T.I.";
+
 
     private final AuthenticatedUser authenticatedUser;
 
@@ -42,8 +52,8 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         i18n.setErrorMessage(i18nErrorMessage);
 
         i18n.setHeader(new LoginI18n.Header());
-        i18n.getHeader().setTitle("Biomedicos - Incidencias");
-        i18n.getHeader().setDescription("Registro de incidencias de Biomedicos");
+        i18n.getHeader().setTitle(Titulo);
+        i18n.getHeader().setDescription(Description);
 
         i18n.setForm(i18nForm);
         i18n.setAdditionalInformation(null);
