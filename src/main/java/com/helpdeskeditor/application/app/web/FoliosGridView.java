@@ -22,6 +22,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
@@ -36,7 +37,6 @@ import java.util.List;
 @RolesAllowed({"USER","ADMIN"})
 @CssImport(themeFor = "vaadin-grid", value = "vaadin-grid.css")
 public class FoliosGridView extends VerticalLayout{
-
     private Grid<FolioDAO> grid;
     private TextField folioFilter,usuarioreportaFilter,bienFilter,marcaFilter,modeloFilter,
             numeroSerieFilter,numeroInventarioFilter,estadoFilter,unidadFilter;
@@ -44,6 +44,9 @@ public class FoliosGridView extends VerticalLayout{
     private ComboBox<UsuarioSoporteEntity> CB_UsuarioSoporte = new ComboBox<UsuarioSoporteEntity>("Soporte");
 
     private final FolioService folioService;
+
+    @Value("${server.servlet.context-path}")
+    private String context;
 
     public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser, UsuarioSoporteService usuarioSoporteService) {
         this.folioService = folioService;
@@ -106,7 +109,8 @@ public class FoliosGridView extends VerticalLayout{
         horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
         grid.addColumn(new ComponentRenderer<>(Anchor::new, (anchor, folioDAO) -> {
-            anchor.setHref("/folio/"+folioDAO.getId()+"");
+
+            anchor.setHref(context+"/folio/"+folioDAO.getId()+"");
             anchor.setText(folioDAO.getId()+"");
             anchor.getElement().setAttribute("router-ignore", "");
         })).setHeader("FOLIO").setKey("id").setResizable(true);

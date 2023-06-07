@@ -59,7 +59,7 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "FROM FolioEntity fe,UnidadEntity ue, BienEntity be "+
             "WHERE fe.idUnidad = ue.id "+
             "AND fe.idBien = be.id "+
-            "ORDER BY fe.id DESC", nativeQuery=false)
+            "ORDER BY estado,fe.id DESC", nativeQuery=false)
     List<FolioDAO> getAll();
 
 
@@ -76,6 +76,6 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "WHERE fe.idUnidad = ue.id "+
             "AND fe.idUsuarioSoporteAsignado = :idUsuarioSoporteAsignado "+
             "AND fe.idBien = be.id "+
-            "ORDER BY fe.id DESC", nativeQuery=false)
+            "ORDER BY estado,fe.id DESC", nativeQuery=false)
     List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado);
 }
