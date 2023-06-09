@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/project/03b96ffa-597f-4b61-8ab6-cc9a7d0d7235 -->
     <groupId>com.helpdeskeditor.application</groupId>
-    <artifactId>HelpDeskBioMedicos</artifactId>
-    <name>HelpDesk BioMedicos</name>
+    <artifactId>HelpDeskTI</artifactId>
+    <name>helpdeskeditor</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
