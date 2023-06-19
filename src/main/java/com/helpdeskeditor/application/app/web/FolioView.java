@@ -1093,7 +1093,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                                         UIutils.confirmDialog("Error al borrar estatus!","El estatus tiene estatus consecutivo)").open();
                                 }
                                 else{
-                                    if(estatus.getIdEstatus() == idDiagnosticoFinal){
+                                    if(estatus.getIdEstatus() == idCerrar){
                                         folioEntity.setActivo(true);
                                         folioService.save(folioEntity);
                                     }
