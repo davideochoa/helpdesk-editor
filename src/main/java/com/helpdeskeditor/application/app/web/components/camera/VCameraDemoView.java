@@ -11,6 +11,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.InputStreamFactory;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.io.FileNotFoundException;
 
 @Route(value = "vcamerademoview")
 @AnonymousAllowed
+@Slf4j
 public class VCameraDemoView extends AbstractCameraView {
 
     @Id("snap")
@@ -41,6 +43,7 @@ public class VCameraDemoView extends AbstractCameraView {
     @Id("video")
     Div videoContainer = new Div();
 
+
     public VCameraDemoView() {
 
         VerticalLayout vl = new VerticalLayout();
@@ -54,6 +57,8 @@ public class VCameraDemoView extends AbstractCameraView {
 
         takePicture.addClickListener(e -> {
             getCamera().takePicture();
+
+            log.info("takePicture.addClickListener");
         });
 
         preview.addClickListener(e -> {
@@ -74,7 +79,8 @@ public class VCameraDemoView extends AbstractCameraView {
 
         getCamera().showPreview();
         getCamera().addFinishedListener(e -> {
-
+            log.info("addFinishedListener "+e.toString());
+            log.info("addFinishedListener "+e.getMime());
             String mime = e.getMime();
             if (mime.contains("image")) {
                 setImage();
@@ -97,12 +103,12 @@ public class VCameraDemoView extends AbstractCameraView {
             InputStreamFactory f = () -> {
                 try {
                     return new FileInputStream(file);
-                } catch (FileNotFoundException e) {
+                }
+                catch (FileNotFoundException e) {
                 }
                 return null;
             };
-            Image image = new Image(new StreamResource("image", f),
-                    "The captured image");
+            Image image = new Image(new StreamResource("image", f),"The captured image");
             imageContainer.add(image);
         }
     }

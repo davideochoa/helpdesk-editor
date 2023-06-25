@@ -45,7 +45,7 @@ public class FoliosGridView extends VerticalLayout{
 
     private final FolioService folioService;
 
-    @Value("${server.servlet.context-path}")
+    //@Value("${server.servlet.context-path}")
     private String context;
 
     public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser, UsuarioSoporteService usuarioSoporteService) {
@@ -110,7 +110,7 @@ public class FoliosGridView extends VerticalLayout{
 
         grid.addColumn(new ComponentRenderer<>(Anchor::new, (anchor, folioDAO) -> {
 
-            anchor.setHref(context+"/folio/"+folioDAO.getId()+"");
+            anchor.setHref(context+"/folio/"+folioDAO.getId());
             anchor.setText(folioDAO.getId()+"");
             anchor.getElement().setAttribute("router-ignore", "");
         })).setHeader("FOLIO").setKey("id").setResizable(true);
