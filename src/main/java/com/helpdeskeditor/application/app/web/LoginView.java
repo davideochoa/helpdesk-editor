@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 @PageTitle("Login")
 @Route(value = "login")
 @Slf4j
-
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
    /* private String Titulo = "Biomedicos - Incidencias";
