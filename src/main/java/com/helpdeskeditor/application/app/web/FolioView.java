@@ -63,6 +63,7 @@ import org.springframework.core.io.InputStreamSource;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -567,7 +568,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     parameters.put("Folio", IF_Folio.getValue());
                     parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
-                    JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+                    InputStream template = getClass().getResourceAsStream("reportes/HelpDeskRPTIncidencia.jasper");
+
+                    //JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+                    JasperPrint print = JasperFillManager.fillReport(template, parameters, conn);
 
                     byte[] output = JasperExportManager.exportReportToPdf(print);
 
@@ -590,6 +594,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 } catch (JRException ex) {
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
+                    log.info(ex.getMessage());
                     throw new RuntimeException(ex);
                 }
             }
