@@ -570,16 +570,16 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     parameters.put("Folio", IF_Folio.getValue());
                     parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
-                    log.info("this:"+this);
+                    //log.info("this:"+this);
 
-                    ClassPathResource cpr = new ClassPathResource("/reportes/HelpDeskRPTIncidencia.jasper");
-                    InputStream template = cpr.getInputStream();
-                    log.info(template.toString()+" : "+template.getClass().getName()+" : "+template.getClass().getCanonicalName());
+                    //ClassPathResource cpr = new ClassPathResource("/reportes/HelpDeskRPTIncidencia.jasper");
+                    //InputStream template = cpr.getInputStream();
+                    //log.info(template.toString()+" : "+template.getClass().getName()+" : "+template.getClass().getCanonicalName());
 
                     //InputStream template = getClass().getClassLoader().getResourceAsStream("reportes/HelpDeskRPTIncidencia.jasper");
 
-                    //JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
-                    JasperPrint print = JasperFillManager.fillReport(template, parameters, conn);
+                    JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+                    //JasperPrint print = JasperFillManager.fillReport(template, parameters, conn);
 
                     byte[] output = JasperExportManager.exportReportToPdf(print);
 
@@ -603,8 +603,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     log.info(ex.getMessage());
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }

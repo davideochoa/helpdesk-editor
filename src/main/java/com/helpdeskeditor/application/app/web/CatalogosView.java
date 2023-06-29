@@ -504,7 +504,7 @@ public class CatalogosView extends VerticalLayout{
             byte[] firma = signature.getImageBase64();
 
             if(nombrePropio != null && userName != null && firma.length > 0){
-                if(!verificarExisteUsername(TF_userName.getValue())){
+                if(!verificarExisteUsername(userName.toUpperCase())){
                     usuarioSoporteEntity = new UsuarioSoporteEntity();
                     usuarioSoporteEntity.setNombrePropio(nombrePropio.toUpperCase());
                     usuarioSoporteEntity.setNombreUsuario(userName);
@@ -554,6 +554,7 @@ public class CatalogosView extends VerticalLayout{
     }
 
     private Boolean verificarExisteUsername(String userName){
+        log.info("userName:"+userName);
         UsuarioSoporteEntity usuario = usuarioSoporteService.findByNombreUsuario(userName);
 
         if(usuario != null)
