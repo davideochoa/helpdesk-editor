@@ -53,17 +53,23 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -170,6 +176,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     EstatusDAO estatusDAO;
     FolioEntity folioEntity = null;
     Dialog dialogProgressBarModificandoFolio = UIutils.dialogPorgressBarIndeterminate("Modificando Folio", "Espere mientras se modifica el folio");
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     public FolioView(UnidadService unidadService,
                      AreaService areaService,
@@ -570,16 +579,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     parameters.put("Folio", IF_Folio.getValue());
                     parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
-                    //log.info("this:"+this);
-
-                    //ClassPathResource cpr = new ClassPathResource("/reportes/HelpDeskRPTIncidencia.jasper");
-                    //InputStream template = cpr.getInputStream();
-                    //log.info(template.toString()+" : "+template.getClass().getName()+" : "+template.getClass().getCanonicalName());
-
-                    //InputStream template = getClass().getClassLoader().getResourceAsStream("reportes/HelpDeskRPTIncidencia.jasper");
-
                     JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
-                    //JasperPrint print = JasperFillManager.fillReport(template, parameters, conn);
 
                     byte[] output = JasperExportManager.exportReportToPdf(print);
 
@@ -603,6 +603,8 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     log.info(ex.getMessage());
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
