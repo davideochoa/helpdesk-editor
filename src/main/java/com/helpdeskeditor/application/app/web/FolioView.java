@@ -604,8 +604,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 } catch (NullPointerException ex) {
                     log.info(ex.getMessage());
                     throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
                 }
             }
             else

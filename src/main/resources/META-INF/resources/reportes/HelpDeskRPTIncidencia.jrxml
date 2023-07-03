@@ -643,7 +643,16 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch"/>
+		<band height="14" splitType="Stretch">
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-1" x="0" y="0" width="550" height="14" uuid="65453341-80d4-4480-9b4d-800e9cb344dc"/>
+				<subreportParameter name="Folio">
+					<subreportParameterExpression><![CDATA[$P{Folio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["C:\\reportes\\HelpDeskRPTIncidencia_subreport0.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
 	</detail>
 	<columnFooter>
 		<band height="122" splitType="Stretch">
