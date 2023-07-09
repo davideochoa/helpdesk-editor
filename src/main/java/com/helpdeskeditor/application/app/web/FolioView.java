@@ -58,6 +58,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -66,12 +67,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.ResourceUtils;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -81,6 +85,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 
 import static com.helpdeskeditor.application.configuration.DriverManagerDataSource.SQLDataSource;
 
@@ -579,7 +584,17 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     parameters.put("Folio", IF_Folio.getValue());
                     parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
-                    JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+
+                    File file = ResourceUtils.getFile("classpath:reportes/HelpDeskRPTIncidencia.jasper");
+                    InputStream in = new FileInputStream(file);
+
+                    JasperReport subJasperReport = (JasperReport) JRLoader.loadObject(in);
+
+                    byte[] datos = in.readAllBytes();
+                    log.info("datos:"+datos.length);
+
+                    JasperPrint print = JasperFillManager.fillReport(subJasperReport, parameters, conn);
+                    //JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
 
                     byte[] output = JasperExportManager.exportReportToPdf(print);
 
@@ -600,9 +615,13 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (JRException ex) {
+                    log.info(ex.getMessage());
+                    log.info(ex.getMessageKey());
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     log.info(ex.getMessage());
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
