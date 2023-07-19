@@ -19,6 +19,9 @@ public class AuthenticatedUser {
 
     private final UsuarioSoporteRepository userRepository;
 
+    @Value("${server.servlet.context-path}")
+    private String context;
+
     @Autowired
     public AuthenticatedUser(UsuarioSoporteRepository userRepository) {
         this.userRepository = userRepository;
@@ -35,7 +38,7 @@ public class AuthenticatedUser {
     }
 
     public void logout() {
-        UI.getCurrent().getPage().setLocation(SecurityConfiguration.LOGOUT_URL);
+        UI.getCurrent().getPage().setLocation(context+SecurityConfiguration.LOGOUT_URL);
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null);
     }

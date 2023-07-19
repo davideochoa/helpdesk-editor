@@ -26,7 +26,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
    /* private String Titulo = "Biomedicos - Incidencias";
     private String Description= "Registro de incidencias de Biomedicos";*/
 
-    private String Titulo = "T.I. - Incidencias";
+    private String Titulo = "T.I. - HelpDesk";
     private String Description= "Registro de incidencias de T.I.";
 
     private final AuthenticatedUser authenticatedUser;

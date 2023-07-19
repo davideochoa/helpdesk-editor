@@ -584,17 +584,14 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     parameters.put("Folio", IF_Folio.getValue());
                     parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
-
+/*
                     File file = ResourceUtils.getFile("classpath:reportes/HelpDeskRPTIncidencia.jasper");
                     InputStream in = new FileInputStream(file);
 
                     JasperReport subJasperReport = (JasperReport) JRLoader.loadObject(in);
-
-                    byte[] datos = in.readAllBytes();
-                    log.info("datos:"+datos.length);
-
-                    JasperPrint print = JasperFillManager.fillReport(subJasperReport, parameters, conn);
-                    //JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+*/
+                    //JasperPrint print = JasperFillManager.fillReport(subJasperReport, parameters, conn);
+                    JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
 
                     byte[] output = JasperExportManager.exportReportToPdf(print);
 
@@ -620,8 +617,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     log.info(ex.getMessage());
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }

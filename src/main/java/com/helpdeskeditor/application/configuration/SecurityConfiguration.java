@@ -18,6 +18,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
+
+    @Value("${server.servlet.context-path}")
+    private String context;
+
     public static final String LOGOUT_URL = "/";
 
   /*  @Bean
@@ -34,7 +38,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll();
         super.configure(http);
-        setLoginView(http, LoginView.class, LOGOUT_URL);
+        setLoginView(http, LoginView.class, context+LOGOUT_URL);
     }
 
 }

@@ -1,1 +1,1 @@
-java -jar helpdeskeditor-1.0-SNAPSHOT.jar
+java -jar target/HelpDeskTI.jar
