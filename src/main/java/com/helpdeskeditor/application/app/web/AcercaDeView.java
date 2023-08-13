@@ -1,6 +1,8 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.web.components.camera.VCameraDemoView;
+import com.helpdeskeditor.application.app.web.charts.VerticalBarChartExample;
+import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
@@ -25,11 +27,20 @@ public class AcercaDeView extends VerticalLayout {
 
         img.setWidth("200px");
         add(img);
+        VerticalBarChartExample vbce = new VerticalBarChartExample();
+        ApexCharts chart = vbce.build();
+        chart.getStyle().set("align-self", "center");
+
 
         add(new H2("This place intentionally left empty"));
 
-        VCameraDemoView vc = new VCameraDemoView();
-        add(vc);
+        FormLayout fm = new FormLayout();
+        fm.add(chart);
+
+        add(fm);
+
+        //VCameraDemoView vc = new VCameraDemoView();
+        //add(vc);
 
         add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
 
