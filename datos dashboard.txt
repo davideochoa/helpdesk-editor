@@ -1,5 +1,16 @@
 por periodo de tiempo
 
-Folios por unidad
-Folios por incidencia
-Folios por unidad x incidencia
+Folios por unidades (PASTEL) Cuantos Folios por unidad
+Folios por incidencia (PASTEL) Cuantos Folios por incidencia
+
+Folios por unidad x incidencia (PASTEL) De una unidad cuantos folios por incidencia
+Folios por incidencia x unidad (PASTEL) De una incidencia cuantos por unidad
+
+
+por periodo de tiempo (limitar a 10 por grafica)
+
+Folios por unidades (linea tiempo)
+Folios de incdencias por unidades (linea tiempo)
+
+
+

@@ -1,8 +1,10 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.web.charts.PieChartExample;
 import com.helpdeskeditor.application.app.web.charts.VerticalBarChartExample;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
@@ -27,14 +29,26 @@ public class AcercaDeView extends VerticalLayout {
 
         img.setWidth("200px");
         add(img);
+
+        add(new H2("This place intentionally left empty"));
+
         VerticalBarChartExample vbce = new VerticalBarChartExample();
         ApexCharts chart = vbce.build();
         chart.getStyle().set("align-self", "center");
 
-
-        add(new H2("This place intentionally left empty"));
+        PieChartExample pce = new PieChartExample();
+        ApexCharts pchart = pce.build();
 
         FormLayout fm = new FormLayout();
+        fm.setResponsiveSteps(
+                // Use one column by default
+                new ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new ResponsiveStep("500px", 2));
+        // Stretch the username field over 2 columns
+
+        //fm.setColspan(chart, 2);
+        fm.add(pchart);
         fm.add(chart);
 
         add(fm);
