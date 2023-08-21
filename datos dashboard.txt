@@ -1,6 +1,16 @@
 por periodo de tiempo
 
 Folios por unidades (PASTEL) Cuantos Folios por unidad
+--------------------------------------------------------------
+SELECT catalogo_unidades.Nombre,tabla1.cantidadFolios FROM
+(SELECT IdUnidad, COUNT(IdUnidad) AS cantidadFolios FROM concentrado_folios_incidencias
+WHERE fecha BETWEEN '2023-01-01 00:00:00' AND '2023-12-31 23:59:59'
+GROUP BY IdUnidad) AS tabla1,
+catalogo_unidades
+WHERE tabla1.IdUnidad = catalogo_unidades.Id
+ORDER BY Nombre
+--------------------------------------------------------------
+
 Folios por incidencia (PASTEL) Cuantos Folios por incidencia
 
 Folios por unidad x incidencia (PASTEL) De una unidad cuantos folios por incidencia

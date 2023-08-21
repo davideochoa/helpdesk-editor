@@ -1,8 +1,9 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.web.charts.PieChartExample;
+import com.helpdeskeditor.application.app.web.charts.LineMultiYAxesChartExample;
 import com.helpdeskeditor.application.app.web.charts.VerticalBarChartExample;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
+import com.helpdeskeditor.application.util.ApexCharts.config.TitleSubtitle;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H2;
@@ -36,8 +37,11 @@ public class AcercaDeView extends VerticalLayout {
         ApexCharts chart = vbce.build();
         chart.getStyle().set("align-self", "center");
 
-        PieChartExample pce = new PieChartExample();
-        ApexCharts pchart = pce.build();
+        LineMultiYAxesChartExample lm = new LineMultiYAxesChartExample();
+        TitleSubtitle titleSubtitle = new TitleSubtitle();
+        titleSubtitle.setText("PRUEBAA");
+        lm.withTitle(titleSubtitle);
+        ApexCharts plchart = lm.build();
 
         FormLayout fm = new FormLayout();
         fm.setResponsiveSteps(
@@ -48,8 +52,9 @@ public class AcercaDeView extends VerticalLayout {
         // Stretch the username field over 2 columns
 
         //fm.setColspan(chart, 2);
-        fm.add(pchart);
+
         fm.add(chart);
+        fm.add(plchart);
 
         add(fm);
 

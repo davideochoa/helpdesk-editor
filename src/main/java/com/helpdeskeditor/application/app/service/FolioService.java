@@ -1,8 +1,8 @@
 package com.helpdeskeditor.application.app.service;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
+import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
-import com.helpdeskeditor.application.app.data.repository.FolioRepository;
 import com.helpdeskeditor.application.app.facade.FolioFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +56,9 @@ public class FolioService {
 
     public List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado){
         return folioFacade.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
+    }
+
+    public List<FoliosxUnidadDTO> getFoliosXUnidad(){
+        return folioFacade.getFoliosXUnidad();
     }
 }

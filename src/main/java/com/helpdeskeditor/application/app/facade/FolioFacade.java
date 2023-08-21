@@ -1,6 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
+import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,5 +64,9 @@ public class FolioFacade {
     @Transactional(readOnly = true)
     public List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado){
         return folioRepository.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
+    }
+
+    public List<FoliosxUnidadDTO> getFoliosXUnidad(){
+        return folioRepository.getFoliosXUnidad();
     }
 }
