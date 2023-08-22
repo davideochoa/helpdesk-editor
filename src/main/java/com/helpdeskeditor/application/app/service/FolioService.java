@@ -7,6 +7,7 @@ import com.helpdeskeditor.application.app.facade.FolioFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +59,7 @@ public class FolioService {
         return folioFacade.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
     }
 
-    public List<FoliosxUnidadDTO> getFoliosXUnidad(){
-        return folioFacade.getFoliosXUnidad();
+    public List<FoliosxUnidadDTO> getFoliosXUnidad(LocalDate LDfechaInicio, LocalDate LDfechaFin){
+        return folioFacade.getFoliosXUnidad(LDfechaInicio, LDfechaFin);
     }
 }

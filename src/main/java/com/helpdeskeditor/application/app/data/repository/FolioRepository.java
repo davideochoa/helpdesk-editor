@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -84,19 +85,10 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "ue.nombre, "+
             "COUNT(fe.idUnidad) AS cantidadFolios) "+
             "FROM FolioEntity fe,UnidadEntity ue "+
-            "WHERE fe.fecha BETWEEN '2023-01-01 00:00:00' AND '2023-01-31 23:59:59' "+
+            "WHERE fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
             "AND fe.idUnidad = ue.id "+
             "GROUP BY fe.idUnidad,ue.nombre  "+
             "ORDER BY cantidadFolios DESC, ue.nombre",nativeQuery=false)
-    List<FoliosxUnidadDTO> getFoliosXUnidad();
-/*
-SELECT catalogo_unidades.Nombre,tabla1.cantidadFolios FROM
-(SELECT IdUnidad, COUNT(IdUnidad) AS cantidadFolios FROM concentrado_folios_incidencias
-WHERE fecha BETWEEN '2023-01-01 00:00:00' AND '2023-12-31 23:59:59'
-GROUP BY IdUnidad) AS tabla1,
-catalogo_unidades
-WHERE tabla1.IdUnidad = catalogo_unidades.Id
-ORDER BY Nombre
-*/
+    List<FoliosxUnidadDTO> getFoliosXUnidad(LocalDate LDfechaInicio, LocalDate LDfechaFin);
 
 }
