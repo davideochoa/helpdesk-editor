@@ -16,7 +16,9 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URISyntaxException;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class DashBoard extends VerticalLayout {
     DatePicker fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
     List<FoliosxUnidadDTO> foliosXUnidadDTOList = new ArrayList<FoliosxUnidadDTO>();
+
+    ApexCharts pchart = null;
     public DashBoard(FolioService folioService) {
         FormLayout dashBoard = new FormLayout();
         dashBoard.setResponsiveSteps(
@@ -39,12 +43,39 @@ public class DashBoard extends VerticalLayout {
                 new ResponsiveStep("500px", 3));
 
         dashBoard.add(fechaInicio,fechaFin,B_GenerarGrafico);
+        fechaInicio.setValue(LocalDate.now(ZoneId.systemDefault()));
+        fechaFin.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+
+        foliosXUnidadDTOList = folioService.getFoliosXUnidad(Date.valueOf(fechaInicio.getValue()),Date.valueOf(fechaFin.getValue()));
 
         B_GenerarGrafico.addClickListener(clickEvent -> {
-            LocalDate LDfechaInicio = fechaInicio.getValue();
-            LocalDate LDfechaFin = fechaFin.getValue();
+            foliosXUnidadDTOList = folioService.getFoliosXUnidad(Date.valueOf(fechaInicio.getValue()),Date.valueOf(fechaFin.getValue()));
 
-            foliosXUnidadDTOList = folioService.getFoliosXUnidad(LDfechaInicio,LDfechaFin);
+            String nombre[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getNombre2).toArray(String[] :: new);
+            Long folios[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFolios).toArray(Long[] :: new);
+
+            int sumaTotalFolios = 0;
+            for(FoliosxUnidadDTO folio : foliosXUnidadDTOList) {
+                log.info("getIdUnidad:" + folio.getNombre() + " getCantidadFolios:" + folio.getCantidadFolios());
+                sumaTotalFolios = sumaTotalFolios + folio.getCantidadFolios().intValue();
+            }
+
+            TitleSubtitle titleSubtitleFoliosUnidades = new TitleSubtitle();
+            titleSubtitleFoliosUnidades.setText("Folios por Unidades. Total: "+sumaTotalFolios+" folios generados");
+
+            Double[] doubles = new Double[folios.length];
+
+            for(int pos = 0; pos < folios.length ; pos++){
+                doubles[pos] = Double.parseDouble(Long.toString(folios[pos]));
+            }
+
+            pchart.setLabels(nombre);
+            pchart.setSeries(doubles);
+
+            pchart.setTitle(titleSubtitleFoliosUnidades);
+
+            pchart.render();
 
         });
 
@@ -60,10 +91,13 @@ public class DashBoard extends VerticalLayout {
 
         TitleSubtitle titleSubtitleFoliosUnidades = new TitleSubtitle();
         titleSubtitleFoliosUnidades.setText("Folios por Unidades. Total: "+sumaTotalFolios+" folios generados");
-        ApexCharts pchart = new PieChartExample(nombre,folios).withTitle(titleSubtitleFoliosUnidades).build();
+
+        pchart = new PieChartExample(nombre,folios).withTitle(titleSubtitleFoliosUnidades).build();
         pchart.setHeight("400px");
+
         dashBoard.setColspan(pchart, 3);
         dashBoard.add(pchart);
+
 
 
         add(dashBoard);

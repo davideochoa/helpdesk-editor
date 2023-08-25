@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.helpdeskeditor.application.app.data.repository.FolioRepository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,7 @@ public class FolioFacade {
         return folioRepository.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
     }
 
-    public List<FoliosxUnidadDTO> getFoliosXUnidad(LocalDate LDfechaInicio, LocalDate LDfechaFin){
+    public List<FoliosxUnidadDTO> getFoliosXUnidad(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosXUnidad(LDfechaInicio, LDfechaFin);
     }
 }

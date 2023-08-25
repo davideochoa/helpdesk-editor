@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -89,6 +90,6 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "AND fe.idUnidad = ue.id "+
             "GROUP BY fe.idUnidad,ue.nombre  "+
             "ORDER BY cantidadFolios DESC, ue.nombre",nativeQuery=false)
-    List<FoliosxUnidadDTO> getFoliosXUnidad(LocalDate LDfechaInicio, LocalDate LDfechaFin);
+    List<FoliosxUnidadDTO> getFoliosXUnidad(Date LDfechaInicio, Date LDfechaFin);
 
 }
