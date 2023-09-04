@@ -1,10 +1,8 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.service.FolioService;
-import com.helpdeskeditor.application.app.web.charts.PieChartExample;
-import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
-import com.helpdeskeditor.application.util.ApexCharts.config.TitleSubtitle;
+import com.helpdeskeditor.application.app.web.graficas.GraficaPastelFoliosXIncidecia;
+import com.helpdeskeditor.application.app.web.graficas.GraficaPastelFoliosXUnidad;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -15,12 +13,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.URISyntaxException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 @Slf4j
 @PageTitle("DashBoard")
@@ -28,79 +24,65 @@ import java.util.List;
 @AnonymousAllowed
 //@RolesAllowed("USER")
 public class DashBoard extends VerticalLayout {
-    DatePicker fechaInicio = new DatePicker("Fecha Inicio");
-    DatePicker fechaFin = new DatePicker("Fecha Fin");
+    DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
+    DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
-    List<FoliosxUnidadDTO> foliosXUnidadDTOList = new ArrayList<FoliosxUnidadDTO>();
 
-    ApexCharts pchart = null;
+
     public DashBoard(FolioService folioService) {
-        FormLayout dashBoard = new FormLayout();
-        dashBoard.setResponsiveSteps(
+        FormLayout flFechas = new FormLayout();
+        flFechas.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 3));
 
-        dashBoard.add(fechaInicio,fechaFin,B_GenerarGrafico);
-        fechaInicio.setValue(LocalDate.now(ZoneId.systemDefault()));
-        fechaFin.setValue(LocalDate.now(ZoneId.systemDefault()));
+        FormLayout flgraficas = new FormLayout();
+        flgraficas.setResponsiveSteps(
+                // Use one column by default
+                new ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new ResponsiveStep("500px", 3));
 
+        flFechas.add(DP_fechaInicio, DP_fechaFin,B_GenerarGrafico);
 
-        foliosXUnidadDTOList = folioService.getFoliosXUnidad(Date.valueOf(fechaInicio.getValue()),Date.valueOf(fechaFin.getValue()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -730);
+
+        DP_fechaInicio.setValue( new Date(calendar.getTimeInMillis()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        DP_fechaFin.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+        Date inicio = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        Date fin = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+
+        final FormLayout[] dash = new FormLayout[2];
+        dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio, fin);
+        dash[1] = new GraficaPastelFoliosXIncidecia(folioService, inicio, fin);
+        flgraficas.add(dash[0]);
+        flgraficas.add(dash[1]);
+
+        flgraficas.setColspan(dash[0], 3);
+        flgraficas.setColspan(dash[1], 3);
 
         B_GenerarGrafico.addClickListener(clickEvent -> {
-            foliosXUnidadDTOList = folioService.getFoliosXUnidad(Date.valueOf(fechaInicio.getValue()),Date.valueOf(fechaFin.getValue()));
+            flgraficas.removeAll();
 
-            String nombre[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getNombre2).toArray(String[] :: new);
-            Long folios[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFolios).toArray(Long[] :: new);
+            Date inicio2 = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+            Date fin2 = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
-            int sumaTotalFolios = 0;
-            for(FoliosxUnidadDTO folio : foliosXUnidadDTOList) {
-                log.info("getIdUnidad:" + folio.getNombre() + " getCantidadFolios:" + folio.getCantidadFolios());
-                sumaTotalFolios = sumaTotalFolios + folio.getCantidadFolios().intValue();
-            }
+            dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio2, fin2);
+            dash[1] = new GraficaPastelFoliosXIncidecia(folioService, inicio2, fin2);
 
-            TitleSubtitle titleSubtitleFoliosUnidades = new TitleSubtitle();
-            titleSubtitleFoliosUnidades.setText("Folios por Unidades. Total: "+sumaTotalFolios+" folios generados");
+            flgraficas.add(dash[0]);
+            flgraficas.add(dash[1]);
 
-            Double[] doubles = new Double[folios.length];
-
-            for(int pos = 0; pos < folios.length ; pos++){
-                doubles[pos] = Double.parseDouble(Long.toString(folios[pos]));
-            }
-
-            pchart.setLabels(nombre);
-            pchart.setSeries(doubles);
-
-            pchart.setTitle(titleSubtitleFoliosUnidades);
-
-            pchart.render();
-
+            flgraficas.setColspan(dash[0], 3);
+            flgraficas.setColspan(dash[1], 3);
         });
 
+        add(flFechas);
 
-        String nombre[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getNombre2).toArray(String[] :: new);
-        Long folios[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFolios).toArray(Long[] :: new);
-
-        int sumaTotalFolios = 0;
-        for(FoliosxUnidadDTO folio : foliosXUnidadDTOList) {
-            log.info("getIdUnidad:" + folio.getNombre() + " getCantidadFolios:" + folio.getCantidadFolios());
-            sumaTotalFolios = sumaTotalFolios + folio.getCantidadFolios().intValue();
-        }
-
-        TitleSubtitle titleSubtitleFoliosUnidades = new TitleSubtitle();
-        titleSubtitleFoliosUnidades.setText("Folios por Unidades. Total: "+sumaTotalFolios+" folios generados");
-
-        pchart = new PieChartExample(nombre,folios).withTitle(titleSubtitleFoliosUnidades).build();
-        pchart.setHeight("400px");
-
-        dashBoard.setColspan(pchart, 3);
-        dashBoard.add(pchart);
-
-
-
-        add(dashBoard);
+        add(flgraficas);
 
     }
 

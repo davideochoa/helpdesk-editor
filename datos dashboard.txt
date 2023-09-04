@@ -11,7 +11,19 @@ WHERE tabla1.IdUnidad = catalogo_unidades.Id
 ORDER BY Nombre
 --------------------------------------------------------------
 
+
 Folios por incidencia (PASTEL) Cuantos Folios por incidencia
+--------------------------------------------------------------
+SELECT
+Nombre AS Incidencia,
+COUNT(IdTipoIncidencia) AS cantidadFolios
+FROM concentrado_folios_incidencias, catalogo_tipo_incidencias
+WHERE fecha BETWEEN '2023-01-01 00:00:00' AND '2023-12-31 23:59:59'
+AND concentrado_folios_incidencias.IdTipoIncidencia = catalogo_tipo_incidencias.Id
+GROUP BY IdTipoIncidencia,Nombre
+ORDER BY Incidencia ASC
+--------------------------------------------------------------
+
 
 Folios por unidad x incidencia (PASTEL) De una unidad cuantos folios por incidencia
 Folios por incidencia x unidad (PASTEL) De una incidencia cuantos por unidad

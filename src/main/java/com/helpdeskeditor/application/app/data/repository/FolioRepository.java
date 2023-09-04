@@ -2,13 +2,13 @@ package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
+import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -89,7 +89,16 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "WHERE fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
             "AND fe.idUnidad = ue.id "+
             "GROUP BY fe.idUnidad,ue.nombre  "+
-            "ORDER BY cantidadFolios DESC, ue.nombre",nativeQuery=false)
+            "ORDER BY ue.nombre ASC",nativeQuery=false)
     List<FoliosxUnidadDTO> getFoliosXUnidad(Date LDfechaInicio, Date LDfechaFin);
 
+    @Query(value = "SELECT new com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO("+
+            "ie.nombre, "+
+            "COUNT(fe.idTipoIncidencia) AS cantidadIncidencias) "+
+            "FROM FolioEntity fe,IncidenciaEntity ie "+
+            "WHERE fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
+            "AND fe.idTipoIncidencia = ie.id "+
+            "GROUP BY fe.idTipoIncidencia,ie.nombre  "+
+            "ORDER BY ie.nombre ASC",nativeQuery=false)
+    List<FolioxIncidenciaDTO> getFoliosXIncidencia(Date LDfechaInicio, Date LDfechaFin);
 }

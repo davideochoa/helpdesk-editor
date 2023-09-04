@@ -2,14 +2,14 @@ package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
+import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.helpdeskeditor.application.app.data.repository.FolioRepository;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,5 +70,9 @@ public class FolioFacade {
 
     public List<FoliosxUnidadDTO> getFoliosXUnidad(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosXUnidad(LDfechaInicio, LDfechaFin);
+    }
+
+    public List<FolioxIncidenciaDTO> getFoliosXIncidencia(Date LDfechaInicio, Date LDfechaFin){
+        return folioRepository.getFoliosXIncidencia(LDfechaInicio, LDfechaFin);
     }
 }

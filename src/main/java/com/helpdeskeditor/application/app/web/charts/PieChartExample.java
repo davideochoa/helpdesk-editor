@@ -12,21 +12,15 @@ import com.helpdeskeditor.application.util.ApexCharts.config.responsive.builder.
 
 public class PieChartExample extends ApexChartsBuilder {
 
-    public PieChartExample(String nombre[],Long folios[]) {
+    public PieChartExample(String nombre[],Double folios[]) {
         Toolbar toolbar = new Toolbar();
         toolbar.setShow(true);
         Export export = new Export();
 
         toolbar.setExport(export);
 
-        Double[] doubles = new Double[folios.length];
-
-        for(int pos = 0; pos < folios.length ; pos++){
-            doubles[pos] = Double.parseDouble(Long.toString(folios[pos]));
-        }
-
         super.withLabels(nombre);
-        super.withSeries(doubles);
+        super.withSeries(folios);
 
         withChart(ChartBuilder.get().withType(Type.PIE).withToolbar(toolbar).build())
                 //.withLabels("Team A", "Team B", "Team C", "Team D", "Team E")
