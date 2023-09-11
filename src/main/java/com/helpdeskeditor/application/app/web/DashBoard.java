@@ -3,6 +3,7 @@ package com.helpdeskeditor.application.app.web;
 import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.app.web.graficas.GraficaPastelFoliosXIncidecia;
 import com.helpdeskeditor.application.app.web.graficas.GraficaPastelFoliosXUnidad;
+import com.helpdeskeditor.application.app.web.graficas.GraficasIntegrales;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -27,7 +28,6 @@ public class DashBoard extends VerticalLayout {
     DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
-
 
     public DashBoard(FolioService folioService) {
         FormLayout flFechas = new FormLayout();
@@ -55,14 +55,18 @@ public class DashBoard extends VerticalLayout {
         Date inicio = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         Date fin = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
-        final FormLayout[] dash = new FormLayout[2];
+        final FormLayout[] dash = new FormLayout[3];
         dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio, fin);
         dash[1] = new GraficaPastelFoliosXIncidecia(folioService, inicio, fin);
+        dash[2] = new GraficasIntegrales(folioService, inicio, fin);
+
         flgraficas.add(dash[0]);
         flgraficas.add(dash[1]);
+        flgraficas.add(dash[2]);
 
         flgraficas.setColspan(dash[0], 3);
         flgraficas.setColspan(dash[1], 3);
+        flgraficas.setColspan(dash[2], 3);
 
         B_GenerarGrafico.addClickListener(clickEvent -> {
             flgraficas.removeAll();
@@ -72,12 +76,15 @@ public class DashBoard extends VerticalLayout {
 
             dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio2, fin2);
             dash[1] = new GraficaPastelFoliosXIncidecia(folioService, inicio2, fin2);
-
-            flgraficas.add(dash[0]);
-            flgraficas.add(dash[1]);
+            dash[2] = new GraficasIntegrales(folioService, inicio, fin);
 
             flgraficas.setColspan(dash[0], 3);
             flgraficas.setColspan(dash[1], 3);
+            flgraficas.setColspan(dash[2], 3);
+
+            flgraficas.add(dash[0]);
+            flgraficas.add(dash[1]);
+            flgraficas.add(dash[2]);
         });
 
         add(flFechas);

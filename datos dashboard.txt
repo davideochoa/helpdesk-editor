@@ -1,6 +1,6 @@
 por periodo de tiempo
 
-Folios por unidades (PASTEL) Cuantos Folios por unidad
+*** Folios por unidades (PASTEL) Cuantos Folios por unidad
 --------------------------------------------------------------
 SELECT catalogo_unidades.Nombre,tabla1.cantidadFolios FROM
 (SELECT IdUnidad, COUNT(IdUnidad) AS cantidadFolios FROM concentrado_folios_incidencias
@@ -12,7 +12,7 @@ ORDER BY Nombre
 --------------------------------------------------------------
 
 
-Folios por incidencia (PASTEL) Cuantos Folios por incidencia
+*** Folios por incidencia (PASTEL) Cuantos Folios por incidencia
 --------------------------------------------------------------
 SELECT
 Nombre AS Incidencia,
@@ -24,14 +24,38 @@ GROUP BY IdTipoIncidencia,Nombre
 ORDER BY Incidencia ASC
 --------------------------------------------------------------
 
+_____________________________________________________________________________________
+*** Folios por unidad x incidencia (PASTEL) De una unidad cuantos folios por incidencia
+select
+catalogo_unidades.Nombre AS Unidad,
+catalogo_bien.Nombre AS Bien,
+COUNT(catalogo_bien.Nombre) AS Cantidad
+FROM concentrado_folios_incidencias, catalogo_unidades,catalogo_bien
+WHERE fecha BETWEEN '2023-01-01 00:00:00' AND '2023-12-31 23:59:59'
+AND IdUnidad = catalogo_unidades.Id
+AND IdBien = catalogo_bien.Id
+GROUP BY catalogo_unidades.Nombre,catalogo_bien.Nombre
+ORDER BY Unidad,Bien
+_______________________________________________________________________________________
 
-Folios por unidad x incidencia (PASTEL) De una unidad cuantos folios por incidencia
-Folios por incidencia x unidad (PASTEL) De una incidencia cuantos por unidad
+___________________________________________________________________________________
+*** Folios por incidencia x unidad (PASTEL) De una incidencia cuantos por unidad
+select
+catalogo_bien.Nombre AS Bien,
+catalogo_unidades.Nombre AS Unidad,
+COUNT(catalogo_unidades.Nombre) AS Cantidad
+FROM concentrado_folios_incidencias, catalogo_unidades,catalogo_bien
+WHERE fecha BETWEEN '2023-01-01 00:00:00' AND '2023-12-31 23:59:59'
+AND IdUnidad = catalogo_unidades.Id
+AND IdBien = catalogo_bien.Id
+GROUP BY catalogo_bien.Nombre,catalogo_unidades.Nombre
+ORDER BY Bien, Unidad
+______________________________________________________________________________________
 
 
 por periodo de tiempo (limitar a 10 por grafica)
 
-Folios por unidades (linea tiempo)
+Folios generados (linea tiempo)
 Folios de incdencias por unidades (linea tiempo)
 
 

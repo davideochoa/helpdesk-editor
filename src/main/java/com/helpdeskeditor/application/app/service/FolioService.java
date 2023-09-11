@@ -3,6 +3,7 @@ package com.helpdeskeditor.application.app.service;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
+import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.facade.FolioFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,9 @@ public class FolioService {
 
     public List<FolioxIncidenciaDTO> getFoliosXIncidencia(Date LDfechaInicio, Date LDfechaFin){
         return folioFacade.getFoliosXIncidencia(LDfechaInicio, LDfechaFin);
+    }
+
+    public List<IncidenciaXUnidad> getFoliosIncidenciaXUnidad(Date LDfechaInicio, Date LDfechaFin){
+        return folioFacade.getFoliosIncidenciaXUnidad(LDfechaInicio,LDfechaFin);
     }
 }

@@ -7,13 +7,16 @@ import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.helpdeskeditor.application.util.ApexCharts.config.TitleSubtitle;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Slf4j
 public class GraficaPastelFoliosXUnidad extends FormLayout{
+
 
     public GraficaPastelFoliosXUnidad(FolioService folioService, Date fechaInicio, Date fechaFin) {
         this.setResponsiveSteps(
@@ -25,9 +28,6 @@ public class GraficaPastelFoliosXUnidad extends FormLayout{
         List<FoliosxUnidadDTO> foliosXUnidadDTOList = new ArrayList<FoliosxUnidadDTO>();
 
         foliosXUnidadDTOList = folioService.getFoliosXUnidad(fechaInicio, fechaFin);
-
-        log.info("fechaInicio: "+fechaInicio+" : fechaFin: "+fechaFin);
-        log.info("foliosXUnidadDTOList.size(): "+foliosXUnidadDTOList.size());
 
         this.setResponsiveSteps(
                 // Use one column by default
