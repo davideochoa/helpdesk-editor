@@ -5,11 +5,13 @@ import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
 import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 public class GraficasIntegrales extends FormLayout {
 
     public GraficasIntegrales(FolioService folioService, Date LDfechaInicio, Date LDfechaFin) {
@@ -23,18 +25,25 @@ public class GraficasIntegrales extends FormLayout {
 
         List<FoliosxUnidadDTO> foliosxUnidadDTOList = new ArrayList<>();
 
-        String nombreUnidad = incidenciaXUnidadList.get(0).getUnidad();
+        String nombreUnidad = null;
         for(IncidenciaXUnidad incidenciaXUnidad : incidenciaXUnidadList){
-            FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
+            if(nombreUnidad == null)
+                nombreUnidad = incidenciaXUnidad.getUnidad();
+
             if(nombreUnidad.equals(incidenciaXUnidad.getUnidad())){
+                FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
                 foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
                 foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
 
                 foliosxUnidadDTOList.add(foliosxUnidadDTO);
+
+                log.info("nombreUnidad:"+nombreUnidad+" : "+incidenciaXUnidad.getUnidad()+" : "+foliosxUnidadDTO.getNombre()+" : "+foliosxUnidadDTO.getCantidadFolios());
             }
             else{
                 String etiquetas[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
                 Double valores[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFoliosDouble).toArray(Double[] :: new);
+
+                log.info(nombreUnidad+" : " +etiquetas + " : "+ valores);
 
                 ApexCharts apexCharts = GraficaPastelIncidenciasXUnidad.get(nombreUnidad,etiquetas,valores);
                 apexCharts.setHeight("400px");
