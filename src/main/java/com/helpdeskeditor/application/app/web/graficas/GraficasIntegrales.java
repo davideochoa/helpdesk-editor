@@ -31,6 +31,7 @@ public class GraficasIntegrales extends FormLayout {
                 nombreUnidad = incidenciaXUnidad.getUnidad();
 
             if(nombreUnidad.equals(incidenciaXUnidad.getUnidad())){
+                log.info("if nombreUnidad:"+nombreUnidad);
                 FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
                 foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
                 foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
@@ -43,7 +44,11 @@ public class GraficasIntegrales extends FormLayout {
                 String etiquetas[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
                 Double valores[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFoliosDouble).toArray(Double[] :: new);
 
-                log.info(nombreUnidad+" : " +etiquetas + " : "+ valores);
+                int pos = 0;
+                while(pos < etiquetas.length) {
+                    log.info(nombreUnidad + " : " + etiquetas[pos] + " : " + valores[pos]);
+                    pos++;
+                }
 
                 ApexCharts apexCharts = GraficaPastelIncidenciasXUnidad.get(nombreUnidad,etiquetas,valores);
                 apexCharts.setHeight("400px");
@@ -53,6 +58,7 @@ public class GraficasIntegrales extends FormLayout {
                 this.add(apexCharts);
 
                 nombreUnidad = incidenciaXUnidad.getUnidad();
+                log.info("else nombreUnidad:"+nombreUnidad);
             }
         }
 
