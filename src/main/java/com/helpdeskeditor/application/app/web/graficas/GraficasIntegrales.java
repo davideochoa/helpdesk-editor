@@ -25,43 +25,43 @@ public class GraficasIntegrales extends FormLayout {
 
         List<FoliosxUnidadDTO> foliosxUnidadDTOList = new ArrayList<>();
 
-        String nombreUnidad = null;
+        String unidadActual = null;
         for(IncidenciaXUnidad incidenciaXUnidad : incidenciaXUnidadList){
-            if(nombreUnidad == null)
-                nombreUnidad = incidenciaXUnidad.getUnidad();
 
-            if(nombreUnidad.equals(incidenciaXUnidad.getUnidad())){
-                log.info("if nombreUnidad:"+nombreUnidad);
-                FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
-                foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
-                foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
+            if(unidadActual == null)
+                unidadActual = incidenciaXUnidad.getUnidad();
 
-                foliosxUnidadDTOList.add(foliosxUnidadDTO);
-
-                log.info("nombreUnidad:"+nombreUnidad+" : "+incidenciaXUnidad.getUnidad()+" : "+foliosxUnidadDTO.getNombre()+" : "+foliosxUnidadDTO.getCantidadFolios());
-            }
-            else{
+            if(unidadActual != incidenciaXUnidad.getUnidad()){
                 String etiquetas[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
                 Double valores[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFoliosDouble).toArray(Double[] :: new);
 
                 int pos = 0;
                 while(pos < etiquetas.length) {
-                    log.info(nombreUnidad + " : " + etiquetas[pos] + " : " + valores[pos]);
+                    log.info(unidadActual + " : " + etiquetas[pos] + " : " + valores[pos]);
                     pos++;
                 }
 
-                ApexCharts apexCharts = GraficaPastelIncidenciasXUnidad.get(nombreUnidad,etiquetas,valores);
+                ApexCharts apexCharts = GraficaPastelIncidenciasXUnidad.get(unidadActual,etiquetas,valores);
                 apexCharts.setHeight("400px");
 
                 this.setColspan(apexCharts, 3);
 
                 this.add(apexCharts);
 
-                nombreUnidad = incidenciaXUnidad.getUnidad();
-                log.info("else nombreUnidad:"+nombreUnidad);
+                //log.info("else nombreUnidad:"+unidadActual);
             }
-        }
+            //log.info("if nombreUnidad:"+unidadActual);
+            FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
+            foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
+            foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
 
+            foliosxUnidadDTOList.add(foliosxUnidadDTO);
+
+            //log.info("nombreUnidad:"+unidadActual+" : "+incidenciaXUnidad.getUnidad()+" : "+foliosxUnidadDTO.getNombre()+" : "+foliosxUnidadDTO.getCantidadFolios());
+
+            unidadActual = incidenciaXUnidad.getUnidad();
+
+        }
 
     }
 }
