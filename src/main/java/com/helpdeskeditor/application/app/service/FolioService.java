@@ -72,4 +72,8 @@ public class FolioService {
     public List<IncidenciaXUnidad> getFoliosIncidenciaXUnidad(Date LDfechaInicio, Date LDfechaFin){
         return folioFacade.getFoliosIncidenciaXUnidad(LDfechaInicio,LDfechaFin);
     }
+
+    public List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin){
+        return folioFacade.getFoliosIncidenciaXBien(LDfechaInicio,LDfechaFin);
+    }
 }

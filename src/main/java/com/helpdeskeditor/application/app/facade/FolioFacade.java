@@ -80,4 +80,8 @@ public class FolioFacade {
     public List<IncidenciaXUnidad> getFoliosIncidenciaXUnidad(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosIncidenciaXUnidad(LDfechaInicio,LDfechaFin);
     }
+
+    public List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin){
+        return folioRepository.getFoliosIncidenciaXBien(LDfechaInicio,LDfechaFin);
+    }
 }
