@@ -2,6 +2,7 @@ package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.web.charts.LineMultiYAxesChartExample;
 import com.helpdeskeditor.application.app.web.charts.VerticalBarChartExample;
+import com.helpdeskeditor.application.app.web.components.camera.VCameraDemoView;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.helpdeskeditor.application.util.ApexCharts.config.TitleSubtitle;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -49,17 +50,14 @@ public class AcercaDeView extends VerticalLayout {
                 new ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 2));
-        // Stretch the username field over 2 columns
-
-        //fm.setColspan(chart, 2);
 
         fm.add(chart);
         fm.add(plchart);
 
         add(fm);
 
-        //VCameraDemoView vc = new VCameraDemoView();
-        //add(vc);
+        VCameraDemoView vc = new VCameraDemoView();
+        add(vc);
 
         add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
 

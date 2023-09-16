@@ -5,6 +5,7 @@ import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
 import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H2;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class GraficasIntegralesXBien extends FormLayout {
                 new ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 3));
+
+        this.add(new H2("INCIDENCIAS POR BIEN"));
 
         List<IncidenciaXUnidad> incidenciaXUnidadList = folioService.getFoliosIncidenciaXBien(LDfechaInicio, LDfechaFin);
 
