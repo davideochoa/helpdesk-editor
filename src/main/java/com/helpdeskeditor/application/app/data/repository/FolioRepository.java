@@ -114,4 +114,16 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY ue.nombre,be.nombre  "+
             "ORDER BY ue.nombre ASC, be.nombre ASC",nativeQuery=false)
     List<IncidenciaXUnidad> getFoliosIncidenciaXUnidad(Date LDfechaInicio, Date LDfechaFin);
+
+    @Query(value = "SELECT new com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad("+
+            "be.nombre AS bien, "+
+            "ue.nombre As unidad, "+
+            "COUNT(ue.nombre) AS cantidadIncidencias) "+
+            "FROM FolioEntity fe, UnidadEntity ue, BienEntity be "+
+            "WHERE fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
+            "AND fe.idBien = be.id "+
+            "AND fe.idUnidad = ue.id AND fe.idBien = be.id "+
+            "GROUP BY be.nombre,ue.nombre  "+
+            "ORDER BY be.nombre ASC, ue.nombre ASC",nativeQuery=false)
+    List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin);
 }

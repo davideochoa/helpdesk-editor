@@ -12,9 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 @Slf4j
-public class GraficasIntegrales extends FormLayout {
+public class GraficasIntegralesXUnidad extends FormLayout {
 
-    public GraficasIntegrales(FolioService folioService, Date LDfechaInicio, Date LDfechaFin) {
+    public GraficasIntegralesXUnidad(FolioService folioService, Date LDfechaInicio, Date LDfechaFin) {
         this.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),
@@ -26,20 +26,26 @@ public class GraficasIntegrales extends FormLayout {
         List<FoliosxUnidadDTO> foliosxUnidadDTOList = new ArrayList<>();
 
         String unidadActual = null;
+        String unidadNueva;
         for(IncidenciaXUnidad incidenciaXUnidad : incidenciaXUnidadList){
 
-            if(unidadActual == null)
+            if(unidadActual == null) {
                 unidadActual = incidenciaXUnidad.getUnidad();
+            }
 
-            if(unidadActual != incidenciaXUnidad.getUnidad()){
+            unidadNueva = incidenciaXUnidad.getUnidad();
+
+            if(unidadActual.equals(unidadNueva)){
+                FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
+                foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
+                foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
+
+                foliosxUnidadDTOList.add(foliosxUnidadDTO);
+            }
+            else{
+
                 String etiquetas[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
                 Double valores[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFoliosDouble).toArray(Double[] :: new);
-
-                int pos = 0;
-                while(pos < etiquetas.length) {
-                    log.info(unidadActual + " : " + etiquetas[pos] + " : " + valores[pos]);
-                    pos++;
-                }
 
                 ApexCharts apexCharts = GraficaPastelIncidenciasXUnidad.get(unidadActual,etiquetas,valores);
                 apexCharts.setHeight("400px");
@@ -47,21 +53,15 @@ public class GraficasIntegrales extends FormLayout {
                 this.setColspan(apexCharts, 3);
 
                 this.add(apexCharts);
+                foliosxUnidadDTOList = new ArrayList<>();
+                FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
+                foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
+                foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
 
-                //log.info("else nombreUnidad:"+unidadActual);
+                foliosxUnidadDTOList.add(foliosxUnidadDTO);
+
+                unidadActual = unidadNueva;
             }
-            //log.info("if nombreUnidad:"+unidadActual);
-            FoliosxUnidadDTO foliosxUnidadDTO = new FoliosxUnidadDTO();
-            foliosxUnidadDTO.setNombre(incidenciaXUnidad.getBien());
-            foliosxUnidadDTO.setCantidadFolios(incidenciaXUnidad.getCantidadFolios());
-
-            foliosxUnidadDTOList.add(foliosxUnidadDTO);
-
-            //log.info("nombreUnidad:"+unidadActual+" : "+incidenciaXUnidad.getUnidad()+" : "+foliosxUnidadDTO.getNombre()+" : "+foliosxUnidadDTO.getCantidadFolios());
-
-            unidadActual = incidenciaXUnidad.getUnidad();
-
         }
-
     }
 }
