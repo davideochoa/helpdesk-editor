@@ -48,7 +48,7 @@ public class DashBoard extends VerticalLayout {
         flFechas.add(DP_fechaInicio, DP_fechaFin,B_GenerarGrafico);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -365);
+        calendar.add(Calendar.DATE, -30);
 
         DP_fechaInicio.setValue( new Date(calendar.getTimeInMillis()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         DP_fechaFin.setValue(LocalDate.now(ZoneId.systemDefault()));
