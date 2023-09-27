@@ -56,6 +56,33 @@ ________________________________________________________________________________
 por periodo de tiempo (limitar a 10 por grafica)
 
 Folios generados (linea tiempo)
+------------------------------------------------
+select
+CONCAT(
+YEAR(fecha), ' ',
+CASE MONTH(fecha)
+WHEN 1 THEN 'ENERO'
+WHEN 2 THEN 'FEBRERO'
+WHEN 3 THEN 'MARZO'
+WHEN 4 THEN 'ABRIL'
+WHEN 5 THEN 'MAYO'
+WHEN 6 THEN 'JUNIO'
+WHEN 7 THEN 'JULIO'
+WHEN 8 THEN 'AGOSTO'
+WHEN 9 THEN 'SEPTIEMBRE'
+WHEN 10 THEN 'OCTUBRE'
+WHEN 11 THEN 'NOVIEMBRE'
+WHEN 12 THEN 'DICIEMBRE'
+END
+) AS mes,
+COUNT(MONTH(fecha)) as folios
+from concentrado_folios_incidencias
+where fecha BETWEEN '2022-09-26 00:00:00' AND '2023-09-26 23:59:59'
+GROUP BY YEAR(fecha),MONTH(fecha)
+ORDER BY YEAR(fecha),MONTH(fecha)
+------------------------------------------------
+
+
 Folios de incdencias por unidades (linea tiempo)
 
 
