@@ -1,10 +1,10 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.service.FolioService;
-import com.helpdeskeditor.application.app.web.graficas.GraficaPastelFoliosXIncidecia;
-import com.helpdeskeditor.application.app.web.graficas.GraficaPastelFoliosXUnidad;
-import com.helpdeskeditor.application.app.web.graficas.GraficasIntegralesXBien;
-import com.helpdeskeditor.application.app.web.graficas.GraficasIntegralesXUnidad;
+import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXIncidecia;
+import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXUnidad;
+import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficasIntegralesXBien;
+import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficasIntegralesXUnidad;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -25,12 +25,12 @@ import java.util.Date;
 @Route(value = "dashboard", layout = MainLayout.class)
 @AnonymousAllowed
 //@RolesAllowed("USER")
-public class DashBoard extends VerticalLayout {
+public class DashBoard1 extends VerticalLayout {
     DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
 
-    public DashBoard(FolioService folioService) {
+    public DashBoard1(FolioService folioService) {
         FormLayout flFechas = new FormLayout();
         flFechas.setResponsiveSteps(
                 // Use one column by default

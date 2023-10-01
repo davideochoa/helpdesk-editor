@@ -1,6 +1,6 @@
-package com.helpdeskeditor.application.app.web.graficas;
+package com.helpdeskeditor.application.app.web.graficas.Dasboard1;
 
-import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
+import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.app.web.charts.PieChartExample;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
@@ -9,25 +9,26 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Slf4j
-public class GraficaPastelFoliosXUnidad extends FormLayout{
+public class GraficaPastelFoliosXIncidecia extends FormLayout{
 
-
-    public GraficaPastelFoliosXUnidad(FolioService folioService, Date fechaInicio, Date fechaFin) {
+    public GraficaPastelFoliosXIncidecia(FolioService folioService,Date fechaInicio, Date fechaFin) {
         this.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 3));
 
-        List<FoliosxUnidadDTO> foliosXUnidadDTOList = new ArrayList<FoliosxUnidadDTO>();
+        List<FolioxIncidenciaDTO> folioxIncidenciaDTOList = new ArrayList<>();
 
-        foliosXUnidadDTOList = folioService.getFoliosXUnidad(fechaInicio, fechaFin);
+        folioxIncidenciaDTOList = folioService.getFoliosXIncidencia(fechaInicio, fechaFin);
+
+        log.info("fechaInicio: "+fechaInicio+" : fechaFin: "+fechaFin);
+        log.info("folioxIncidenciaDTOList.size(): "+folioxIncidenciaDTOList.size());
 
         this.setResponsiveSteps(
                 // Use one column by default
@@ -35,8 +36,8 @@ public class GraficaPastelFoliosXUnidad extends FormLayout{
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 3));
 
-        String nombre[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
-        Long folios[] = foliosXUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFolios).toArray(Long[] :: new);
+        String nombre[] = folioxIncidenciaDTOList.stream().map(FolioxIncidenciaDTO:: getNombre2).toArray(String[] :: new);
+        Long folios[] = folioxIncidenciaDTOList.stream().map(FolioxIncidenciaDTO :: getCantidadFolios).toArray(Long[] :: new);
 
         Double[] doubles = new Double[folios.length];
 
@@ -45,7 +46,7 @@ public class GraficaPastelFoliosXUnidad extends FormLayout{
         }
 
         int sumaTotalFolios = 0;
-        for(FoliosxUnidadDTO folio : foliosXUnidadDTOList)
+        for(FolioxIncidenciaDTO folio : folioxIncidenciaDTOList)
             sumaTotalFolios = sumaTotalFolios + folio.getCantidadFolios().intValue();
 
         TitleSubtitle titleSubtitleFoliosUnidades = new TitleSubtitle();

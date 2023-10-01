@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.graficas;
+package com.helpdeskeditor.application.app.web.graficas.Dasboard1;
 
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
@@ -13,18 +13,18 @@ import java.util.Date;
 import java.util.List;
 
 @Slf4j
-public class GraficasIntegralesXUnidad extends FormLayout {
+public class GraficasIntegralesXBien extends FormLayout {
 
-    public GraficasIntegralesXUnidad(FolioService folioService, Date LDfechaInicio, Date LDfechaFin) {
+    public GraficasIntegralesXBien(FolioService folioService, Date LDfechaInicio, Date LDfechaFin) {
         this.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
                 new ResponsiveStep("500px", 3));
 
-        this.add(new H2("INCIDENCIAS POR UNIDAD"));
+        this.add(new H2("INCIDENCIAS POR BIEN"));
 
-        List<IncidenciaXUnidad> incidenciaXUnidadList = folioService.getFoliosIncidenciaXUnidad(LDfechaInicio, LDfechaFin);
+        List<IncidenciaXUnidad> incidenciaXUnidadList = folioService.getFoliosIncidenciaXBien(LDfechaInicio, LDfechaFin);
 
         List<FoliosxUnidadDTO> foliosxUnidadDTOList = new ArrayList<>();
 
@@ -46,7 +46,6 @@ public class GraficasIntegralesXUnidad extends FormLayout {
                 foliosxUnidadDTOList.add(foliosxUnidadDTO);
             }
             else{
-
                 String etiquetas[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
                 Double valores[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFoliosDouble).toArray(Double[] :: new);
 
@@ -64,7 +63,17 @@ public class GraficasIntegralesXUnidad extends FormLayout {
                 foliosxUnidadDTOList.add(foliosxUnidadDTO);
 
                 unidadActual = unidadNueva;
+
             }
         }
+        String etiquetas[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO:: getNombre2).toArray(String[] :: new);
+        Double valores[] = foliosxUnidadDTOList.stream().map(FoliosxUnidadDTO :: getCantidadFoliosDouble).toArray(Double[] :: new);
+
+        ApexCharts apexCharts = GraficaPastelIncidenciasXUnidad.get(unidadActual,etiquetas,valores);
+        apexCharts.setHeight("400px");
+
+        this.setColspan(apexCharts, 3);
+
+        this.add(apexCharts);
     }
 }

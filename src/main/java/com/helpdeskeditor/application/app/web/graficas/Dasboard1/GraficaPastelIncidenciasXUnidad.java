@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.graficas;
+package com.helpdeskeditor.application.app.web.graficas.Dasboard1;
 
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.service.FolioService;
