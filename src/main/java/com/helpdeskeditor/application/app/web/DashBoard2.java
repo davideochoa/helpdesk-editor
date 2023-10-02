@@ -71,7 +71,7 @@ public class DashBoard2 extends VerticalLayout {
             Date inicio2 = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             Date fin2 = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
-            dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio2, fin2);
+            dash[0] = new GraficaLineaFoliosGenerados(folioService, inicio2, fin2);
 
             flgraficas.setColspan(dash[0], 3);
 
