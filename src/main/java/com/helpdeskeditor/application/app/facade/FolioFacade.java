@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.facade;
 
+import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
@@ -83,5 +84,9 @@ public class FolioFacade {
 
     public List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosIncidenciaXBien(LDfechaInicio,LDfechaFin);
+    }
+
+    public List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin){
+        return folioRepository.getCantidadFoliosGeneradosXMes(LDfechaInicio,LDfechaFin);
     }
 }

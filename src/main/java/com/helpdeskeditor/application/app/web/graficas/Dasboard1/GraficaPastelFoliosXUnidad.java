@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 public class GraficaPastelFoliosXUnidad extends FormLayout{
 
-
     public GraficaPastelFoliosXUnidad(FolioService folioService, Date fechaInicio, Date fechaFin) {
         this.setResponsiveSteps(
                 // Use one column by default

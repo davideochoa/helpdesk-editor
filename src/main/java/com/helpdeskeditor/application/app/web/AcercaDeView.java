@@ -34,28 +34,6 @@ public class AcercaDeView extends VerticalLayout {
 
         add(new H2("This place intentionally left empty"));
 
-        VerticalBarChartExample vbce = new VerticalBarChartExample();
-        ApexCharts chart = vbce.build();
-        chart.getStyle().set("align-self", "center");
-
-        LineMultiYAxesChartExample lm = new LineMultiYAxesChartExample();
-        TitleSubtitle titleSubtitle = new TitleSubtitle();
-        titleSubtitle.setText("PRUEBAA");
-        lm.withTitle(titleSubtitle);
-        ApexCharts plchart = lm.build();
-
-        FormLayout fm = new FormLayout();
-        fm.setResponsiveSteps(
-                // Use one column by default
-                new ResponsiveStep("0", 1),
-                // Use two columns, if layout's width exceeds 500px
-                new ResponsiveStep("500px", 2));
-
-        fm.add(chart);
-        fm.add(plchart);
-
-        add(fm);
-
         VCameraDemoView vc = new VCameraDemoView();
         add(vc);
 

@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -23,8 +24,8 @@ import java.util.Date;
 @Slf4j
 @PageTitle("DashBoard")
 @Route(value = "dashboard", layout = MainLayout.class)
-@AnonymousAllowed
-//@RolesAllowed("USER")
+//@AnonymousAllowed
+@RolesAllowed("ADMIN")
 public class DashBoard1 extends VerticalLayout {
     DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");

@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.data.repository;
 
+import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
@@ -126,4 +127,21 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY be.nombre,ue.nombre  "+
             "ORDER BY be.nombre ASC, ue.nombre ASC",nativeQuery=false)
     List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin);
+
+    @Query(value = "SELECT new com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO("+
+            "YEAR(fe.fecha) as fecha, " +
+            "CASE MONTH(fe.fecha) " +
+                "WHEN 1 THEN 'ENE' " + "WHEN 2 THEN 'FEB' " +
+                "WHEN 3 THEN 'MAR' " + "WHEN 4 THEN 'ABR' " +
+                "WHEN 5 THEN 'MAY' " + "WHEN 6 THEN 'JUN' " +
+                "WHEN 7 THEN 'JUL' " + "WHEN 8 THEN 'AGOS' " +
+                "WHEN 9 THEN 'SEP' " + "WHEN 10 THEN 'OCT' " +
+                "WHEN 11 THEN 'NOV' " + "WHEN 12 THEN 'DIC' "+
+            "END AS categoria, " +
+            "COUNT(MONTH(fe.fecha)) as data) "+
+            "from FolioEntity fe " +
+            "where fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
+            "GROUP BY YEAR(fe.fecha),MONTH(fe.fecha) " +
+            "ORDER BY YEAR(fe.fecha),MONTH(fe.fecha)", nativeQuery=false)
+    List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin);
 }
