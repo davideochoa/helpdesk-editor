@@ -58,8 +58,7 @@ por periodo de tiempo (limitar a 10 por grafica)
 Folios generados (linea tiempo)
 ------------------------------------------------
 select
-CONCAT(
-YEAR(fecha), ' ',
+YEAR(fecha) as year,
 CASE MONTH(fecha)
 WHEN 1 THEN 'ENE'
 WHEN 2 THEN 'FEB'
@@ -73,9 +72,8 @@ WHEN 9 THEN 'SEP'
 WHEN 10 THEN 'OCT'
 WHEN 11 THEN 'NOV'
 WHEN 12 THEN 'DIC'
-END
-) AS mes,
-COUNT(MONTH(fecha)) as folios
+END AS categoria,
+COUNT(MONTH(fecha)) as data
 from concentrado_folios_incidencias
 where fecha BETWEEN '2022-09-26 00:00:00' AND '2023-09-26 23:59:59'
 GROUP BY YEAR(fecha),MONTH(fecha)
