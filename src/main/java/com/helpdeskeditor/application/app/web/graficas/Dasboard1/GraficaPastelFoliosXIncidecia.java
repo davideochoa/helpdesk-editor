@@ -27,9 +27,6 @@ public class GraficaPastelFoliosXIncidecia extends FormLayout{
 
         folioxIncidenciaDTOList = folioService.getFoliosXIncidencia(fechaInicio, fechaFin);
 
-        log.info("fechaInicio: "+fechaInicio+" : fechaFin: "+fechaFin);
-        log.info("folioxIncidenciaDTOList.size(): "+folioxIncidenciaDTOList.size());
-
         this.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),

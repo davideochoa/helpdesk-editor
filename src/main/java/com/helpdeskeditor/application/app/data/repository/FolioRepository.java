@@ -110,7 +110,6 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "COUNT(be.nombre) AS cantidadIncidencias) "+
             "FROM FolioEntity fe, UnidadEntity ue, BienEntity be "+
             "WHERE fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
-            "AND fe.idBien = be.id "+
             "AND fe.idUnidad = ue.id AND fe.idBien = be.id "+
             "GROUP BY ue.nombre,be.nombre  "+
             "ORDER BY ue.nombre ASC, be.nombre ASC",nativeQuery=false)
@@ -122,7 +121,6 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "COUNT(ue.nombre) AS cantidadIncidencias) "+
             "FROM FolioEntity fe, UnidadEntity ue, BienEntity be "+
             "WHERE fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin "+
-            "AND fe.idBien = be.id "+
             "AND fe.idUnidad = ue.id AND fe.idBien = be.id "+
             "GROUP BY be.nombre,ue.nombre  "+
             "ORDER BY be.nombre ASC, ue.nombre ASC",nativeQuery=false)

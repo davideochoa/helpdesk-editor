@@ -26,6 +26,9 @@ public class GraficasIntegralesXUnidad extends FormLayout {
 
         List<IncidenciaXUnidad> incidenciaXUnidadList = folioService.getFoliosIncidenciaXUnidad(LDfechaInicio, LDfechaFin);
 
+        for(IncidenciaXUnidad incidenciaXUnidad : incidenciaXUnidadList)
+            log.info(incidenciaXUnidad.getUnidad()+" : "+incidenciaXUnidad.getBien()+" : "+incidenciaXUnidad.getCantidadFolios());
+
         List<FoliosxUnidadDTO> foliosxUnidadDTOList = new ArrayList<>();
 
         String unidadActual = null;
