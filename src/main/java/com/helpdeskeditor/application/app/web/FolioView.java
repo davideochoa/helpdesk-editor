@@ -584,14 +584,11 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     parameters.put("Folio", IF_Folio.getValue());
                     parameters.put("IdUsuarioSoporte", authenticatedUser.get().get().getId());
 
-/*
-                    File file = ResourceUtils.getFile("classpath:reportes/HelpDeskRPTIncidencia.jasper");
-                    InputStream in = new FileInputStream(file);
+                    JasperReport report = JasperCompileManager.compileReport(getClass()
+                                                                                        .getClassLoader()
+                                                                                        .getResourceAsStream("reportes/HelpDeskRPTIncidencia.jrxml"));
 
-                    JasperReport subJasperReport = (JasperReport) JRLoader.loadObject(in);
-*/
-                    //JasperPrint print = JasperFillManager.fillReport(subJasperReport, parameters, conn);
-                    JasperPrint print = JasperFillManager.fillReport("C://reportes//HelpDeskRPTIncidencia.jasper", parameters, conn);
+                    JasperPrint print = JasperFillManager.fillReport(report, parameters, conn);
 
                     byte[] output = JasperExportManager.exportReportToPdf(print);
 

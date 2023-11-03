@@ -80,8 +80,10 @@ GROUP BY YEAR(fecha),MONTH(fecha)
 ORDER BY YEAR(fecha),MONTH(fecha)
 ------------------------------------------------
 
-
 Folios de incdencias por unidades (linea tiempo)
+select
+catalogo_unidades.Nombre,
+YEAR(fecha) as year,
 CASE MONTH(fecha)
 WHEN 1 THEN 'ENE'
 WHEN 2 THEN 'FEB'
