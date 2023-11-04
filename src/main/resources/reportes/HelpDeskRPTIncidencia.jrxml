@@ -542,11 +542,11 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 			</staticText>
 			<image>
 				<reportElement key="image-1" x="0" y="5" width="120" height="46" uuid="6544e519-a28b-48e5-afe0-25fddf1e69d2"/>
-				<imageExpression><![CDATA["C:\\reportes\\logo_indesalud.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["reportes/logo_indesalud.jpg"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement key="image-2" x="470" y="4" width="81" height="52" uuid="b13973ec-15bb-48e0-8145-5b2caedaa8dc"/>
-				<imageExpression><![CDATA["C:\\reportes\\LOGO_GOB_CAMP.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["reportes/LOGO_GOB_CAMP.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement key="staticText-1" x="121" y="0" width="348" height="24" uuid="26a18741-d9e7-40e5-9fb2-b43a789b179f"/>
@@ -650,7 +650,7 @@ WHERE catalogo_usuarios_soporte.Id = $P{IdUsuarioSoporte}]]>
 					<subreportParameterExpression><![CDATA[$P{Folio}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA["C:\\reportes\\HelpDeskRPTIncidencia_subreport0.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["reportes/HelpDeskRPTIncidencia_subreport0.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

@@ -407,12 +407,12 @@
     "@polymer/polymer": "$@polymer/polymer",
     "print-js": "$print-js",
     "proj4": "$proj4",
-    "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer",
-    "date-fns": "$date-fns",
     "onecolor": "$onecolor",
     "signature_pad": "$signature_pad",
     "line-awesome": "$line-awesome",
+    "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer",
     "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
-    "apexcharts": "$apexcharts"
+    "apexcharts": "$apexcharts",
+    "date-fns": "$date-fns"
   }
 }
