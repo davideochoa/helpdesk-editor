@@ -107,5 +107,52 @@ AND IdUnidad = catalogo_unidades.Id
 GROUP BY catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha)
 ORDER BY catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha)
 
+====================================================================
+select
+catalogo_unidades.Id as idUnidad,catalogo_unidades.Nombre, tabla1.*
+from
+concentrado_folios_incidencias,catalogo_unidades,
+
+(select
+DATENAME(YEAR,dateadd(month,x.number,'2021-09-26 00:00:00')) as anno,
+DATEPART (month,dateadd(month,x.number,'2021-09-26 00:00:00')) as mesNumero,
+CASE DATEPART (month,dateadd(month,x.number,'2021-09-26 00:00:00'))
+WHEN 1 THEN 'ENE'
+WHEN 2 THEN 'FEB'
+WHEN 3 THEN 'MAR'
+WHEN 4 THEN 'ABR'
+WHEN 5 THEN 'MAY'
+WHEN 6 THEN 'JUN'
+WHEN 7 THEN 'JUL'
+WHEN 8 THEN 'AGOS'
+WHEN 9 THEN 'SEP'
+WHEN 10 THEN 'OCT'
+WHEN 11 THEN 'NOV'
+WHEN 12 THEN 'DIC'
+END as mesNombre,
+CONVERT(int, 0) as valor
+
+from master.dbo.spt_values x
+where x.type = 'P'
+and x.number <= DATEDIFF(month,'2021-09-26 00:00:00','2023-09-26 23:59:59')) as tabla1
+
+where fecha BETWEEN '2021-09-26 00:00:00' AND '2023-09-26 23:59:59'
+AND IdUnidad = catalogo_unidades.Id
+GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNombre,tabla1.mesNumero,tabla1.valor;
+=====================================================================
+
+select
+catalogo_unidades.Id as idUnidad,
+YEAR(fecha) as anno,
+MONTH(fecha) as mesNumero,
+COUNT(MONTH(fecha)) as valor
+from
+concentrado_folios_incidencias,
+catalogo_unidades
+where fecha BETWEEN '2021-09-26 00:00:00' AND '2023-09-26 23:59:59'
+AND IdUnidad = catalogo_unidades.Id
+GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha)
+
+=====================================================================
 
 
