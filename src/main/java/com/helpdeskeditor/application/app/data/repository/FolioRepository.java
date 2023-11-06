@@ -142,4 +142,6 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY YEAR(fe.fecha),MONTH(fe.fecha) " +
             "ORDER BY YEAR(fe.fecha),MONTH(fe.fecha)", nativeQuery=false)
     List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin);
+
+
 }
