@@ -1,10 +1,12 @@
 package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
+import com.helpdeskeditor.application.app.data.DAO.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
+import com.helpdeskeditor.application.app.data.DAO.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -143,5 +145,50 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "ORDER BY YEAR(fe.fecha),MONTH(fe.fecha)", nativeQuery=false)
     List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin);
 
+    @Query(value = "select catalogo_unidades.Id as idUnidad,catalogo_unidades.Nombre as nombre, tabla1.* " +
+            "from " +
+            "concentrado_folios_incidencias,catalogo_unidades, " +
 
+            "(select  " +
+            "DATENAME(YEAR,dateadd(month,x.number,:LDfechaInicio)) as anno, " +
+            "DATEPART (month,dateadd(month,x.number,:LDfechaInicio)) as mesNumero, " +
+            "CASE DATEPART (month,dateadd(month,x.number,:LDfechaInicio)) " +
+            "WHEN 1 THEN 'ENE' " +
+            "WHEN 2 THEN 'FEB' " +
+            "WHEN 3 THEN 'MAR' " +
+            "WHEN 4 THEN 'ABR' " +
+            "WHEN 5 THEN 'MAY' " +
+            "WHEN 6 THEN 'JUN' " +
+            "WHEN 7 THEN 'JUL' " +
+            "WHEN 8 THEN 'AGOS' " +
+            "WHEN 9 THEN 'SEP' " +
+            "WHEN 10 THEN 'OCT' " +
+            "WHEN 11 THEN 'NOV' " +
+            "WHEN 12 THEN 'DIC' " +
+            "END as mesNombre, " +
+            "CONVERT(int, 0) as valor " +
+
+            "from master.dbo.spt_values x " +
+            "where x.type = 'P' " +
+            "and x.number <= DATEDIFF(month,:LDfechaInicio,'2023-09-26 23:59:59')) as tabla1 " +
+
+            "where fecha BETWEEN :LDfechaInicio AND :LDfechaFin " +
+            "AND IdUnidad = catalogo_unidades.Id " +
+            "GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNombre,tabla1.mesNumero,tabla1.valor " +
+            "ORDER BY catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNumer", nativeQuery=true)
+    List<DatosParaGraficaLineal> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin);
+
+    @Query(value = "select " +
+            "catalogo_unidades.Id as idUnidad, " +
+            "YEAR(fecha) as anno, " +
+            "MONTH(fecha) as mesNumero, " +
+            "COUNT(MONTH(fecha)) as valor " +
+            "from " +
+            "concentrado_folios_incidencias, " +
+            "catalogo_unidades " +
+            "where fecha BETWEEN :LDfechaInicio AND :LDfechaFin " +
+            "AND IdUnidad = catalogo_unidades.Id " +
+            "GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha) " +
+            "ORDER BY catalogo_unidades.Id,catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha) ", nativeQuery=true)
+    List<ValoresParaGraficaLineal> getValoresGraficaLineal(Date LDfechaInicio, Date LDfechaFin);
 }
