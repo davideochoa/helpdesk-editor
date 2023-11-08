@@ -1,10 +1,12 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
+import com.helpdeskeditor.application.app.data.DAO.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
+import com.helpdeskeditor.application.app.data.DAO.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,5 +90,13 @@ public class FolioFacade {
 
     public List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getCantidadFoliosGeneradosXMes(LDfechaInicio,LDfechaFin);
+    }
+
+    public List<DatosParaGraficaLineal> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
+        return folioRepository.getDatosGraficaLineal(LDfechaInicio,LDfechaFin);
+    }
+
+    public List<ValoresParaGraficaLineal> getValoresGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
+        return folioRepository.getValoresGraficaLineal(LDfechaInicio,LDfechaFin);
     }
 }

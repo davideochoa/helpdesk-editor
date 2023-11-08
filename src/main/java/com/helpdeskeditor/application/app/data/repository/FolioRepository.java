@@ -10,6 +10,7 @@ import com.helpdeskeditor.application.app.data.DAO.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -145,7 +146,13 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "ORDER BY YEAR(fe.fecha),MONTH(fe.fecha)", nativeQuery=false)
     List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin);
 
-    @Query(value = "select catalogo_unidades.Id as idUnidad,catalogo_unidades.Nombre as nombre, tabla1.* " +
+    @Query(value = "select "+
+            "catalogo_unidades.Id as idUnidad,"+
+            "catalogo_unidades.Nombre as nombre,"+
+            "tabla1.anno,"+
+            "tabla1.mesNumero,"+
+            "tabla1.mesNombre,"+
+            "tabla1.valor " +
             "from " +
             "concentrado_folios_incidencias,catalogo_unidades, " +
 
@@ -175,8 +182,8 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "where fecha BETWEEN :LDfechaInicio AND :LDfechaFin " +
             "AND IdUnidad = catalogo_unidades.Id " +
             "GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNombre,tabla1.mesNumero,tabla1.valor " +
-            "ORDER BY catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNumer", nativeQuery=true)
-    List<DatosParaGraficaLineal> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin);
+            "ORDER BY catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNumero", nativeQuery=true)
+    List<DatosParaGraficaLineal> getDatosGraficaLineal(@Param("LDfechaInicio") Date LDfechaInicio, @Param("LDfechaFin") Date LDfechaFin);
 
     @Query(value = "select " +
             "catalogo_unidades.Id as idUnidad, " +

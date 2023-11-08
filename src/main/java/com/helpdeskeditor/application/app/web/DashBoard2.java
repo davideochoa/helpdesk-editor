@@ -1,5 +1,7 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.data.DAO.DatosParaGraficaLineal;
+import com.helpdeskeditor.application.app.data.DAO.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.app.web.charts.LineMultiYAxesChartExample;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXUnidad;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @PageTitle("DashBoard2")
@@ -57,6 +60,17 @@ public class DashBoard2 extends VerticalLayout {
 
         Date inicio = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         Date fin = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+
+        List<DatosParaGraficaLineal> datosParaGraficaLinealList = folioService.getDatosGraficaLineal(inicio,fin);
+        List<ValoresParaGraficaLineal> valoresParaGraficaLinealList = folioService.getValoresGraficaLineal(inicio,fin);
+
+        for(ValoresParaGraficaLineal valoresParaGraficaLineal : valoresParaGraficaLinealList){
+            log.info(valoresParaGraficaLineal.toString());
+        }
+
+        for(DatosParaGraficaLineal datosParaGraficaLineal : datosParaGraficaLinealList){
+            log.info(datosParaGraficaLineal.toString());
+        }
 
         final FormLayout[] dash = new FormLayout[4];
         dash[0] = new GraficaLineaFoliosGenerados(folioService, inicio, fin);
