@@ -89,10 +89,10 @@ public class MainLayout extends AppLayout {
             nav.addItem(new AppNavItem("Catalogos", CatalogosView.class, "la la-globe"));
         }
         if (accessChecker.hasAccess(DashBoard1.class)) {
-            nav.addItem(new AppNavItem("DashBoard1", DashBoard1.class, "la la-file"));
+            nav.addItem(new AppNavItem("DashBoard Pastel", DashBoard1.class, "la la-file"));
         }
         if (accessChecker.hasAccess(DashBoard2.class)) {
-            nav.addItem(new AppNavItem("DashBoard2", DashBoard2.class, "la la-file"));
+            nav.addItem(new AppNavItem("DashBoard TimeLine", DashBoard2.class, "la la-file"));
         }
         if (accessChecker.hasAccess(AcercaDeView.class)) {
             nav.addItem(new AppNavItem("Acerca De", AcercaDeView.class, "la la-file"));

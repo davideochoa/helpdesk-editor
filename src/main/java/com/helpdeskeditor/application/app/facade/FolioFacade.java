@@ -1,18 +1,19 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
-import com.helpdeskeditor.application.app.data.DAO.DatosParaGraficaLineal;
+import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
-import com.helpdeskeditor.application.app.data.DAO.ValoresParaGraficaLineal;
+import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.helpdeskeditor.application.app.data.repository.FolioRepository;
 
+import javax.persistence.Tuple;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -93,10 +94,32 @@ public class FolioFacade {
     }
 
     public List<DatosParaGraficaLineal> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
-        return folioRepository.getDatosGraficaLineal(LDfechaInicio,LDfechaFin);
+        List<Tuple> tupla = folioRepository.getDatosGraficaLineal(LDfechaInicio,LDfechaFin);
+
+        return tupla.stream()
+                .map(tuple -> new DatosParaGraficaLineal(
+                        tuple.get("idUnidad", Integer.class),
+                        tuple.get("nombre", String.class),
+                        tuple.get("anno", Integer.class),
+                        tuple.get("mesNumero", Integer.class),
+                        tuple.get("mesNombre", String.class),
+                        tuple.get("valor", Integer.class)
+                ))
+                .toList();
     }
 
     public List<ValoresParaGraficaLineal> getValoresGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
+        /*List<Tuple> tupla = folioRepository.getValoresGraficaLineal(LDfechaInicio,LDfechaFin);
+
+        return tupla.stream()
+                .map(tuple -> new ValoresParaGraficaLineal(
+                        tuple.get("idUnidad", Integer.class),
+                        tuple.get("anno", Integer.class),
+                        tuple.get("mesNumero", Integer.class),
+                        tuple.get("valor", Integer.class)
+                ))
+                .toList();*/
+
         return folioRepository.getValoresGraficaLineal(LDfechaInicio,LDfechaFin);
     }
 }

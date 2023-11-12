@@ -1,18 +1,17 @@
 package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
-import com.helpdeskeditor.application.app.data.DAO.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
-import com.helpdeskeditor.application.app.data.DAO.ValoresParaGraficaLineal;
+import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Tuple;
 import java.util.Date;
 import java.util.List;
 
@@ -147,12 +146,12 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
     List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin);
 
     @Query(value = "select "+
-            "catalogo_unidades.Id as idUnidad,"+
-            "catalogo_unidades.Nombre as nombre,"+
-            "tabla1.anno,"+
-            "tabla1.mesNumero,"+
-            "tabla1.mesNombre,"+
-            "tabla1.valor " +
+            "CAST(catalogo_unidades.Id AS INT) as idUnidad,"+
+            "CAST(catalogo_unidades.Nombre AS VARCHAR(255)) as nombre,"+
+            "CAST(tabla1.anno AS INT) as anno,"+
+            "CAST(tabla1.mesNumero AS INT) as mesNumero,"+
+            "CAST(tabla1.mesNombre AS VARCHAR(255)) as mesNombre,"+
+            "CAST(tabla1.valor AS INT) as valor " +
             "from " +
             "concentrado_folios_incidencias,catalogo_unidades, " +
 
@@ -183,19 +182,18 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "AND IdUnidad = catalogo_unidades.Id " +
             "GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNombre,tabla1.mesNumero,tabla1.valor " +
             "ORDER BY catalogo_unidades.Nombre,tabla1.anno,tabla1.mesNumero", nativeQuery=true)
-    List<DatosParaGraficaLineal> getDatosGraficaLineal(@Param("LDfechaInicio") Date LDfechaInicio, @Param("LDfechaFin") Date LDfechaFin);
+    List<Tuple> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin);
 
-    @Query(value = "select " +
-            "catalogo_unidades.Id as idUnidad, " +
-            "YEAR(fecha) as anno, " +
-            "MONTH(fecha) as mesNumero, " +
-            "COUNT(MONTH(fecha)) as valor " +
-            "from " +
-            "concentrado_folios_incidencias, " +
-            "catalogo_unidades " +
-            "where fecha BETWEEN :LDfechaInicio AND :LDfechaFin " +
-            "AND IdUnidad = catalogo_unidades.Id " +
-            "GROUP BY catalogo_unidades.Id,catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha) " +
-            "ORDER BY catalogo_unidades.Id,catalogo_unidades.Nombre,YEAR(fecha),MONTH(fecha) ", nativeQuery=true)
+    @Query(value = "SELECT new com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraficaLineal(" +
+            "CAST(fe.idUnidad AS int) as idUnidad, " +
+            "CAST(YEAR(fe.fecha) AS int) as anno, " +
+            "CAST(MONTH(fe.fecha) AS int) as mesNumero, " +
+            "CAST(COUNT(MONTH(fe.fecha)) AS int) as valor ) " +
+            "FROM " +
+            "FolioEntity fe " +
+            "where fe.fecha BETWEEN :LDfechaInicio AND :LDfechaFin " +
+            "GROUP BY fe.idUnidad,YEAR(fe.fecha),MONTH(fe.fecha) " +
+            "ORDER BY fe.idUnidad,YEAR(fe.fecha),MONTH(fe.fecha) ", nativeQuery=false)
     List<ValoresParaGraficaLineal> getValoresGraficaLineal(Date LDfechaInicio, Date LDfechaFin);
+
 }
