@@ -111,8 +111,8 @@ public class DashBoard2 extends VerticalLayout {
                 String etiquetas[] = datosXYGraficaList.stream().map(DatosXYGrafica:: getEtiquetaX).toArray(String[] :: new);
                 Integer valores[] = datosXYGraficaList.stream().map(DatosXYGrafica :: getValorY).toArray(Integer[] :: new);
 
-                //FormLayout grafico = new GraficaLineaFoliosGenerados2("Unidad "+datosParaGraficaLineal.getNombreUnidad(),"Folios",etiquetas,valores);
-                FormLayout grafico = new GraficaLineaFoliosGenerados(folioService, inicio,fin);
+                FormLayout grafico = new GraficaLineaFoliosGenerados2("Unidad "+datosParaGraficaLineal.getNombreUnidad(),"Folios",etiquetas,valores);
+                //FormLayout grafico = new GraficaLineaFoliosGenerados(folioService, inicio,fin);
 
                 flgraficas.setColspan(grafico, 3);
                 flgraficas.add(grafico);
@@ -131,8 +131,8 @@ public class DashBoard2 extends VerticalLayout {
         String etiquetas[] = datosXYGraficaList.stream().map(DatosXYGrafica:: getEtiquetaX).toArray(String[] :: new);
         Integer valores[] = datosXYGraficaList.stream().map(DatosXYGrafica :: getValorY).toArray(Integer[] :: new);
 
-        //FormLayout grafico = new GraficaLineaFoliosGenerados2("Unidad "+unidadActual,"Folios",etiquetas,valores);
-        FormLayout grafico = new GraficaLineaFoliosGenerados(folioService, inicio,fin);
+        FormLayout grafico = new GraficaLineaFoliosGenerados2("Unidad "+unidadActual,"Folios",etiquetas,valores);
+        //FormLayout grafico = new GraficaLineaFoliosGenerados(folioService, inicio,fin);
 
         flgraficas.setColspan(grafico, 3);
         flgraficas.add(grafico);
