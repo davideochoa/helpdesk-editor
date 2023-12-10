@@ -109,7 +109,6 @@ public class FoliosGridView extends VerticalLayout{
         horizontalLayoutComboTecnicos.add(CB_UsuarioSoporte,B_allFolios);
 
         grid.addColumn(new ComponentRenderer<>(Anchor::new, (anchor, folioDAO) -> {
-
             anchor.setHref(context+"/folio/"+folioDAO.getId());
             anchor.setText(folioDAO.getId()+"");
             anchor.getElement().setAttribute("router-ignore", "");

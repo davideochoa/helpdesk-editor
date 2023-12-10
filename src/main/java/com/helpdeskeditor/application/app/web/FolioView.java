@@ -1,5 +1,6 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.awesomecontrols.pdfviewer.PDFViewer;
 import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BienEntity;
@@ -25,6 +26,7 @@ import com.helpdeskeditor.application.util.UIutils;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.charts.Chart;
@@ -51,6 +53,10 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
+import com.vaadin.flow.server.VaadinSession;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -58,23 +64,34 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
+import org.vaadin.alejandro.PdfBrowserViewer;
 
 import javax.annotation.security.RolesAllowed;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -173,6 +190,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     private String password;
     @Value("${spring.datasource.driver-class-name}")
     private String className;
+    @Value("${server.servlet.context-path}")
+    private String context;
+    @Autowired
+    private static Environment env;
 
     @Autowired
     private EmailService emailService;
@@ -590,21 +611,22 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
 
                     JasperPrint print = JasperFillManager.fillReport(report, parameters, conn);
 
-                    byte[] output = JasperExportManager.exportReportToPdf(print);
+                    byte[] output;// = JasperExportManager.exportReportToPdf(print);
 
-                    StreamResource streamResource = new StreamResource("Folio "+IF_Folio.getValue()+".pdf", () ->new ByteArrayInputStream(output));
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                    JRPdfExporter exporter = new JRPdfExporter();
+                    exporter.setExporterInput(new SimpleExporterInput(print));
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+                    exporter.exportReport();
+                    output = outputStream.toByteArray();
+
+                    StreamResource streamResource = new StreamResource("Folio_"+IF_Folio.getValue()+".pdf", () ->new ByteArrayInputStream(output));
                     streamResource.setContentType("application/pdf");
 
-                    Dialog dialog = new Dialog();
-                    dialog.setWidth("80%");
-                    dialog.setHeight("80%");
+                    VaadinSession.getCurrent().getResourceRegistry().registerResource(streamResource);
 
-                    PdfViewer pdfViewer = new PdfViewer();
-                    pdfViewer.setAddPrintButton(true);
-                    pdfViewer.setSrc(streamResource);
-
-                    dialog.add(pdfViewer);
-                    dialog.open();
+                    getUI().get().getPage().open(VaadinRequest.getCurrent().getHeader("origin")+context+"/"+VaadinSession.getCurrent().getResourceRegistry().getTargetURI(streamResource).getPath(), "_blank");
 
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
