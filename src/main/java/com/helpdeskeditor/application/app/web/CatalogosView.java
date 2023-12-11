@@ -113,7 +113,7 @@ public class CatalogosView extends VerticalLayout{
         this.bienService = bienService;
 
         //layoutCatalogousuario();
-        VL_CatalogoUsuairios = layoutCatalogousuario2();
+        layoutCatalogousuario2();
         layoutCatalogoUnidadArea();
         layoutCatalogoIncidenciaBien();
 
@@ -559,18 +559,17 @@ public class CatalogosView extends VerticalLayout{
         TF_userName.clear();
         CB_tipoUsuario.clear();
         CKB_resetPassword.clear();
+        signature.clear();
+        signature.setImage(null);
 
         CB_usuario.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
+
+        VL_CatalogoUsuairios.setVisible(true);
     }
 
     private VerticalLayout layoutCatalogousuario2(){
-        VerticalLayout VL_CatalogoUsuairios = new VerticalLayout();
-            FormLayout FL_principal = new FormLayout();
-                TextField TF_userName = new TextField("UserName");
-                ComboBox<String> CB_tipoUsuario = new ComboBox<String>("Tipo Usuario");
-                Checkbox CKB_resetPassword = new Checkbox("ResetConstraseña");
-                Button Btt_cancelar_limpiar = new Button("CANCELAR / LIMPIAR");
-                Button Btt_guardar = new Button("GUARDAR");
+        Button Btt_cancelar_limpiar = new Button("CANCELAR / LIMPIAR");
+        Button Btt_guardar = new Button("GUARDAR");
 
         VL_CatalogoUsuairios.setMargin(false);
         VL_CatalogoUsuairios.setPadding(false);
@@ -613,9 +612,18 @@ public class CatalogosView extends VerticalLayout{
         Button Btt_borrarFirma = new Button ("Borrar Firma");
         Btt_borrarFirma.addClickListener(e -> {
             signature.clear();
+            signature.setImage(null);
         });
 
         HorizontalLayout buttonLayoutBorrarFirma = new HorizontalLayout(Btt_borrarFirma);
+
+        Btt_cancelar_limpiar.addClickListener(e -> {
+            limpiarLayoutCatalogoUsuario2();
+        });
+
+        Btt_guardar.addClickListener(e -> {
+            limpiarLayoutCatalogoUsuario2();
+        });
 
         HorizontalLayout buttonLayoutCancelar_Grabar = new HorizontalLayout();
         buttonLayoutCancelar_Grabar.add(Btt_cancelar_limpiar,Btt_guardar);
