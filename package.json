@@ -2,7 +2,6 @@
   "name": "no-name",
   "license": "UNLICENSED",
   "dependencies": {
-    "@lrnwebcomponents/pdf-browser-viewer": "2.7.10",
     "@polymer/iron-icon": "3.0.1",
     "@polymer/iron-iconset-svg": "3.0.1",
     "@polymer/iron-list": "3.1.0",
@@ -10,7 +9,6 @@
     "@polymer/iron-resizable-behavior": "3.0.1",
     "@polymer/polymer": "3.5.1",
     "@vaadin-component-factory/vcf-nav": "1.0.6",
-    "@vaadin-component-factory/vcf-pdf-viewer": "1.4.1",
     "@vaadin/accordion": "23.2.8",
     "@vaadin/app-layout": "23.2.8",
     "@vaadin/avatar": "23.2.8",
@@ -125,7 +123,6 @@
     "line-awesome": "1.3.0",
     "lit": "2.3.0",
     "onecolor": "3.1.0",
-    "print-js": "1.6.0",
     "proj4": "2.8.0",
     "signature_pad": "4.0.4"
   },
@@ -147,7 +144,6 @@
   },
   "vaadin": {
     "dependencies": {
-      "@lrnwebcomponents/pdf-browser-viewer": "2.7.10",
       "@polymer/iron-icon": "3.0.1",
       "@polymer/iron-iconset-svg": "3.0.1",
       "@polymer/iron-list": "3.1.0",
@@ -155,7 +151,6 @@
       "@polymer/iron-resizable-behavior": "3.0.1",
       "@polymer/polymer": "3.5.1",
       "@vaadin-component-factory/vcf-nav": "1.0.6",
-      "@vaadin-component-factory/vcf-pdf-viewer": "1.4.1",
       "@vaadin/accordion": "23.2.8",
       "@vaadin/app-layout": "23.2.8",
       "@vaadin/avatar": "23.2.8",
@@ -269,7 +264,6 @@
       "line-awesome": "1.3.0",
       "lit": "2.3.0",
       "onecolor": "3.1.0",
-      "print-js": "1.6.0",
       "proj4": "2.8.0",
       "signature_pad": "4.0.4"
     },
@@ -289,7 +283,7 @@
       "workbox-core": "6.5.0",
       "workbox-precaching": "6.5.0"
     },
-    "hash": "4ccd22cc5cb968e8fb907ecef4da3aae3839f1d7a9bd6e6198c4a99183933a5d"
+    "hash": "7e856eb579b69ad31c7856d4568c6f7df66ed50a57e8fa53df4681a86e3787a1"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -408,14 +402,11 @@
     "lit": "$lit",
     "@polymer/polymer": "$@polymer/polymer",
     "proj4": "$proj4",
+    "date-fns": "$date-fns",
     "onecolor": "$onecolor",
     "signature_pad": "$signature_pad",
     "line-awesome": "$line-awesome",
     "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
-    "apexcharts": "$apexcharts",
-    "date-fns": "$date-fns",
-    "print-js": "$print-js",
-    "@vaadin-component-factory/vcf-pdf-viewer": "$@vaadin-component-factory/vcf-pdf-viewer",
-    "@lrnwebcomponents/pdf-browser-viewer": "$@lrnwebcomponents/pdf-browser-viewer"
+    "apexcharts": "$apexcharts"
   }
 }

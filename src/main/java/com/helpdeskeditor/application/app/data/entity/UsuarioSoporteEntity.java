@@ -2,6 +2,7 @@ package com.helpdeskeditor.application.app.data.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "catalogo_usuarios_soporte")
 public class UsuarioSoporteEntity {

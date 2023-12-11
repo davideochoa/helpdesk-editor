@@ -1,6 +1,5 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.awesomecontrols.pdfviewer.PDFViewer;
 import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BienEntity;
@@ -24,7 +23,6 @@ import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.EmailService;
 import com.helpdeskeditor.application.util.UIutils;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
-import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -79,7 +77,6 @@ import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
-import org.vaadin.alejandro.PdfBrowserViewer;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.BufferedReader;
