@@ -112,7 +112,8 @@ public class CatalogosView extends VerticalLayout{
         this.incidenciaService = incidenciaService;
         this.bienService = bienService;
 
-        layoutCatalogousuario();
+        //layoutCatalogousuario();
+        VL_CatalogoUsuairios = layoutCatalogousuario2();
         layoutCatalogoUnidadArea();
         layoutCatalogoIncidenciaBien();
 
@@ -551,6 +552,82 @@ public class CatalogosView extends VerticalLayout{
         FL_Firma.add(buttonLayout);
 
         VL_CatalogoUsuairios.add(new H5("FIRMA"),FL_Firma);
+    }
+
+    private void limpiarLayoutCatalogoUsuario2(){
+        CB_usuario.clear();
+        TF_userName.clear();
+        CB_tipoUsuario.clear();
+        CKB_resetPassword.clear();
+
+        CB_usuario.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
+    }
+
+    private VerticalLayout layoutCatalogousuario2(){
+        VerticalLayout VL_CatalogoUsuairios = new VerticalLayout();
+            FormLayout FL_principal = new FormLayout();
+                TextField TF_userName = new TextField("UserName");
+                ComboBox<String> CB_tipoUsuario = new ComboBox<String>("Tipo Usuario");
+                Checkbox CKB_resetPassword = new Checkbox("ResetConstraseña");
+                Button Btt_cancelar_limpiar = new Button("CANCELAR / LIMPIAR");
+                Button Btt_guardar = new Button("GUARDAR");
+
+        VL_CatalogoUsuairios.setMargin(false);
+        VL_CatalogoUsuairios.setPadding(false);
+
+        FL_principal.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        signature.setHeight("300px");
+        signature.setBackgroundColor(0, 0, 0, 0);
+        signature.setPenColor("#000000");
+        signature.setVisible(true);
+
+        CB_usuario.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
+        CB_usuario.addValueChangeListener(e -> {
+            usuarioSoporteEntity = e.getValue();
+            TF_userName.setValue(usuarioSoporteEntity.getNombreUsuario());
+            CB_tipoUsuario.setValue(usuarioSoporteEntity.getRol());
+            CKB_resetPassword.setValue(usuarioSoporteEntity.getEsReseteadoPassword());
+
+            if(usuarioSoporteEntity.getFirma() != null){
+                signature.setImage(signature.getImagen642URI(usuarioSoporteEntity.getFirma()));
+            }
+            else {
+                log.info("FIRMA NULL");
+                signature.clear();
+                signature.setImage(null);
+            }
+        });
+        CB_usuario.addCustomValueSetListener(e -> {
+            log.info("addCustomValueSetListener");
+            log.info(e.getDetail());
+        });
+
+
+        CB_tipoUsuario.setItems("ADMIN","USER");
+
+        Button Btt_borrarFirma = new Button ("Borrar Firma");
+        Btt_borrarFirma.addClickListener(e -> {
+            signature.clear();
+        });
+
+        HorizontalLayout buttonLayoutBorrarFirma = new HorizontalLayout(Btt_borrarFirma);
+
+        HorizontalLayout buttonLayoutCancelar_Grabar = new HorizontalLayout();
+        buttonLayoutCancelar_Grabar.add(Btt_cancelar_limpiar,Btt_guardar);
+
+        FL_principal.setColspan(signature, 2);
+        FL_principal.add(CB_usuario,TF_userName,CB_tipoUsuario,CKB_resetPassword,signature);
+
+        VL_CatalogoUsuairios.add(FL_principal,buttonLayoutBorrarFirma,buttonLayoutCancelar_Grabar);
+
+        limpiarLayoutCatalogoUsuario2();
+
+        return VL_CatalogoUsuairios;
     }
 
     private Boolean verificarExisteUsername(String userName){
