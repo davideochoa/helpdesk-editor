@@ -9,6 +9,8 @@ import com.vaadin.flow.component.progressbar.ProgressBar;
 
 public class UIutils {
 
+    private static int timeShow = 3000;
+
     public static Span lineaDivision(){
         Span span = new Span();
         span.getStyle().set("background-image", "linear-gradient(135deg, #777 , rgba(0, 0, 0, 0))");
@@ -22,7 +24,7 @@ public class UIutils {
         Notification notification = new Notification(texto);
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(5000);
+        notification.setDuration(timeShow);
         return notification;
     }
 
@@ -30,7 +32,7 @@ public class UIutils {
         Notification notification = new Notification(texto);
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(5000);
+        notification.setDuration(timeShow);
         return notification;
     }
 
@@ -38,7 +40,7 @@ public class UIutils {
         Notification notification = new Notification(texto);
         notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
         notification.setPosition(Notification.Position.MIDDLE);
-        notification.setDuration(5000);
+        notification.setDuration(timeShow);
         return notification;
     }
 

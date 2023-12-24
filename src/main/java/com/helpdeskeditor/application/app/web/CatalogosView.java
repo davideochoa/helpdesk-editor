@@ -36,7 +36,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @PageTitle("Catalogos")
 @Route(value = "catalogos", layout = MainLayout.class)
-//@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed("ADMIN")
 @Slf4j
 public class CatalogosView extends VerticalLayout{

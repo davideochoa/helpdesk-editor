@@ -18,4 +18,18 @@ public class UnidadEntity {
 
     @Column(name = "Nombre")
     private String nombre;
+
+    @Column(name = "Cargo")
+    private String cargoTitular;
+
+    @Column(name = "InicialesTitular")
+    private String inicialesTitular;
+
+    @Column(name = "Nombretitular")
+    private String nombreTitular;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "firmaTitular")
+    private byte[] firmaTitular;
 }

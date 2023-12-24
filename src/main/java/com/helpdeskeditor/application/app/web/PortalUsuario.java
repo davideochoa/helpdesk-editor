@@ -4,6 +4,7 @@ import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.helpdeskeditor.application.util.UIutils;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -24,7 +25,7 @@ import java.net.URISyntaxException;
 @Slf4j
 @PageTitle("Portal de Soporte a Usuarios")
 @Route(value = "portal-usuario", layout = MainLayout.class)
-//@RouteAlias(value = "", layout = MainLayout.class)
+@RouteAlias(value = "/portal-usuario", layout = MainLayout.class)
 //@AnonymousAllowed
 @RolesAllowed("PORTAL")
 public class PortalUsuario extends VerticalLayout {
@@ -33,17 +34,23 @@ public class PortalUsuario extends VerticalLayout {
     private Tab tabHistorial;
     private Tab tabDatosTitular;
     private VerticalLayout contenidoTab;
-
     private VerticalLayout VL_Solicitud = new VerticalLayout();
     private VerticalLayout VL_Historial = new VerticalLayout();
     private VerticalLayout VL_DatosTitular = new VerticalLayout();
         private TextField TF_Unidad = new TextField("Unidad");
+        private TextField TF_Cargo = new TextField("Cargo");
+        private TextField TF_InicialesTitulo = new TextField("Iniciales Titulo");
+        private TextField TF_Nombre = new TextField("Nombre Completo");
+        private SignaturePad SP_Firma = new SignaturePad();
+
+    AuthenticatedUser authenticatedUser;
 
     UnidadService unidadService;
 
     UnidadEntity unidadEntity;
 
     public PortalUsuario(AuthenticatedUser authenticatedUser, UnidadService unidadService){
+        this.authenticatedUser = authenticatedUser;
         this.unidadService = unidadService;
 
         layoutTabs();
@@ -52,24 +59,37 @@ public class PortalUsuario extends VerticalLayout {
 
         this.add(tabs, contenidoTab);
 
-        UsuarioSoporteEntity usuarioSoporte = authenticatedUser.get().get();
+        cargarDatos();
+    }
 
-        log.info("authenticatedUser:"+usuarioSoporte.getNombreUsuario()+usuarioSoporte.getIdUnidad());
+    private void cargarDatos() {
+        UsuarioSoporteEntity usuarioSoporte = authenticatedUser.get().get();
 
         unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
 
         TF_Unidad.setValue(unidadEntity.getNombre());
+
+        if(unidadEntity.getCargoTitular() != null)
+            TF_Cargo.setValue(unidadEntity.getCargoTitular());
+
+        if(unidadEntity.getInicialesTitular() != null)
+            TF_InicialesTitulo.setValue(unidadEntity.getInicialesTitular());
+
+        if(unidadEntity.getNombreTitular() != null)
+            TF_Nombre.setValue(unidadEntity.getNombreTitular());
+
+        //if(unidadEntity.getFirmaTitular() != null)
+            SP_Firma.setImage(SP_Firma.getImagen642URI(unidadEntity.getFirmaTitular()));
+
     }
+
 
     private VerticalLayout layoutDatosUnidad(){
         VerticalLayout VL_Principal = new VerticalLayout();
 
         FormLayout FL_principal = new FormLayout();
-            TextField TF_Cargo = new TextField("Cargo");
-            TextField TF_InicialesTitulo = new TextField("Iniciales Titulo");
-            TextField TF_Nombre = new TextField("Nombre Completo");
+
             HorizontalLayout HL_TextoFirma = new HorizontalLayout(new H5("FIRMA"));
-            SignaturePad SP_Firma = new SignaturePad();
 
             Button Btt_borrarFirma = new Button ("Borrar Firma");
             HorizontalLayout HL_BotonBorrarFirma = new HorizontalLayout(Btt_borrarFirma);
@@ -95,7 +115,6 @@ public class PortalUsuario extends VerticalLayout {
         TF_Nombre.setPlaceholder("Nombre(s) Apellido Paterno Apellido Materno");
         TF_Nombre.setClearButtonVisible(true);
 
-
         SP_Firma.setHeight("300px");
         SP_Firma.setBackgroundColor(0, 0, 0, 0);
         SP_Firma.setPenColor("#000000");
@@ -111,6 +130,27 @@ public class PortalUsuario extends VerticalLayout {
         });
 
         Btt_grabar.addClickListener(e -> {
+            String cargoTitular = TF_Cargo.getValue();
+            String inicialesTitular = TF_InicialesTitulo.getValue();
+            String nombreTitular = TF_Nombre.getValue();
+            byte[] firma = SP_Firma.getImageBase64();
+
+            if(cargoTitular != null && inicialesTitular != null && nombreTitular != null){
+                if(cargoTitular.length() > 0 && inicialesTitular.length() > 0  && nombreTitular.length() > 0 && firma.length > 0){
+                    unidadEntity.setCargoTitular(cargoTitular.toUpperCase());
+                    unidadEntity.setInicialesTitular(inicialesTitular.toUpperCase());
+                    unidadEntity.setNombreTitular(nombreTitular.toUpperCase());
+                    unidadEntity.setFirmaTitular(firma);
+
+                    unidadEntity = unidadService.save(unidadEntity);
+
+                    if(unidadEntity.getId() > 0)
+                        UIutils.notificacionSUCCESS("Los datos se guardaron con exito").open();
+                    else
+                        UIutils.notificacionERROR("No se realizo el guardado de los datos").open();
+
+                }
+            }
 
         });
 
