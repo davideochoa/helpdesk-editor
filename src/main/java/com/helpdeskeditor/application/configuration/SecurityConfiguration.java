@@ -24,11 +24,6 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     public static final String LOGOUT_URL = "/";
 
-  /*  @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-*/
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

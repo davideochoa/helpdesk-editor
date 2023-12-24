@@ -1,5 +1,7 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
+import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -20,7 +22,7 @@ import java.net.URISyntaxException;
 @Slf4j
 @PageTitle("Portal de Soporte a Usuarios")
 @Route(value = "portal-usuario", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
+//@RouteAlias(value = "", layout = MainLayout.class)
 //@AnonymousAllowed
 @RolesAllowed("PORTAL")
 public class PortalUsuario extends VerticalLayout {
@@ -34,12 +36,15 @@ public class PortalUsuario extends VerticalLayout {
     private VerticalLayout VL_Historial = new VerticalLayout();
     private VerticalLayout VL_DatosTitular = new VerticalLayout();
 
-    public PortalUsuario(){
+    public PortalUsuario(AuthenticatedUser authenticatedUser){
         layoutTabs();
 
         VL_DatosTitular = layoutDatosUnidad();
 
         this.add(tabs, contenidoTab);
+
+        UsuarioSoporteEntity usuarioSoporte = authenticatedUser.get().get();
+
     }
 
     private VerticalLayout layoutDatosUnidad(){

@@ -53,6 +53,8 @@ public class UsuarioSoporteEntity {
     @Column(name = "firma")
     private byte[] firma;
 
-    @Column(name = "IdUnidad", columnDefinition = "integer default '0'")
+    @Column(name = "IdUnidad",
+            columnDefinition = "integer default '0'",
+            nullable = false)
     private Integer idUnidad;
 }

@@ -319,7 +319,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         CB_Area.setItems();
 
         CB_UsuarioReporta.clear();
-        //CB_UsuarioReporta.setItems();
 
         TF_Telefono.clear();
         TF_ReferenciaDocumental.clear();

@@ -366,8 +366,14 @@ public class SignaturePad extends Component implements HasSize {
    * @param uri {@link String}
    */
   public void setImage(String uri) {
-    this.getElement().setProperty("img", uri);
-    this.imageUri = uri;
+    if(uri != null){
+      this.getElement().setProperty("img", uri);
+      this.imageUri = uri;
+    }
+    else{
+      this.getElement().setProperty("img", "");
+      this.imageUri = null;
+    }
   }
 
   /**
