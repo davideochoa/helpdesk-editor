@@ -1,6 +1,8 @@
 package com.helpdeskeditor.application.app.web;
 
+import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
+import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.flow.component.button.Button;
@@ -35,8 +37,15 @@ public class PortalUsuario extends VerticalLayout {
     private VerticalLayout VL_Solicitud = new VerticalLayout();
     private VerticalLayout VL_Historial = new VerticalLayout();
     private VerticalLayout VL_DatosTitular = new VerticalLayout();
+        private TextField TF_Unidad = new TextField("Unidad");
 
-    public PortalUsuario(AuthenticatedUser authenticatedUser){
+    UnidadService unidadService;
+
+    UnidadEntity unidadEntity;
+
+    public PortalUsuario(AuthenticatedUser authenticatedUser, UnidadService unidadService){
+        this.unidadService = unidadService;
+
         layoutTabs();
 
         VL_DatosTitular = layoutDatosUnidad();
@@ -45,13 +54,17 @@ public class PortalUsuario extends VerticalLayout {
 
         UsuarioSoporteEntity usuarioSoporte = authenticatedUser.get().get();
 
+        log.info("authenticatedUser:"+usuarioSoporte.getNombreUsuario()+usuarioSoporte.getIdUnidad());
+
+        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
+
+        TF_Unidad.setValue(unidadEntity.getNombre());
     }
 
     private VerticalLayout layoutDatosUnidad(){
         VerticalLayout VL_Principal = new VerticalLayout();
 
         FormLayout FL_principal = new FormLayout();
-            TextField TF_Unidad = new TextField("Unidad");
             TextField TF_Cargo = new TextField("Cargo");
             TextField TF_InicialesTitulo = new TextField("Iniciales Titulo");
             TextField TF_Nombre = new TextField("Nombre Completo");

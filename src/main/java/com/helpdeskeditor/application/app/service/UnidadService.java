@@ -25,4 +25,6 @@ public class UnidadService {
     public UnidadEntity save(UnidadEntity unidadEntity){
         return unidadFacade.save(unidadEntity);
     }
+
+
 }
