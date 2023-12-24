@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UsuarioSoporteFacade {
@@ -38,4 +39,8 @@ public class UsuarioSoporteFacade {
         return usuarioSoporteRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public Optional<UsuarioSoporteEntity> findById(Integer id){
+        return usuarioSoporteRepository.findById(id);
+    }
 }

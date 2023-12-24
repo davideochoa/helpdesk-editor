@@ -3,6 +3,7 @@ package com.helpdeskeditor.application.app.data.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -52,8 +53,6 @@ public class UsuarioSoporteEntity {
     @Column(name = "firma")
     private byte[] firma;
 
-    @Override
-    public String toString(){
-        return getId()+" : "+getNombreUsuario()+" : "+getNombrePropio()+" : "+getRol()+" : "+getEsReseteadoPassword();
-    }
+    @Column(name = "IdUnidad", columnDefinition = "integer default '0'")
+    private Integer idUnidad;
 }

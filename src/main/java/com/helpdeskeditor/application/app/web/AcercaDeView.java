@@ -16,13 +16,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.security.RolesAllowed;
 import java.net.URISyntaxException;
 
 @Slf4j
 @PageTitle("Acerca De")
 @Route(value = "acerca-de", layout = MainLayout.class)
-@AnonymousAllowed
-//@RolesAllowed("USER")
+//@AnonymousAllowed
+@RolesAllowed("ADMINS")
 public class AcercaDeView extends VerticalLayout {
     public AcercaDeView() throws URISyntaxException {
         setSpacing(false);

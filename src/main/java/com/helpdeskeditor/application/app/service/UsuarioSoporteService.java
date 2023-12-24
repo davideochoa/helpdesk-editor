@@ -5,6 +5,7 @@ import com.helpdeskeditor.application.app.facade.UsuarioSoporteFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioSoporteService {
@@ -29,4 +30,7 @@ public class UsuarioSoporteService {
         return usuarioSoporteFacade.findAll();
     }
 
+    public Optional<UsuarioSoporteEntity> findById(Integer id){
+        return usuarioSoporteFacade.findById(id);
+    }
 }

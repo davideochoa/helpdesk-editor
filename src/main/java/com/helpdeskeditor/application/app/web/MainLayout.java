@@ -97,6 +97,9 @@ public class MainLayout extends AppLayout {
         if (accessChecker.hasAccess(AcercaDeView.class)) {
             nav.addItem(new AppNavItem("Acerca De", AcercaDeView.class, "la la-file"));
         }
+        if (accessChecker.hasAccess(PortalUsuario.class)) {
+            nav.addItem(new AppNavItem("Portal Soporte a Usuario", PortalUsuario.class, "la la-file"));
+        }
 
         return nav;
     }

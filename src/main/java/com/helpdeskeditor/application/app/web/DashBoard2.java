@@ -1,7 +1,5 @@
 package com.helpdeskeditor.application.app.web;
 
-import com.helpdeskeditor.application.app.data.DAO.DatosCategoriasSeriesDAO;
-import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosXYGrafica;
 import com.helpdeskeditor.application.app.service.FolioService;

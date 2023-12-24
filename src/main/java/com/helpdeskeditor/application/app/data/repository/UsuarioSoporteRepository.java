@@ -2,11 +2,11 @@ package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioSoporteRepository extends CrudRepository<UsuarioSoporteEntity, Integer> {
@@ -15,5 +15,7 @@ public interface UsuarioSoporteRepository extends CrudRepository<UsuarioSoporteE
     List<UsuarioSoporteEntity> findAll();
 
     UsuarioSoporteEntity findByNombreUsuario(String nombreUsuario);
+
+    Optional<UsuarioSoporteEntity> findById(Integer id);
 
 }
