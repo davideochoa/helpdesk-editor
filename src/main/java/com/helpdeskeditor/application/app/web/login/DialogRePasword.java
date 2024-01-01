@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.login;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;

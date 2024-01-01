@@ -1,0 +1,362 @@
+package com.helpdeskeditor.application.app.web.views;
+
+import com.helpdeskeditor.application.app.data.entity.AreaEntity;
+import com.helpdeskeditor.application.app.data.entity.BienEntity;
+import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
+import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
+import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
+import com.helpdeskeditor.application.app.service.AreaService;
+import com.helpdeskeditor.application.app.service.BienService;
+import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.service.IncidenciaService;
+import com.helpdeskeditor.application.app.service.UnidadService;
+import com.helpdeskeditor.application.app.web.MainLayout;
+import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.helpdeskeditor.application.util.UIutils;
+import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.List;
+
+@Slf4j
+@PageTitle("Portal de Soporte a Usuarios")
+@Route(value = "portal-usuario", layout = MainLayout.class)
+//@RouteAlias(value = "/portal-usuario", layout = MainLayout.class)
+//@AnonymousAllowed
+@RolesAllowed("PORTAL")
+public class PortalUsuarioView extends VerticalLayout {
+
+    private Tab tabSolicitud = new Tab("SOLICITUD");
+    private Tab tabHistorial = new Tab("HISTORIAL");
+    private Tab tabDatosTitular = new Tab("DATOS DE TITULAR DE LA UNIDAD");
+    private Tabs tabs = new Tabs(tabSolicitud, tabHistorial,tabDatosTitular);
+    private VerticalLayout contenidoTab = new VerticalLayout();;
+
+    private TextField TF_Unidad = new TextField("Unidad");
+    private TextField TF_Cargo = new TextField("Cargo");
+    private TextField TF_InicialesTitulo = new TextField("Iniciales Titulo");
+    private TextField TF_Nombre = new TextField("Nombre Completo");
+    private SignaturePad SP_Firma = new SignaturePad();
+
+    private Select<AreaEntity> CB_Area = new Select<>();
+    private Select<IncidenciaEntity> CB_TipoIncidencia = new Select<>();
+    private Select<BienEntity> CB_TipoBien = new Select<>();
+    private ComboBox<String> CB_Marca = new ComboBox<>("Marca");
+    private ComboBox<String> CB_Modelo = new ComboBox<>("Modelo");
+    private ComboBox<String> CB_NumeroSerie = new ComboBox<>("Numero Serie");
+    private ComboBox<String> CB_NumeroInventaro = new ComboBox<>("Numero Inventario");
+    private TextArea TA_Motivo = new TextArea("Motivo");
+
+    private AuthenticatedUser authenticatedUser;
+    private UnidadService unidadService;
+    private AreaService areaService;
+    private IncidenciaService incidenciaService;
+    private BienService bienService;
+    private FolioService folioService;
+
+    private UnidadEntity unidadEntity;
+    private UsuarioSoporteEntity usuarioSoporte;
+
+    public PortalUsuarioView(AuthenticatedUser authenticatedUser,
+                             UnidadService unidadService,
+                             AreaService areaService,
+                             IncidenciaService incidenciaService,
+                             BienService bienService,
+                             FolioService folioService){
+
+        this.authenticatedUser = authenticatedUser;
+        this.unidadService = unidadService;
+        this.areaService = areaService;
+        this.incidenciaService = incidenciaService;
+        this.bienService = bienService;
+        this.folioService = folioService;
+
+        usuarioSoporte = authenticatedUser.get().get();
+
+        layoutTabs();
+
+        this.add(tabs, contenidoTab);
+
+    }
+
+    private VerticalLayout layoutDatosSolicitud(){
+
+        FormLayout FL_principal = new FormLayout();
+        FormLayout FL_principal2 = new FormLayout();
+
+        Button Btt_generarSolcitud = new Button("GENERAR SOLICITUD");
+        Btt_generarSolcitud.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Button Btt_cancelar = new Button("CANCELAR");
+
+        HorizontalLayout layoutBotones = new HorizontalLayout();
+        layoutBotones.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        layoutBotones.add(Btt_generarSolcitud,Btt_cancelar);
+
+        FL_principal.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_principal2.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_principal2.setColspan(TA_Motivo, 2);
+
+        CB_Area.setItemLabelGenerator(AreaEntity::getNombre);
+        CB_Area.setLabel("Area");
+        CB_Area.addValueChangeListener(e ->{});
+
+        CB_TipoIncidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
+        CB_TipoIncidencia.setLabel("Tipo Incidencia");
+        CB_TipoIncidencia.addValueChangeListener(e ->{
+
+            if(e.getValue() != null){
+                CB_TipoBien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(e.getValue().getId()));
+
+                CB_Marca.clear();
+                CB_Modelo.clear();
+                CB_NumeroSerie.clear();
+                CB_NumeroInventaro.clear();
+            }
+
+        });
+
+        CB_TipoBien.setItemLabelGenerator(BienEntity::getNombre);
+        CB_TipoBien.setLabel("Tipo Bien");
+        CB_TipoBien.addValueChangeListener(e ->{
+            if(e.getValue() != null){
+                CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(
+                        CB_TipoIncidencia.getValue().getId(),
+                        e.getValue().getId()));
+            }
+
+
+        });
+
+        CB_Marca.addValueChangeListener(e ->{
+            if (e.getValue() != null) {
+                CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
+                        CB_TipoIncidencia.getValue().getId(),
+                        CB_TipoBien.getValue().getId(),
+                        CB_Marca.getValue()));
+            }
+        });
+
+        /*
+        CB_Marca.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_Marca.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_Marca.setItems(allItems);
+            CB_Marca.setValue(customValue);
+        });
+        */
+
+        CB_Modelo.addValueChangeListener(e ->{
+            if (e.getValue() != null) {
+
+            }
+        });
+
+        /*
+        CB_Modelo.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_Modelo.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_Modelo.setItems(allItems);
+            CB_Modelo.setValue(customValue);
+        });
+         */
+
+        FL_principal.add(CB_Area);
+
+        FL_principal2.add(CB_TipoIncidencia);
+        FL_principal2.add(CB_TipoBien);
+
+        FL_principal2.add(CB_Marca);
+        FL_principal2.add(CB_Modelo);
+
+        FL_principal2.add(CB_NumeroSerie);
+        FL_principal2.add(CB_NumeroInventaro);
+
+        FL_principal2.add(TA_Motivo);
+
+        cargarDatosSolicitud();
+
+        return new VerticalLayout(FL_principal,FL_principal2,layoutBotones);
+
+    }
+
+    private void cargarDatosSolicitud() {
+
+        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
+
+        CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
+
+        CB_TipoIncidencia.setItems(incidenciaService.findAll());
+
+    }
+
+    private VerticalLayout layoutHistorial(){
+        VerticalLayout VL_Principal = new VerticalLayout();
+
+        FormLayout FL_principal = new FormLayout();
+
+        FL_principal.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+
+
+        return VL_Principal;
+    }
+
+
+    private VerticalLayout layoutDatosUnidad(){
+
+        FormLayout FL_principal = new FormLayout();
+
+            HorizontalLayout HL_TextoFirma = new HorizontalLayout(new H5("FIRMA"));
+
+            Button Btt_borrarFirma = new Button ("Borrar Firma");
+            HorizontalLayout HL_BotonBorrarFirma = new HorizontalLayout(Btt_borrarFirma);
+
+            Button Btt_grabar = new Button("GRABAR DATOS");
+            HorizontalLayout HL_BotonGrabar = new HorizontalLayout(Btt_grabar);
+
+        FL_principal.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_principal.setColspan(SP_Firma, 2);
+
+        TF_Unidad.setReadOnly(true);
+
+        TF_Cargo.setPlaceholder("Cargo como titular");
+        TF_Cargo.setClearButtonVisible(true);
+
+        TF_InicialesTitulo.setPlaceholder("Iniciales titulo academico o ciudadano (C.,DR., Lic.)");
+        TF_InicialesTitulo.setClearButtonVisible(true);
+
+        TF_Nombre.setPlaceholder("Nombre(s) Apellido Paterno Apellido Materno");
+        TF_Nombre.setClearButtonVisible(true);
+
+        SP_Firma.setHeight("300px");
+        SP_Firma.setBackgroundColor(0, 0, 0, 0);
+        SP_Firma.setPenColor("#000000");
+        SP_Firma.setVisible(true);
+
+        FL_principal.add(TF_Unidad,TF_Cargo,TF_InicialesTitulo,TF_Nombre,HL_TextoFirma,SP_Firma);
+
+        Btt_borrarFirma.addClickListener(e -> {
+            SP_Firma.clear();
+            SP_Firma.setImage(null);
+        });
+
+        Btt_grabar.addClickListener(e -> {
+            String cargoTitular = TF_Cargo.getValue();
+            String inicialesTitular = TF_InicialesTitulo.getValue();
+            String nombreTitular = TF_Nombre.getValue();
+            byte[] firma = SP_Firma.getImageBase64();
+
+            if(cargoTitular != null && inicialesTitular != null && nombreTitular != null){
+                if(cargoTitular.length() > 0 && inicialesTitular.length() > 0  && nombreTitular.length() > 0 && firma.length > 0){
+                    unidadEntity.setCargoTitular(cargoTitular.toUpperCase());
+                    unidadEntity.setInicialesTitular(inicialesTitular.toUpperCase());
+                    unidadEntity.setNombreTitular(nombreTitular.toUpperCase());
+                    unidadEntity.setFirmaTitular(firma);
+
+                    unidadEntity = unidadService.save(unidadEntity);
+
+                    if(unidadEntity.getId() > 0)
+                        UIutils.notificacionSUCCESS("Los datos se guardaron con exito").open();
+                    else
+                        UIutils.notificacionERROR("No se realizo el guardado de los datos").open();
+
+                }
+            }
+
+        });
+
+        cargarDatosUnidad();
+
+        return new VerticalLayout(FL_principal,HL_BotonBorrarFirma,HL_BotonGrabar);
+    }
+
+    private void cargarDatosUnidad(){
+        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
+
+        TF_Unidad.setValue(unidadEntity.getNombre());
+
+        if(unidadEntity.getCargoTitular() != null)
+            TF_Cargo.setValue(unidadEntity.getCargoTitular());
+
+        if(unidadEntity.getInicialesTitular() != null)
+            TF_InicialesTitulo.setValue(unidadEntity.getInicialesTitular());
+
+        if(unidadEntity.getNombreTitular() != null)
+            TF_Nombre.setValue(unidadEntity.getNombreTitular());
+
+        if(unidadEntity.getFirmaTitular() != null)
+            SP_Firma.setImage(SP_Firma.getImagen642URI(unidadEntity.getFirmaTitular()));
+
+
+        List<AreaEntity> areaEntityList = areaService.findByidUnidad(unidadEntity.getId());
+
+    }
+
+    private void layoutTabs(){
+
+        tabs.addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
+
+        contenidoTab.setSpacing(false);
+
+        setContent(tabs.getSelectedTab());
+
+    }
+
+    private void setContent(Tab tab) {
+
+        contenidoTab.removeAll();
+
+        if (tab.equals(tabSolicitud))
+            contenidoTab.add(layoutDatosSolicitud());
+        else
+            if (tab.equals(tabHistorial))
+                contenidoTab.add(layoutHistorial());
+            else
+                if (tab.equals(tabDatosTitular))
+                    contenidoTab.add(layoutDatosUnidad());
+
+
+    }
+
+}

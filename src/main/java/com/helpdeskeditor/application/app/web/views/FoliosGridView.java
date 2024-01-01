@@ -1,10 +1,11 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.views;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;

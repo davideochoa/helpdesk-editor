@@ -1,6 +1,7 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.views;
 
 import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXIncidecia;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXUnidad;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficasIntegralesXBien;
@@ -12,7 +13,6 @@ import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
@@ -26,12 +26,12 @@ import java.util.Date;
 @Route(value = "dashboard", layout = MainLayout.class)
 //@AnonymousAllowed
 @RolesAllowed("ADMIN")
-public class DashBoard1 extends VerticalLayout {
+public class DashBoard1View extends VerticalLayout {
     DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
 
-    public DashBoard1(FolioService folioService) {
+    public DashBoard1View(FolioService folioService) {
         FormLayout flFechas = new FormLayout();
         flFechas.setResponsiveSteps(
                 // Use one column by default

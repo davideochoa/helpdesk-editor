@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.views;
 
 import com.helpdeskeditor.application.app.data.DAO.EstatusDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
@@ -19,6 +19,7 @@ import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.PrioridadService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.EmailService;
 import com.helpdeskeditor.application.util.UIutils;
@@ -105,7 +106,7 @@ import static com.helpdeskeditor.application.configuration.DriverManagerDataSour
 
 @PageTitle("Folios")
 @Route(value = "folio", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
+//@RouteAlias(value = "", layout = MainLayout.class)
 @RolesAllowed({"USER","ADMIN"})
 @Slf4j
 public class FolioView extends VerticalLayout implements HasUrlParameter<String> {
@@ -129,7 +130,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             private TextField TF_NumeroSerie = new TextField("Numero Serie");
             private TextField TF_NumeroInventario = new TextField("Numero Inventario");
         Button Btt_SalvarIncidencia = new Button("GUARDAR");
-
 
     private VerticalLayout VL_Motivo = new VerticalLayout();
         private FormLayout FL_Motivo = new FormLayout();
@@ -155,7 +155,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             private TextField TF_email = new TextField("Email");
             private TextField TF_email2 = new TextField("copia Email");
             private SignaturePad signature = new SignaturePad();
-
 
     private Tabs tabs;
         private Tab tabUnidad;
@@ -189,9 +188,9 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     private String className;
     @Value("${server.servlet.context-path}")
     private String context;
+
     @Autowired
     private static Environment env;
-
     @Autowired
     private EmailService emailService;
 
@@ -767,10 +766,6 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                //CB_Incidencia.setValue(e.getValue());
-                //folioEntity.setIdBien(0);
-                //folioEntity.setMarca("NO ESPECIFICADO");
-                //folioEntity.setModelo("NO ESPECIFICADO");
 
                 CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(CB_Incidencia.getValue().getId()));
 
@@ -778,16 +773,13 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 CB_Modelo.clear();
                 TF_NumeroSerie.clear();
                 TF_NumeroInventario.clear();
+
             }
         });
 
         CB_Bien.setItemLabelGenerator(BienEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                //CB_Bien.setValue(e.getValue());
-                //folioEntity.setMarca("NO ESPECIFICADO");
-                //folioEntity.setModelo("NO ESPECIFICADO");
-
                 CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(CB_Incidencia.getValue().getId(),
                                                                                 e.getValue().getId()));
 

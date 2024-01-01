@@ -29,7 +29,6 @@ public class UnidadEntity {
     private String nombreTitular;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
     @Column(name = "firmaTitular")
     private byte[] firmaTitular;
 }

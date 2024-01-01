@@ -1,8 +1,9 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.views;
 
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosXYGrafica;
 import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard2.GraficaLineaFoliosGenerados;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard2.GraficaLineaFoliosGenerados2;
 import com.vaadin.flow.component.button.Button;
@@ -27,13 +28,13 @@ import java.util.List;
 @Route(value = "dashboard2", layout = MainLayout.class)
 //@AnonymousAllowed
 @RolesAllowed("ADMIN")
-public class DashBoard2 extends VerticalLayout {
+public class DashBoard2View extends VerticalLayout {
     DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
     FolioService folioService;
     FormLayout flgraficas = new FormLayout();
-    public DashBoard2(FolioService folioService) {
+    public DashBoard2View(FolioService folioService) {
         this.folioService = folioService;
         FormLayout flFechas = new FormLayout();
         flFechas.setResponsiveSteps(

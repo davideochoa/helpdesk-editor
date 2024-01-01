@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web;
+package com.helpdeskeditor.application.app.web.views;
 
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BienEntity;
@@ -10,6 +10,7 @@ import com.helpdeskeditor.application.app.service.BienService;
 import com.helpdeskeditor.application.app.service.IncidenciaService;
 import com.helpdeskeditor.application.app.service.UnidadService;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.helpdeskeditor.application.util.UIutils;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
@@ -52,7 +53,7 @@ public class CatalogosView extends VerticalLayout{
         private FormLayout FL_principal = new FormLayout();
             private ComboBox<UsuarioSoporteEntity> CB_usuario = new ComboBox<UsuarioSoporteEntity>("Nombre Usuario");
             private TextField TF_userName = new TextField("UserName");
-            private Select<String> CB_tipoUsuario = new Select<String>("Tipo Usuario");
+            private Select<String> CB_tipoUsuario = new Select<String>();
             private Checkbox CKB_resetPassword = new Checkbox("ResetConstraseña");
 
     private VerticalLayout VL_CatalogoUnidadArea = new VerticalLayout();
@@ -546,10 +547,7 @@ public class CatalogosView extends VerticalLayout{
         FL_principal.add(CB_usuario,TF_userName,CB_tipoUsuario,CKB_resetPassword,signature);
 
         VL_CatalogoUsuairios.add(FL_principal,buttonLayoutBorrarFirma,buttonLayoutCancelar_Grabar);
-/*
-        limpiarLayoutCatalogoUsuario2();
 
-         */
     }
 
     private Boolean verificarExisteUsername(String userName){

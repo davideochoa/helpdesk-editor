@@ -27,4 +27,5 @@ public class AreaEntity {
 
     @Column(name = "Nombre")
     private String nombre;
+
 }
