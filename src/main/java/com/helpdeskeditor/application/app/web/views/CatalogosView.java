@@ -534,9 +534,12 @@ public class CatalogosView extends VerticalLayout{
                     usuarioSoporteEntity.setCorreo("NO ESPECIFICAOO");
                     usuarioSoporteEntity.setEsAdministrador(false);
 
-                    usuarioSoporteService.save(usuarioSoporteEntity);
+                    usuarioSoporteEntity = usuarioSoporteService.save(usuarioSoporteEntity);
 
-                    UIutils.notificacionSUCCESS("Se agrego el usuario").open();
+                    if(usuarioSoporteEntity.getId() > 0)
+                        UIutils.notificacionSUCCESS("Se agrego el usuario").open();
+                    else
+                        UIutils.notificacionERROR("Hubo algun problema, No se agrego el usuario").open();
                 }
 
             }

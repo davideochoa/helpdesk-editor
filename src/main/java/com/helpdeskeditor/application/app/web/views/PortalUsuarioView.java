@@ -103,6 +103,18 @@ public class PortalUsuarioView extends VerticalLayout {
 
     }
 
+
+    private void limpiarLayoutSolicitud(){
+        CB_Area.clear();
+        CB_TipoIncidencia.clear();
+        CB_TipoBien.clear();
+        CB_Marca.clear();
+        CB_Modelo.clear();
+        CB_NumeroSerie.clear();
+        CB_NumeroInventaro.clear();
+        TA_Motivo.clear();
+    }
+
     private VerticalLayout layoutDatosSolicitud(){
 
         unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
@@ -156,23 +168,21 @@ public class PortalUsuarioView extends VerticalLayout {
                 solicitudEntity.setNumeroInventario(numeroInventaro);
                 solicitudEntity.setMotivo(motivo);
 
-                solicitudRepository.save(solicitudEntity);
+                solicitudEntity = solicitudRepository.save(solicitudEntity);
 
-                CB_Area.clear();
-                CB_TipoIncidencia.clear();
-                CB_TipoBien.clear();
-                CB_Marca.clear();
-                CB_Modelo.clear();
-                CB_NumeroSerie.clear();
-                CB_NumeroInventaro.clear();
-                TA_Motivo.clear();
+                if(solicitudEntity.getId() > 0)
+                    UIutils.notificacionSUCCESS("Se agrego la solicitud").open();
+                else
+                    UIutils.notificacionERROR("Hubo un problema, no se agrego la solicitud").open();
 
-                UIutils.notificacionSUCCESS("Se agrego la solicitud").open();
-
+                limpiarLayoutSolicitud();
             }
         });
 
         Button Btt_cancelar = new Button("CANCELAR");
+        Btt_generarSolcitud.addClickListener(e -> {
+            limpiarLayoutSolicitud();
+        });
 
         HorizontalLayout layoutBotones = new HorizontalLayout();
         layoutBotones.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
@@ -222,8 +232,6 @@ public class PortalUsuarioView extends VerticalLayout {
                 CB_NumeroSerie.clear();
                 CB_NumeroInventaro.clear();
             }
-
-
         });
 
         CB_Marca.addValueChangeListener(e ->{
@@ -301,17 +309,13 @@ public class PortalUsuarioView extends VerticalLayout {
 
         FL_principal2.add(CB_TipoIncidencia);
         FL_principal2.add(CB_TipoBien);
-
         FL_principal2.add(CB_Marca);
         FL_principal2.add(CB_Modelo);
-
         FL_principal2.add(CB_NumeroSerie);
         FL_principal2.add(CB_NumeroInventaro);
-
         FL_principal2.add(TA_Motivo);
 
         return new VerticalLayout(FL_principal,FL_principal2,layoutBotones);
-
     }
 
     private VerticalLayout layoutHistorial(){
