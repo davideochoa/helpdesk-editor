@@ -2,6 +2,8 @@ package com.helpdeskeditor.application.app.web.login;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.helpdeskeditor.application.configuration.SecurityConfiguration;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
@@ -70,8 +72,8 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
             event.forwardTo("");
         }
-
         setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
+
     }
 
 }

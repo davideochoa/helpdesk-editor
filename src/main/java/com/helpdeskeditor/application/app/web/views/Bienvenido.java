@@ -25,6 +25,7 @@ import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.Lumo;
@@ -38,7 +39,9 @@ import java.net.URISyntaxException;
 
 @Slf4j
 @PageTitle("Bienvenido")
-@Route(value = "", layout = MainLayout.class)
+
+@Route(value = "bienvenido", layout = MainLayout.class)
+@RouteAlias(value = "", layout = MainLayout.class)
 @AnonymousAllowed
 public class Bienvenido extends VerticalLayout {
 
@@ -98,9 +101,14 @@ public class Bienvenido extends VerticalLayout {
 
         VL_Texto_Bienvenido.add(new H4("Bienvenido al portal de servicios informaticos, como usuario que solicita soporte, podras entrar a la siguiente liga"));
 
+        VL_Texto_Bienvenido.add(new Anchor("portal-usuario","PORTAL USUARIO"));
 
+        VL_Texto_Bienvenido.add(new H4("como usuario que otorga soporte teccnico, podras entrar a la siguiente liga"));
+
+        VL_Texto_Bienvenido.add(new Anchor("folio","PORTAL SOPORTE TECNICO"));
 
         add(VL_Texto_Bienvenido);
+
 
         //****************************************
 

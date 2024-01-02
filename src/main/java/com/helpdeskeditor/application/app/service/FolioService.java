@@ -50,6 +50,20 @@ public class FolioService {
         return  folioFacade.findModeloByIdIncidenciaAndIdBienAndMarca(idIncidencia, idBien, marca);
     }
 
+    public List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(Integer idIncidencia, Integer idBien,String marca, String modelo){
+        return  folioFacade.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(idIncidencia, idBien, marca, modelo);
+    }
+
+    public List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(Integer idIncidencia,
+                                                                                        Integer idBien,
+                                                                                        String marca,
+                                                                                        String modelo,
+                                                                                        String numeroSerie){
+        return  folioFacade.findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(idIncidencia, idBien,
+                                                                                            marca, modelo,
+                                                                                            numeroSerie);
+    }
+
     public Optional<FolioEntity> findById(Integer Id){
         return folioFacade.findById(Id);
     }

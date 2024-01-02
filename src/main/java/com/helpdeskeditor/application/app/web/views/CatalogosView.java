@@ -520,6 +520,8 @@ public class CatalogosView extends VerticalLayout{
                         usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(userName));
 
                     usuarioSoporteService.save(usuarioSoporteEntity);
+
+                    UIutils.notificacionSUCCESS("Se modifico el usuario").open();
                 }
                 else{
                     usuarioSoporteEntity = new UsuarioSoporteEntity();
@@ -533,6 +535,8 @@ public class CatalogosView extends VerticalLayout{
                     usuarioSoporteEntity.setEsAdministrador(false);
 
                     usuarioSoporteService.save(usuarioSoporteEntity);
+
+                    UIutils.notificacionSUCCESS("Se agrego el usuario").open();
                 }
 
             }

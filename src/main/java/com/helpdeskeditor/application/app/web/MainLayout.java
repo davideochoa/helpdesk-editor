@@ -4,11 +4,8 @@ import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
-import com.helpdeskeditor.application.app.web.login.DialogRePasword;
 import com.helpdeskeditor.application.app.web.views.AcercaDeView;
 import com.helpdeskeditor.application.app.web.views.Bienvenido;
-import com.helpdeskeditor.application.app.web.views.Bienvenido2;
-import com.helpdeskeditor.application.app.web.views.Bienvenido3;
 import com.helpdeskeditor.application.app.web.views.CatalogosView;
 import com.helpdeskeditor.application.app.web.views.DashBoard1View;
 import com.helpdeskeditor.application.app.web.views.DashBoard2View;
@@ -20,7 +17,6 @@ import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -120,12 +116,6 @@ public class MainLayout extends AppLayout {
         }
         if (accessChecker.hasAccess(Bienvenido.class)) {
             nav.addItem(new AppNavItem("Bienvenido", Bienvenido.class, "la la-file"));
-        }
-        if (accessChecker.hasAccess(Bienvenido2.class)) {
-            nav.addItem(new AppNavItem("Bienvenido2", Bienvenido2.class, "la la-file"));
-        }
-        if (accessChecker.hasAccess(Bienvenido3.class)) {
-            nav.addItem(new AppNavItem("Bienvenido3", Bienvenido3.class, "la la-file"));
         }
 
         return nav;

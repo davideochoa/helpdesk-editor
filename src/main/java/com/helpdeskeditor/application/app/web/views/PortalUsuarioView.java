@@ -3,8 +3,10 @@ package com.helpdeskeditor.application.app.web.views;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BienEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
+import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
+import com.helpdeskeditor.application.app.data.repository.SolicitudRepository;
 import com.helpdeskeditor.application.app.service.AreaService;
 import com.helpdeskeditor.application.app.service.BienService;
 import com.helpdeskeditor.application.app.service.FolioService;
@@ -72,16 +74,18 @@ public class PortalUsuarioView extends VerticalLayout {
     private IncidenciaService incidenciaService;
     private BienService bienService;
     private FolioService folioService;
-
     private UnidadEntity unidadEntity;
     private UsuarioSoporteEntity usuarioSoporte;
+
+    private SolicitudRepository solicitudRepository;
 
     public PortalUsuarioView(AuthenticatedUser authenticatedUser,
                              UnidadService unidadService,
                              AreaService areaService,
                              IncidenciaService incidenciaService,
                              BienService bienService,
-                             FolioService folioService){
+                             FolioService folioService,
+                             SolicitudRepository solicitudRepository){
 
         this.authenticatedUser = authenticatedUser;
         this.unidadService = unidadService;
@@ -89,6 +93,7 @@ public class PortalUsuarioView extends VerticalLayout {
         this.incidenciaService = incidenciaService;
         this.bienService = bienService;
         this.folioService = folioService;
+        this.solicitudRepository = solicitudRepository;
 
         usuarioSoporte = authenticatedUser.get().get();
 
@@ -100,11 +105,72 @@ public class PortalUsuarioView extends VerticalLayout {
 
     private VerticalLayout layoutDatosSolicitud(){
 
+        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
+
+        CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
+
+        CB_TipoIncidencia.setItems(incidenciaService.findAll());
+
         FormLayout FL_principal = new FormLayout();
         FormLayout FL_principal2 = new FormLayout();
 
         Button Btt_generarSolcitud = new Button("GENERAR SOLICITUD");
         Btt_generarSolcitud.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Btt_generarSolcitud.addClickListener(e -> {
+            AreaEntity areaEntity = CB_Area.getValue();
+            IncidenciaEntity incidenciaEntity = CB_TipoIncidencia.getValue();
+            BienEntity bienEntity = CB_TipoBien.getValue();
+            String marca = CB_Marca.getValue();
+            String modelo = CB_Modelo.getValue();
+            String numeroSerie = CB_NumeroSerie.getValue();
+            String numeroInventaro = CB_NumeroInventaro.getValue();
+            String motivo = TA_Motivo.getValue();
+
+            if(areaEntity != null && incidenciaEntity != null && bienEntity != null &&
+                    marca != null && modelo != null && numeroSerie != null && numeroInventaro != null &&
+                    motivo != null){
+
+                if(!(marca.length() > 0))
+                    marca = "NO ESPECIFICADO";
+
+                if(!(modelo.length() > 0))
+                    modelo = "NO ESPECIFICADO";
+
+                if(!(numeroSerie.length() > 0))
+                    numeroSerie = "NO ESPECIFICADO";
+
+                if(!(numeroInventaro.length() > 0))
+                    numeroInventaro = "NO ESPECIFICADO";
+
+                if(!(motivo.length() > 0))
+                    motivo = "NO ESPECIFICADO";
+
+                SolicitudEntity solicitudEntity = new SolicitudEntity();
+                solicitudEntity.setIdUnidad(unidadEntity.getId());
+                solicitudEntity.setIdArea(areaEntity.getId());
+                solicitudEntity.setIdTipoIncidencia(incidenciaEntity.getId());
+                solicitudEntity.setIdTipoBien(bienEntity.getId());
+                solicitudEntity.setMarca(marca);
+                solicitudEntity.setModelo(modelo);
+                solicitudEntity.setNumeroSerie(numeroSerie);
+                solicitudEntity.setNumeroInventario(numeroInventaro);
+                solicitudEntity.setMotivo(motivo);
+
+                solicitudRepository.save(solicitudEntity);
+
+                CB_Area.clear();
+                CB_TipoIncidencia.clear();
+                CB_TipoBien.clear();
+                CB_Marca.clear();
+                CB_Modelo.clear();
+                CB_NumeroSerie.clear();
+                CB_NumeroInventaro.clear();
+                TA_Motivo.clear();
+
+                UIutils.notificacionSUCCESS("Se agrego la solicitud").open();
+
+            }
+        });
 
         Button Btt_cancelar = new Button("CANCELAR");
 
@@ -133,7 +199,6 @@ public class PortalUsuarioView extends VerticalLayout {
         CB_TipoIncidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_TipoIncidencia.setLabel("Tipo Incidencia");
         CB_TipoIncidencia.addValueChangeListener(e ->{
-
             if(e.getValue() != null){
                 CB_TipoBien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(e.getValue().getId()));
 
@@ -142,7 +207,6 @@ public class PortalUsuarioView extends VerticalLayout {
                 CB_NumeroSerie.clear();
                 CB_NumeroInventaro.clear();
             }
-
         });
 
         CB_TipoBien.setItemLabelGenerator(BienEntity::getNombre);
@@ -152,6 +216,11 @@ public class PortalUsuarioView extends VerticalLayout {
                 CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(
                         CB_TipoIncidencia.getValue().getId(),
                         e.getValue().getId()));
+
+                CB_Marca.clear();
+                CB_Modelo.clear();
+                CB_NumeroSerie.clear();
+                CB_NumeroInventaro.clear();
             }
 
 
@@ -163,6 +232,10 @@ public class PortalUsuarioView extends VerticalLayout {
                         CB_TipoIncidencia.getValue().getId(),
                         CB_TipoBien.getValue().getId(),
                         CB_Marca.getValue()));
+
+                CB_Modelo.clear();
+                CB_NumeroSerie.clear();
+                CB_NumeroInventaro.clear();
             }
         });
 
@@ -178,7 +251,39 @@ public class PortalUsuarioView extends VerticalLayout {
 
         CB_Modelo.addValueChangeListener(e ->{
             if (e.getValue() != null) {
+                CB_NumeroSerie.setItems(folioService.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(
+                        CB_TipoIncidencia.getValue().getId(),
+                        CB_TipoBien.getValue().getId(),
+                        CB_Marca.getValue(),
+                        CB_Modelo.getValue()
+                ));
 
+                CB_NumeroSerie.clear();
+                CB_NumeroInventaro.clear();
+            }
+        });
+
+        /*
+        CB_Modelo.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_Modelo.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_Modelo.setItems(allItems);
+            CB_Modelo.setValue(customValue);
+        });
+         */
+
+        CB_NumeroSerie.addValueChangeListener(e ->{
+            if (e.getValue() != null) {
+                CB_NumeroInventaro.setItems(folioService.findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(
+                        CB_TipoIncidencia.getValue().getId(),
+                        CB_TipoBien.getValue().getId(),
+                        CB_Marca.getValue(),
+                        CB_Modelo.getValue(),
+                        CB_NumeroSerie.getValue()
+                ));
+
+                CB_NumeroInventaro.clear();
             }
         });
 
@@ -205,19 +310,7 @@ public class PortalUsuarioView extends VerticalLayout {
 
         FL_principal2.add(TA_Motivo);
 
-        cargarDatosSolicitud();
-
         return new VerticalLayout(FL_principal,FL_principal2,layoutBotones);
-
-    }
-
-    private void cargarDatosSolicitud() {
-
-        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
-
-        CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
-
-        CB_TipoIncidencia.setItems(incidenciaService.findAll());
 
     }
 

@@ -54,6 +54,25 @@ public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
             "GROUP BY CFI.modelo ORDER BY CFI.modelo ASC")
     List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca);
 
+    @Query("SELECT CFI.numeroSerie "+
+            "FROM FolioEntity CFI "+
+            "WHERE CFI.idTipoIncidencia = :idIncidencia "+
+            "AND CFI.idBien = :idBien "+
+            "AND CFI.marca = :marca "+
+            "AND CFI.modelo = :modelo "+
+            "GROUP BY CFI.numeroSerie ORDER BY CFI.numeroSerie ASC")
+    List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(Integer idIncidencia, Integer idBien,String marca, String modelo);
+
+    @Query("SELECT CFI.numeroInventario "+
+            "FROM FolioEntity CFI "+
+            "WHERE CFI.idTipoIncidencia = :idIncidencia "+
+            "AND CFI.idBien = :idBien "+
+            "AND CFI.marca = :marca "+
+            "AND CFI.modelo = :modelo "+
+            "AND CFI.numeroSerie = :numeroSerie "+
+            "GROUP BY CFI.numeroInventario ORDER BY CFI.numeroInventario ASC")
+    List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(Integer idIncidencia, Integer idBien,String marca, String modelo, String numeroSerie);
+
     @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO("+
             "fe.id,"+
             "fe.fecha,"+
