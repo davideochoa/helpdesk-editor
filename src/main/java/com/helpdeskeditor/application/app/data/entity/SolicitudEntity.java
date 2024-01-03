@@ -33,24 +33,38 @@ public class SolicitudEntity {
     @Column(name = "IdTipoBien")
     private Integer idTipoBien;
 
-    @ToUpperCase
     @Column(name = "Marca")
     private String marca;
 
-    @ToUpperCase
     @Column(name = "Modelo")
     private String modelo;
 
-    @ToUpperCase
     @Column(name = "NumeroSerie")
     private String NumeroSerie;
 
-    @ToUpperCase
     @Column(name = "NumeroInventario")
     private String NumeroInventario;
 
-    @ToUpperCase
     @Column(name = "Motivo")
     private String motivo;
 
+    public void setMarca(String marca) {
+        this.marca = marca.toUpperCase();
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo.toUpperCase();
+    }
+
+    public void setNumeroSerie(String numeroSerie) {
+        NumeroSerie = numeroSerie.toUpperCase();
+    }
+
+    public void setNumeroInventario(String numeroInventario) {
+        NumeroInventario = numeroInventario.toUpperCase();
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo.toUpperCase();
+    }
 }

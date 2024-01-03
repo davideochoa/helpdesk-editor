@@ -247,15 +247,18 @@ public class PortalUsuarioView extends VerticalLayout {
             }
         });
 
-        /*
         CB_Marca.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_Marca.getDataProvider()).getItems();
             String customValue = e.getDetail();
             allItems.add(customValue);
             CB_Marca.setItems(allItems);
             CB_Marca.setValue(customValue);
+
+            CB_Modelo.clear();
+            CB_NumeroSerie.clear();
+            CB_NumeroInventaro.clear();
         });
-        */
+
 
         CB_Modelo.addValueChangeListener(e ->{
             if (e.getValue() != null) {
@@ -271,15 +274,16 @@ public class PortalUsuarioView extends VerticalLayout {
             }
         });
 
-        /*
         CB_Modelo.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_Modelo.getDataProvider()).getItems();
             String customValue = e.getDetail();
             allItems.add(customValue);
             CB_Modelo.setItems(allItems);
             CB_Modelo.setValue(customValue);
+
+            CB_NumeroSerie.clear();
+            CB_NumeroInventaro.clear();
         });
-         */
 
         CB_NumeroSerie.addValueChangeListener(e ->{
             if (e.getValue() != null) {
@@ -295,15 +299,24 @@ public class PortalUsuarioView extends VerticalLayout {
             }
         });
 
-        /*
-        CB_Modelo.addCustomValueSetListener(e -> {
-            List<String> allItems = (List<String>) ((ListDataProvider) CB_Modelo.getDataProvider()).getItems();
+        CB_NumeroSerie.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_NumeroSerie.getDataProvider()).getItems();
             String customValue = e.getDetail();
             allItems.add(customValue);
-            CB_Modelo.setItems(allItems);
-            CB_Modelo.setValue(customValue);
+            CB_NumeroSerie.setItems(allItems);
+            CB_NumeroSerie.setValue(customValue);
+
+            CB_NumeroInventaro.clear();
         });
-         */
+
+        CB_NumeroInventaro.addCustomValueSetListener(e -> {
+            List<String> allItems = (List<String>) ((ListDataProvider) CB_NumeroInventaro.getDataProvider()).getItems();
+            String customValue = e.getDetail();
+            allItems.add(customValue);
+            CB_NumeroInventaro.setItems(allItems);
+            CB_NumeroInventaro.setValue(customValue);
+        });
+
 
         FL_principal.add(CB_Area);
 

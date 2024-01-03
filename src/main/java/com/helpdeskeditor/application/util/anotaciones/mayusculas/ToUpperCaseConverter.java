@@ -8,6 +8,7 @@ public class ToUpperCaseConverter  extends StdConverter<String, String> {
         if (value == null){
             return null;
         }
+
         return value.toUpperCase();
     }
 }
