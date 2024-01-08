@@ -48,6 +48,8 @@ public class SolicitudEntity {
     @Column(name = "Motivo")
     private String motivo;
 
+
+
     public void setMarca(String marca) {
         this.marca = marca.toUpperCase();
     }

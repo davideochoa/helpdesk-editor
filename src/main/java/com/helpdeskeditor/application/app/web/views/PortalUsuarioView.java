@@ -20,6 +20,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -103,7 +104,6 @@ public class PortalUsuarioView extends VerticalLayout {
 
     }
 
-
     private void limpiarLayoutSolicitud(){
         CB_Area.clear();
         CB_TipoIncidencia.clear();
@@ -138,24 +138,31 @@ public class PortalUsuarioView extends VerticalLayout {
             String numeroInventaro = CB_NumeroInventaro.getValue();
             String motivo = TA_Motivo.getValue();
 
-            if(areaEntity != null && incidenciaEntity != null && bienEntity != null &&
-                    marca != null && modelo != null && numeroSerie != null && numeroInventaro != null &&
-                    motivo != null){
+            if(marca == null)
+                marca = "NO ESPECIFICADO";
 
-                if(!(marca.length() > 0))
+            if(modelo == null)
+                modelo = "NO ESPECIFICADO";
+
+            if(numeroSerie == null)
+                numeroSerie = "NO ESPECIFICADO";
+
+            if(numeroInventaro == null)
+                numeroInventaro = "NO ESPECIFICADO";
+
+            if(areaEntity != null && incidenciaEntity != null && bienEntity != null && motivo != null && motivo.length() > 0){
+
+                if(marca.length() == 0)
                     marca = "NO ESPECIFICADO";
 
-                if(!(modelo.length() > 0))
+                if(modelo.length() == 0)
                     modelo = "NO ESPECIFICADO";
 
-                if(!(numeroSerie.length() > 0))
+                if(numeroSerie.length() == 0)
                     numeroSerie = "NO ESPECIFICADO";
 
-                if(!(numeroInventaro.length() > 0))
+                if(numeroInventaro.length() == 0)
                     numeroInventaro = "NO ESPECIFICADO";
-
-                if(!(motivo.length() > 0))
-                    motivo = "NO ESPECIFICADO";
 
                 SolicitudEntity solicitudEntity = new SolicitudEntity();
                 solicitudEntity.setIdUnidad(unidadEntity.getId());
@@ -170,17 +177,19 @@ public class PortalUsuarioView extends VerticalLayout {
 
                 solicitudEntity = solicitudRepository.save(solicitudEntity);
 
-                if(solicitudEntity.getId() > 0)
+                if(solicitudEntity.getId() > 0) {
                     UIutils.notificacionSUCCESS("Se agrego la solicitud").open();
+                    limpiarLayoutSolicitud();
+                }
                 else
-                    UIutils.notificacionERROR("Hubo un problema, no se agrego la solicitud").open();
-
-                limpiarLayoutSolicitud();
+                    UIutils.notificacionERROR("No se puede generar la solicitud, verifique los datos, o contacte a soporte por telefono").open();
             }
+            else
+                UIutils.notificacionERROR("No se puede generar la solicitud faltan datos").open();
         });
 
         Button Btt_cancelar = new Button("CANCELAR");
-        Btt_generarSolcitud.addClickListener(e -> {
+        Btt_cancelar.addClickListener(e -> {
             limpiarLayoutSolicitud();
         });
 
@@ -258,7 +267,6 @@ public class PortalUsuarioView extends VerticalLayout {
             CB_NumeroSerie.clear();
             CB_NumeroInventaro.clear();
         });
-
 
         CB_Modelo.addValueChangeListener(e ->{
             if (e.getValue() != null) {
@@ -340,13 +348,30 @@ public class PortalUsuarioView extends VerticalLayout {
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
-                new FormLayout.ResponsiveStep("500px", 2));
+                new FormLayout.ResponsiveStep("500px", 1));
 
+        Grid<SolicitudEntity> grid = new Grid<>(SolicitudEntity.class, false);
+        grid.addColumn(SolicitudEntity::getIdArea).setHeader("Area");
+        grid.addColumn(SolicitudEntity::getIdTipoIncidencia).setHeader("Incidencia");
+        grid.addColumn(SolicitudEntity::getIdTipoBien).setHeader("Bien");
+        grid.addColumn(SolicitudEntity::getMarca).setHeader("Marca");
+        grid.addColumn(SolicitudEntity::getModelo).setHeader("Modelo");
+        grid.addColumn(SolicitudEntity::getNumeroSerie).setHeader("Serie");
+        grid.addColumn(SolicitudEntity::getNumeroInventario).setHeader("Inventario");
+        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Motivo");
+        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Estatus");
+        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Hoja Servicio");
+        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Oficio Baja");
 
+        //List<SolicitudEntity> people = DataService.getPeople();
+        //grid.setItems(people);
+
+        FL_principal.add(grid);
+
+        VL_Principal.add(grid);
 
         return VL_Principal;
     }
-
 
     private VerticalLayout layoutDatosUnidad(){
 
