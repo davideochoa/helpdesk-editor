@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UnidadFacade {
+public class UnidadesFacade {
     private final UnidadesRepository unidadesRepository;
 
     @Autowired
-    public UnidadFacade(UnidadesRepository unidadesRepository) {
+    public UnidadesFacade(UnidadesRepository unidadesRepository) {
         this.unidadesRepository = unidadesRepository;
     }
 

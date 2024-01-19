@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-public class SolicitudFacade {
+public class SolicitudesFacade {
     private final SolicitudesRepository solicitudesRepository;
 
     @Autowired
-    public SolicitudFacade(SolicitudesRepository solicitudesRepository) {
+    public SolicitudesFacade(SolicitudesRepository solicitudesRepository) {
         this.solicitudesRepository = solicitudesRepository;
     }
 

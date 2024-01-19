@@ -1,31 +1,31 @@
 package com.helpdeskeditor.application.app.service;
 
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
-import com.helpdeskeditor.application.app.facade.AreaFacade;
+import com.helpdeskeditor.application.app.facade.AreasFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AreaService {
-    private final AreaFacade areaFacade;
-    public AreaService(AreaFacade areaFacade) {
-        this.areaFacade = areaFacade;
+    private final AreasFacade areasFacade;
+    public AreaService(AreasFacade areasFacade) {
+        this.areasFacade = areasFacade;
     }
 
     public List<AreaEntity> findAll(){
-        return areaFacade.findAll();
+        return areasFacade.findAll();
     }
 
     public List<AreaEntity> findByidUnidad(int idUnidad){
-        return areaFacade.findByidUnidad(idUnidad);
+        return areasFacade.findByidUnidad(idUnidad);
     }
 
     public AreaEntity findByIdAndIdUnidad(Integer IdUnidad,Integer IdArea){
-        return areaFacade.findByIdAndIdUnidad(IdUnidad,IdArea);
+        return areasFacade.findByIdAndIdUnidad(IdUnidad,IdArea);
     }
 
     public AreaEntity save(AreaEntity areaEntity){
-        return areaFacade.save(areaEntity);
+        return areasFacade.save(areaEntity);
     }
 }

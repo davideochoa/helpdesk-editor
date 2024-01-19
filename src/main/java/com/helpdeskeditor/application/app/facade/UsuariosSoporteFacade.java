@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UsuarioSoporteFacade {
+public class UsuariosSoporteFacade {
     private final UsuariosSoporteRepository usuariosSoporteRepository;
 
     @Autowired
-    public UsuarioSoporteFacade(UsuariosSoporteRepository usuariosSoporteRepository) {
+    public UsuariosSoporteFacade(UsuariosSoporteRepository usuariosSoporteRepository) {
         this.usuariosSoporteRepository = usuariosSoporteRepository;
     }
 

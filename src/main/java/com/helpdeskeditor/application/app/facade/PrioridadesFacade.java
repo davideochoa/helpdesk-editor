@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Component
 @Transactional(readOnly = true)
-public class PrioridadFacade {
+public class PrioridadesFacade {
     private PrioridadesRepository prioridadesRepository;
 
     @Autowired
-    public PrioridadFacade(PrioridadesRepository prioridadesRepository) {
+    public PrioridadesFacade(PrioridadesRepository prioridadesRepository) {
         this.prioridadesRepository = prioridadesRepository;
     }
 

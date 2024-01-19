@@ -8,7 +8,7 @@ import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
-import com.helpdeskeditor.application.app.facade.FolioFacade;
+import com.helpdeskeditor.application.app.facade.FoliosFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,39 +19,39 @@ import java.util.Optional;
 @Service
 public class FolioService {
 
-    private final FolioFacade  folioFacade;
+    private final FoliosFacade foliosFacade;
 
     @Autowired
-    public FolioService(FolioFacade folioFacade) {
-        this.folioFacade = folioFacade;
+    public FolioService(FoliosFacade foliosFacade) {
+        this.foliosFacade = foliosFacade;
     }
 
     public List<String> getAllUsuarioReporta(){
-        return folioFacade.getAllUsuarioReporta();
+        return foliosFacade.getAllUsuarioReporta();
     }
 
     public List<String> getAllMarca(){
-        return folioFacade.getAllMarca();
+        return foliosFacade.getAllMarca();
     }
 
     public List<String> findMarcaByIdIncidenciaAndIdBien(Integer idIncidencia,Integer idBien){
-        return  folioFacade.findMarcaByIdIncidenciaAndIdBien(idIncidencia,idBien);
+        return  foliosFacade.findMarcaByIdIncidenciaAndIdBien(idIncidencia,idBien);
     }
 
     public List<String> getAllModelo(){
-        return folioFacade.getAllModelo();
+        return foliosFacade.getAllModelo();
     }
 
     public List<String> findModeloByMarca(String marca){
-        return  folioFacade.findModeloByMarca(marca);
+        return  foliosFacade.findModeloByMarca(marca);
     }
 
     public List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca){
-        return  folioFacade.findModeloByIdIncidenciaAndIdBienAndMarca(idIncidencia, idBien, marca);
+        return  foliosFacade.findModeloByIdIncidenciaAndIdBienAndMarca(idIncidencia, idBien, marca);
     }
 
     public List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(Integer idIncidencia, Integer idBien,String marca, String modelo){
-        return  folioFacade.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(idIncidencia, idBien, marca, modelo);
+        return  foliosFacade.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(idIncidencia, idBien, marca, modelo);
     }
 
     public List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(Integer idIncidencia,
@@ -59,49 +59,49 @@ public class FolioService {
                                                                                         String marca,
                                                                                         String modelo,
                                                                                         String numeroSerie){
-        return  folioFacade.findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(idIncidencia, idBien,
+        return  foliosFacade.findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(idIncidencia, idBien,
                                                                                             marca, modelo,
                                                                                             numeroSerie);
     }
 
     public Optional<FolioEntity> findById(Integer Id){
-        return folioFacade.findById(Id);
+        return foliosFacade.findById(Id);
     }
 
-    public FolioEntity save(FolioEntity folioEntity){ return folioFacade.save(folioEntity);}
+    public FolioEntity save(FolioEntity folioEntity){ return foliosFacade.save(folioEntity);}
 
     public List<FolioDAO> getAll(){
-        return folioFacade.getAll();
+        return foliosFacade.getAll();
     }
 
     public List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado){
-        return folioFacade.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
+        return foliosFacade.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
     }
 
     public List<FoliosxUnidadDTO> getFoliosXUnidad(Date LDfechaInicio, Date LDfechaFin){
-        return folioFacade.getFoliosXUnidad(LDfechaInicio, LDfechaFin);
+        return foliosFacade.getFoliosXUnidad(LDfechaInicio, LDfechaFin);
     }
 
     public List<FolioxIncidenciaDTO> getFoliosXIncidencia(Date LDfechaInicio, Date LDfechaFin){
-        return folioFacade.getFoliosXIncidencia(LDfechaInicio, LDfechaFin);
+        return foliosFacade.getFoliosXIncidencia(LDfechaInicio, LDfechaFin);
     }
 
     public List<IncidenciaXUnidad> getFoliosIncidenciaXUnidad(Date LDfechaInicio, Date LDfechaFin){
-        return folioFacade.getFoliosIncidenciaXUnidad(LDfechaInicio,LDfechaFin);
+        return foliosFacade.getFoliosIncidenciaXUnidad(LDfechaInicio,LDfechaFin);
     }
 
     public List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin){
-        return folioFacade.getFoliosIncidenciaXBien(LDfechaInicio,LDfechaFin);
+        return foliosFacade.getFoliosIncidenciaXBien(LDfechaInicio,LDfechaFin);
     }
 
     public List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin){
-        return folioFacade.getCantidadFoliosGeneradosXMes(LDfechaInicio,LDfechaFin);
+        return foliosFacade.getCantidadFoliosGeneradosXMes(LDfechaInicio,LDfechaFin);
     }
 
     public List<DatosParaGraficaLineal> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
 
-        List<DatosParaGraficaLineal> datosParaGraficaLinealList = folioFacade.getDatosGraficaLineal(LDfechaInicio,LDfechaFin);
-        List<ValoresParaGraficaLineal> valoresParaGraficaLinealList = folioFacade.getValoresGraficaLineal(LDfechaInicio,LDfechaFin);
+        List<DatosParaGraficaLineal> datosParaGraficaLinealList = foliosFacade.getDatosGraficaLineal(LDfechaInicio,LDfechaFin);
+        List<ValoresParaGraficaLineal> valoresParaGraficaLinealList = foliosFacade.getValoresGraficaLineal(LDfechaInicio,LDfechaFin);
 
         for(ValoresParaGraficaLineal valoresParaGraficaLineal : valoresParaGraficaLinealList){
             for(DatosParaGraficaLineal datosParaGraficaLineal : datosParaGraficaLinealList){

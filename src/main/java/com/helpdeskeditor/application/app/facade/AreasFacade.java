@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-public class AreaFacade {
+public class AreasFacade {
     private final AreasRepository areasRepository;
 
     @Autowired
-    public AreaFacade(AreasRepository areasRepository) {
+    public AreasFacade(AreasRepository areasRepository) {
         this.areasRepository = areasRepository;
     }
 

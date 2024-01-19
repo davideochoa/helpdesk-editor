@@ -1,33 +1,33 @@
 package com.helpdeskeditor.application.app.service;
 
 import com.helpdeskeditor.application.app.data.entity.BienEntity;
-import com.helpdeskeditor.application.app.facade.BienFacade;
+import com.helpdeskeditor.application.app.facade.BienesFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BienService {
-    private BienFacade bienFacade;
+    private BienesFacade bienesFacade;
 
-    public BienService(BienFacade bienFacade) {
-        this.bienFacade = bienFacade;
+    public BienService(BienesFacade bienesFacade) {
+        this.bienesFacade = bienesFacade;
     }
 
     public List<BienEntity> findAll(){
-        return bienFacade.findAll();
+        return bienesFacade.findAll();
     }
 
     public List<BienEntity> findByIdTipoIncidenciaOrderByNombreAsc(int idTipoIncidencia){
-        return bienFacade.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
+        return bienesFacade.findByIdTipoIncidenciaOrderByNombreAsc(idTipoIncidencia);
     }
 
     public BienEntity findByIdAndIdTipoIncidencia(Integer IdTipoIncidencia, Integer Id){
-        return bienFacade.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
+        return bienesFacade.findByIdAndIdTipoIncidencia(IdTipoIncidencia,Id);
     }
 
     public BienEntity save(BienEntity bienEntity){
-        return bienFacade.save(bienEntity);
+        return bienesFacade.save(bienEntity);
     }
 
 }

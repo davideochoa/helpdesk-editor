@@ -10,11 +10,11 @@ import java.util.List;
 
 @Component
 @Transactional(readOnly = true)
-public class CatalogoEstatusFacade {
+public class CatalogosEstatusFacade {
     private CatalogosEstatusRepository catalogosEstatusRepository;
 
     @Autowired
-    public CatalogoEstatusFacade(CatalogosEstatusRepository catalogosEstatusRepository) {
+    public CatalogosEstatusFacade(CatalogosEstatusRepository catalogosEstatusRepository) {
         this.catalogosEstatusRepository = catalogosEstatusRepository;
     }
 

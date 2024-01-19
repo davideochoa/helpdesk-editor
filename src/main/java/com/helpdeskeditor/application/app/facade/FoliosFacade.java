@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class FolioFacade {
+public class FoliosFacade {
     private final FoliosRepository foliosRepository;
 
-    public FolioFacade(FoliosRepository foliosRepository) {
+    public FoliosFacade(FoliosRepository foliosRepository) {
         this.foliosRepository = foliosRepository;
     }
 
