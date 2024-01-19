@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CatalogoEstatusService {
+public class CatalogosEstatusService {
     private CatalogosEstatusFacade catalogosEstatusFacade;
-    public CatalogoEstatusService(CatalogosEstatusFacade catalogosEstatusFacade) {
+    public CatalogosEstatusService(CatalogosEstatusFacade catalogosEstatusFacade) {
         this.catalogosEstatusFacade = catalogosEstatusFacade;
     }
 

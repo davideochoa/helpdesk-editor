@@ -10,26 +10,23 @@ import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.service.AreaService;
-import com.helpdeskeditor.application.app.service.BienService;
-import com.helpdeskeditor.application.app.service.CatalogoEstatusService;
+import com.helpdeskeditor.application.app.service.AreasService;
+import com.helpdeskeditor.application.app.service.BienesService;
+import com.helpdeskeditor.application.app.service.CatalogosEstatusService;
 import com.helpdeskeditor.application.app.service.EstatusService;
-import com.helpdeskeditor.application.app.service.FolioService;
-import com.helpdeskeditor.application.app.service.IncidenciaService;
-import com.helpdeskeditor.application.app.service.PrioridadService;
-import com.helpdeskeditor.application.app.service.UnidadService;
-import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.service.FoliosService;
+import com.helpdeskeditor.application.app.service.IncidenciasService;
+import com.helpdeskeditor.application.app.service.PrioridadesService;
+import com.helpdeskeditor.application.app.service.UnidadesService;
+import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.EmailService;
 import com.helpdeskeditor.application.util.UIutils;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.charts.Chart;
-import com.vaadin.flow.component.charts.model.ChartType;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -53,8 +50,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinSession;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
@@ -64,33 +59,18 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.ResourceUtils;
 
 import javax.annotation.security.RolesAllowed;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -100,7 +80,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 
 import static com.helpdeskeditor.application.configuration.DriverManagerDataSource.SQLDataSource;
 
@@ -164,16 +143,16 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         private Tab tabFirma;
         private VerticalLayout contenidoTab;
 
-    private UnidadService unidadService;
-    private AreaService areaService;
-    private final FolioService folioService;
-    private IncidenciaService incidenciaService;
-    private IncidenciaService incidenciaServiceFinal;
-    private BienService bienService;
-    private PrioridadService prioridadService;
+    private UnidadesService unidadesService;
+    private AreasService areasService;
+    private final FoliosService foliosService;
+    private IncidenciasService incidenciasService;
+    private IncidenciasService incidenciasServiceFinal;
+    private BienesService bienesService;
+    private PrioridadesService prioridadesService;
     private final EstatusService estatusService;
-    private CatalogoEstatusService catalogoEstatusService;
-    private UsuarioSoporteService usuarioSoporteService;
+    private CatalogosEstatusService catalogosEstatusService;
+    private UsuariosSoporteService usuariosSoporteService;
     AuthenticatedUser authenticatedUser;
 
     @Value("${charLimit}")
@@ -202,28 +181,28 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public FolioView(UnidadService unidadService,
-                     AreaService areaService,
-                     FolioService folioService,
-                     IncidenciaService incidenciaService,
-                     BienService bienService,
-                     PrioridadService prioridadService,
+    public FolioView(UnidadesService unidadesService,
+                     AreasService areasService,
+                     FoliosService foliosService,
+                     IncidenciasService incidenciasService,
+                     BienesService bienesService,
+                     PrioridadesService prioridadesService,
                      EstatusService estatusService,
-                     CatalogoEstatusService catalogoEstatusService,
-                     UsuarioSoporteService usuarioSoporteService,
-                     IncidenciaService incidenciaServiceFinal,
+                     CatalogosEstatusService catalogosEstatusService,
+                     UsuariosSoporteService usuariosSoporteService,
+                     IncidenciasService incidenciasServiceFinal,
                      AuthenticatedUser authenticatedUser) {
 
-        this.unidadService = unidadService;
-        this.areaService = areaService;
-        this.folioService = folioService;
-        this.incidenciaService = incidenciaService;
-        this.bienService = bienService;
-        this.prioridadService = prioridadService;
+        this.unidadesService = unidadesService;
+        this.areasService = areasService;
+        this.foliosService = foliosService;
+        this.incidenciasService = incidenciasService;
+        this.bienesService = bienesService;
+        this.prioridadesService = prioridadesService;
         this.estatusService = estatusService;
-        this.catalogoEstatusService = catalogoEstatusService;
-        this.usuarioSoporteService = usuarioSoporteService;
-        this.incidenciaServiceFinal = incidenciaServiceFinal;
+        this.catalogosEstatusService = catalogosEstatusService;
+        this.usuariosSoporteService = usuariosSoporteService;
+        this.incidenciasServiceFinal = incidenciasServiceFinal;
         this.authenticatedUser = authenticatedUser;
 
         folioEntity = new FolioEntity();
@@ -271,7 +250,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     folio != null && firma != null){
                 if(nombre.length() > 0 && cargo.length() > 0 && email.length() > 0 &&
                         folio > 0 && firma.length > 0){
-                    folioEntity = folioService.findById(folio).get();
+                    folioEntity = foliosService.findById(folio).get();
 
                     folioEntity.setNombreFirma(nombre);
                     folioEntity.setCargoFirma(cargo);
@@ -279,7 +258,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                     folioEntity.setEmail2(email2);
                     folioEntity.setFirma(firma);
 
-                    folioService.save(folioEntity);
+                    foliosService.save(folioEntity);
 
                     UIutils.notificacionSUCCESS("La firma fue guardada en el folio!").open();
                 }
@@ -360,14 +339,14 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     }
 
     private boolean cargarFolio(Integer folio){
-        Optional<FolioEntity> OptionalfolioEntity = folioService.findById(folio);
+        Optional<FolioEntity> OptionalfolioEntity = foliosService.findById(folio);
         if(!OptionalfolioEntity.isEmpty()){
             folioEntity = OptionalfolioEntity.get();
 
             if(folioEntity.getId() > 0){
                 //************************** UNIDAD *************************
-                CB_Unidad.setValue(unidadService.findById(folioEntity.getIdUnidad()).get());
-                CB_Area.setValue(areaService.findByIdAndIdUnidad(folioEntity.getIdArea(), unidadService.findById(folioEntity.getIdUnidad()).get().getId()));
+                CB_Unidad.setValue(unidadesService.findById(folioEntity.getIdUnidad()).get());
+                CB_Area.setValue(areasService.findByIdAndIdUnidad(folioEntity.getIdArea(), unidadesService.findById(folioEntity.getIdUnidad()).get().getId()));
                 CB_UsuarioReporta.setValue(folioEntity.getUsuarioReporta());
 
                 String valor_str = folioEntity.getTelefonoContacto();
@@ -392,15 +371,15 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 DtePikr_fechaApertura.setValue(LocalDate.ofInstant(folioEntity.getFecha().toInstant(), ZoneId.systemDefault()));
 
                 //************************************************************************
-                IncidenciaEntity incidenciaEntity = incidenciaService.findById(folioEntity.getIdTipoIncidencia()).get();
-                BienEntity bienEntity = bienService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
+                IncidenciaEntity incidenciaEntity = incidenciasService.findById(folioEntity.getIdTipoIncidencia()).get();
+                BienEntity bienEntity = bienesService.findByIdAndIdTipoIncidencia(folioEntity.getIdBien(), folioEntity.getIdTipoIncidencia());
                 String marca = folioEntity.getMarca();
                 String modelo = folioEntity.getModelo();
                 String numSerie = folioEntity.getNumeroSerie();
                 String numInventario = folioEntity.getNumeroInventario();
 
                 String motivoReporte = folioEntity.getMotivoReporte();
-                PrioridadEntity prioridad = prioridadService.findById(folioEntity.getIdPrioridad()).get();
+                PrioridadEntity prioridad = prioridadesService.findById(folioEntity.getIdPrioridad()).get();
 
                 estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
@@ -544,10 +523,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 folioEntity.getMotivoReporte().length() > 0 && folioEntity.getIdPrioridad() > 0 &&
                 folioEntity.getActivo()){
 
-            folioEntity = folioService.save(folioEntity);
+            folioEntity = foliosService.save(folioEntity);
 
             if(apertura){
-                List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
+                List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogosEstatusService.findAll();
 
                 for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
                     if(catalogoEstatusEntity1.getAbrir())
@@ -705,11 +684,11 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         TF_Telefono.setWidth("240px");
 
         CB_Unidad.setItemLabelGenerator(UnidadEntity::getNombre);
-        CB_Unidad.setItems(unidadService.findAll());
+        CB_Unidad.setItems(unidadesService.findAll());
         CB_Unidad.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 CB_Unidad.setValue(e.getValue());
-                CB_Area.setItems(areaService.findByidUnidad(CB_Unidad.getValue().getId()));
+                CB_Area.setItems(areasService.findByidUnidad(CB_Unidad.getValue().getId()));
             }
         });
 
@@ -718,7 +697,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             CB_Area.setValue(e.getValue());
         });
 
-        CB_UsuarioReporta.setItems(folioService.getAllUsuarioReporta());
+        CB_UsuarioReporta.setItems(foliosService.getAllUsuarioReporta());
 
         CB_UsuarioReporta.addCustomValueSetListener(e -> {
             List<String> allItems = (List<String>) ((ListDataProvider) CB_UsuarioReporta.getDataProvider()).getItems();
@@ -762,12 +741,12 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_Incidencia.setItems(incidenciaService.findAll());
+        CB_Incidencia.setItems(incidenciasService.findAll());
         CB_Incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
         CB_Incidencia.addValueChangeListener(e -> {
             if(e.getValue() != null){
 
-                CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(CB_Incidencia.getValue().getId()));
+                CB_Bien.setItems(bienesService.findByIdTipoIncidenciaOrderByNombreAsc(CB_Incidencia.getValue().getId()));
 
                 CB_Marca.clear();
                 CB_Modelo.clear();
@@ -780,7 +759,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         CB_Bien.setItemLabelGenerator(BienEntity::getNombre);
         CB_Bien.addValueChangeListener(e -> {
             if(e.getValue() != null){
-                CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(CB_Incidencia.getValue().getId(),
+                CB_Marca.setItems(foliosService.findMarcaByIdIncidenciaAndIdBien(CB_Incidencia.getValue().getId(),
                                                                                 e.getValue().getId()));
 
                 CB_Modelo.clear();
@@ -793,7 +772,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             if (e.getValue() != null) {
                 //CB_Marca.setValue(e.getValue());
 
-                CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
+                CB_Modelo.setItems(foliosService.findModeloByIdIncidenciaAndIdBienAndMarca(
                                     CB_Incidencia.getValue().getId(),
                                     CB_Bien.getValue().getId(),
                                     CB_Marca.getValue()));
@@ -858,7 +837,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             e.getSource().setHelperText(e.getValue().length() + "/" + charLimit);
         });
 
-        CB_Prioridad.setItems(prioridadService.findAll());
+        CB_Prioridad.setItems(prioridadesService.findAll());
         CB_Prioridad.setItemLabelGenerator(PrioridadEntity::getNombre);
 
         FL_Motivo.add(TA_MotivoReporte,CB_Prioridad);
@@ -879,7 +858,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 new FormLayout.ResponsiveStep("0", 1),
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_Estaus.setItems(catalogoEstatusService.findAll());
+        CB_Estaus.setItems(catalogosEstatusService.findAll());
         CB_Estaus.setItemLabelGenerator(CatalogoEstatusEntity::getNombre);
         CB_Estaus.addValueChangeListener(e -> {
             if(e.getValue() != null){
@@ -887,10 +866,10 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             }
         });
 
-        CB_SoporteAsignado.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
+        CB_SoporteAsignado.setItems(usuariosSoporteService.findByOrderBynombreUsuarioAsc());
         CB_SoporteAsignado.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
 
-        CB_TipoIncidenciaFinal.setItems(incidenciaServiceFinal.findAll());
+        CB_TipoIncidenciaFinal.setItems(incidenciasServiceFinal.findAll());
         CB_TipoIncidenciaFinal.setItemLabelGenerator(IncidenciaEntity::getNombre);
 
         TA_Anotacion.setLabel("Anotacion");
@@ -916,7 +895,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
             IncidenciaEntity incidenciaEntity = CB_TipoIncidenciaFinal.getValue();
             List<EstatusDAO> estatusEntityList = estatusService.findAllDAO(folioEntity.getId());
 
-            List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
+            List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogosEstatusService.findAll();
 
             for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
                 if(catalogoEstatusEntity1.getAbrir())
@@ -987,7 +966,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                             if(existeApertura && existeDiagnosticoInicial && existeDiagnosticoFinal && !existeCerrar && anotacion.length() > 0){
                                 agregarEstatus(catalogoEstatusEntity.getId(), anotacion,DtePikr_fechaMovimiento.getValue());
                                 folioEntity.setActivo(false);
-                                folioService.save(folioEntity);
+                                foliosService.save(folioEntity);
                             }
                             else
                                 UIutils.confirmDialog("Error en Estatus","El estatus ya existe o falta su correlativo anterior").open();
@@ -996,7 +975,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                             if(catalogoEstatusEntity.getId() == idReasignar){
                                 if(existeApertura && !existeCerrar){
                                     folioEntity.setIdUsuarioSoporteAsignado(usuarioSoporteEntity.getId());
-                                    folioEntity = folioService.save(folioEntity);
+                                    folioEntity = foliosService.save(folioEntity);
 
                                     agregarEstatus(catalogoEstatusEntity.getId(), "Nuevo usuario de soporte asignado"+usuarioSoporteEntity.getNombrePropio(),DtePikr_fechaMovimiento.getValue());
                                 }
@@ -1050,7 +1029,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                         Integer idCerrar = 0;
                         Integer idReasignar = 0;
 
-                        List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogoEstatusService.findAll();
+                        List<CatalogoEstatusEntity> catalogoEstatusEntityList = catalogosEstatusService.findAll();
 
                         for(CatalogoEstatusEntity catalogoEstatusEntity1 : catalogoEstatusEntityList){
                             if(catalogoEstatusEntity1.getAbrir())
@@ -1129,7 +1108,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                                 else{
                                     if(estatus.getIdEstatus() == idCerrar){
                                         folioEntity.setActivo(true);
-                                        folioService.save(folioEntity);
+                                        foliosService.save(folioEntity);
                                     }
                                     EstatusEntity estatusEntity = estatus.getEntity();
                                     estatusService.delete(estatusEntity);

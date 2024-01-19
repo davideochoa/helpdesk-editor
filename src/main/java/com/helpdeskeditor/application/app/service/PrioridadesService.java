@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PrioridadService {
+public class PrioridadesService {
     private PrioridadesFacade prioridadesFacade;
-    public PrioridadService(PrioridadesFacade prioridadesFacade) {
+    public PrioridadesService(PrioridadesFacade prioridadesFacade) {
         this.prioridadesFacade = prioridadesFacade;
     }
 

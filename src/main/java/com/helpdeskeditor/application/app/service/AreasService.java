@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AreaService {
+public class AreasService {
     private final AreasFacade areasFacade;
-    public AreaService(AreasFacade areasFacade) {
+    public AreasService(AreasFacade areasFacade) {
         this.areasFacade = areasFacade;
     }
 

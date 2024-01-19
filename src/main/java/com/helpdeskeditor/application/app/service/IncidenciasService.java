@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IncidenciaService {
+public class IncidenciasService {
     private IncidenciasFacade incidenciasFacade;
-    public IncidenciaService(IncidenciasFacade incidenciasFacade) {
+    public IncidenciasService(IncidenciasFacade incidenciasFacade) {
         this.incidenciasFacade = incidenciasFacade;
     }
 

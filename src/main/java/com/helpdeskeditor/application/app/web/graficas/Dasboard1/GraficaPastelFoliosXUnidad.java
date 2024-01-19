@@ -1,15 +1,13 @@
 package com.helpdeskeditor.application.app.web.graficas.Dasboard1;
 
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
-import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.app.web.charts.PieChartExample;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.helpdeskeditor.application.util.ApexCharts.config.TitleSubtitle;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class GraficaPastelFoliosXUnidad extends FormLayout{
 
-    public GraficaPastelFoliosXUnidad(FolioService folioService, Date fechaInicio, Date fechaFin) {
+    public GraficaPastelFoliosXUnidad(FoliosService foliosService, Date fechaInicio, Date fechaFin) {
         this.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),
@@ -26,7 +24,7 @@ public class GraficaPastelFoliosXUnidad extends FormLayout{
 
         List<FoliosxUnidadDTO> foliosXUnidadDTOList = new ArrayList<FoliosxUnidadDTO>();
 
-        foliosXUnidadDTOList = folioService.getFoliosXUnidad(fechaInicio, fechaFin);
+        foliosXUnidadDTOList = foliosService.getFoliosXUnidad(fechaInicio, fechaFin);
 
         this.setResponsiveSteps(
                 // Use one column by default

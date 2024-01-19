@@ -1,6 +1,6 @@
 package com.helpdeskeditor.application.app.web.views.soporte;
 
-import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXIncidecia;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard1.GraficaPastelFoliosXUnidad;
@@ -31,7 +31,7 @@ public class DashBoard1View extends VerticalLayout {
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
 
-    public DashBoard1View(FolioService folioService) {
+    public DashBoard1View(FoliosService foliosService) {
         FormLayout flFechas = new FormLayout();
         flFechas.setResponsiveSteps(
                 // Use one column by default
@@ -58,10 +58,10 @@ public class DashBoard1View extends VerticalLayout {
         Date fin = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
         final FormLayout[] dash = new FormLayout[4];
-        dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio, fin);
-        dash[1] = new GraficaPastelFoliosXIncidecia(folioService, inicio, fin);
-        dash[2] = new GraficasIntegralesXUnidad(folioService, inicio, fin);
-        dash[3] = new GraficasIntegralesXBien(folioService, inicio, fin);
+        dash[0] = new GraficaPastelFoliosXUnidad(foliosService, inicio, fin);
+        dash[1] = new GraficaPastelFoliosXIncidecia(foliosService, inicio, fin);
+        dash[2] = new GraficasIntegralesXUnidad(foliosService, inicio, fin);
+        dash[3] = new GraficasIntegralesXBien(foliosService, inicio, fin);
 
         flgraficas.add(dash[0]);
         flgraficas.add(dash[1]);
@@ -79,10 +79,10 @@ public class DashBoard1View extends VerticalLayout {
             Date inicio2 = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             Date fin2 = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
-            dash[0] = new GraficaPastelFoliosXUnidad(folioService, inicio2, fin2);
-            dash[1] = new GraficaPastelFoliosXIncidecia(folioService, inicio2, fin2);
-            dash[2] = new GraficasIntegralesXUnidad(folioService, inicio2, fin2);
-            dash[3] = new GraficasIntegralesXBien(folioService, inicio2, fin2);
+            dash[0] = new GraficaPastelFoliosXUnidad(foliosService, inicio2, fin2);
+            dash[1] = new GraficaPastelFoliosXIncidecia(foliosService, inicio2, fin2);
+            dash[2] = new GraficasIntegralesXUnidad(foliosService, inicio2, fin2);
+            dash[3] = new GraficasIntegralesXBien(foliosService, inicio2, fin2);
 
             flgraficas.setColspan(dash[0], 3);
             flgraficas.setColspan(dash[1], 3);

@@ -1,16 +1,9 @@
 package com.helpdeskeditor.application.app.web.graficas.Dasboard1;
 
-import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
-import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.app.web.charts.PieChartExample;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.helpdeskeditor.application.util.ApexCharts.config.TitleSubtitle;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Slf4j
 public class GraficaPastelIncidenciasXUnidad {

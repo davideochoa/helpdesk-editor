@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UnidadService {
+public class UnidadesService {
     private static UnidadesFacade unidadesFacade;
-    public UnidadService(UnidadesFacade unidadesFacade) {
+    public UnidadesService(UnidadesFacade unidadesFacade) {
         this.unidadesFacade = unidadesFacade;
     }
 

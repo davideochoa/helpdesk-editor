@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.web;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNav;
 import com.helpdeskeditor.application.app.web.components.appnav.AppNavItem;
 import com.helpdeskeditor.application.app.web.views.soporte.AcercaDeView;
@@ -47,7 +47,7 @@ public class MainLayout extends AppLayout {
     public MainLayout(AuthenticatedUser authenticatedUser,
                       AccessAnnotationChecker accessChecker,
                       SecurityConfiguration securityConfiguration,
-                      UsuarioSoporteService usuarioSoporteService) {
+                      UsuariosSoporteService usuariosSoporteService) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
 

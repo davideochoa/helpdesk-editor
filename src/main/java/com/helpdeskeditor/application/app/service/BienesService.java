@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BienService {
+public class BienesService {
     private BienesFacade bienesFacade;
 
-    public BienService(BienesFacade bienesFacade) {
+    public BienesService(BienesFacade bienesFacade) {
         this.bienesFacade = bienesFacade;
     }
 

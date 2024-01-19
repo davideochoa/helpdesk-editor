@@ -2,7 +2,7 @@ package com.helpdeskeditor.application.app.web.views.soporte;
 
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosXYGrafica;
-import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard2.GraficaLineaFoliosGenerados;
 import com.helpdeskeditor.application.app.web.graficas.Dasboard2.GraficaLineaFoliosGenerados2;
@@ -32,10 +32,10 @@ public class DashBoard2View extends VerticalLayout {
     DatePicker DP_fechaInicio = new DatePicker("Fecha Inicio");
     DatePicker DP_fechaFin = new DatePicker("Fecha Fin");
     Button B_GenerarGrafico = new Button("Generar Grafico");
-    FolioService folioService;
+    FoliosService foliosService;
     FormLayout flgraficas = new FormLayout();
-    public DashBoard2View(FolioService folioService) {
-        this.folioService = folioService;
+    public DashBoard2View(FoliosService foliosService) {
+        this.foliosService = foliosService;
         FormLayout flFechas = new FormLayout();
         flFechas.setResponsiveSteps(
                 // Use one column by default
@@ -63,7 +63,7 @@ public class DashBoard2View extends VerticalLayout {
 
         final FormLayout[] dash = new FormLayout[4];
 
-        dash[0] = new GraficaLineaFoliosGenerados(folioService, inicio,fin);
+        dash[0] = new GraficaLineaFoliosGenerados(foliosService, inicio,fin);
 
         flgraficas.add(dash[0]);
 
@@ -75,7 +75,7 @@ public class DashBoard2View extends VerticalLayout {
             Date inicio2 = Date.from(DP_fechaInicio.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
             Date fin2 = Date.from(DP_fechaFin.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 
-            dash[0] = new GraficaLineaFoliosGenerados(folioService, inicio2,fin2);
+            dash[0] = new GraficaLineaFoliosGenerados(foliosService, inicio2,fin2);
 
             flgraficas.setColspan(dash[0], 3);
 
@@ -92,7 +92,7 @@ public class DashBoard2View extends VerticalLayout {
     }
 
     private void graficosXunidad(Date inicio, Date fin){
-        List<DatosParaGraficaLineal> datosParaGraficaLinealList = folioService.getDatosGraficaLineal(inicio,fin);
+        List<DatosParaGraficaLineal> datosParaGraficaLinealList = foliosService.getDatosGraficaLineal(inicio,fin);
 
         String unidadActual = datosParaGraficaLinealList.get(0).getNombreUnidad();
         List<DatosXYGrafica> datosXYGraficaList = new ArrayList<>();

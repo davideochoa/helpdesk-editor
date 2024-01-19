@@ -5,11 +5,11 @@ import com.helpdeskeditor.application.app.data.entity.BienEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.service.AreaService;
-import com.helpdeskeditor.application.app.service.BienService;
-import com.helpdeskeditor.application.app.service.IncidenciaService;
-import com.helpdeskeditor.application.app.service.UnidadService;
-import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.service.AreasService;
+import com.helpdeskeditor.application.app.service.BienesService;
+import com.helpdeskeditor.application.app.service.IncidenciasService;
+import com.helpdeskeditor.application.app.service.UnidadesService;
+import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.helpdeskeditor.application.util.UIutils;
@@ -20,7 +20,6 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -33,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.concurrent.atomic.AtomicReference;
 
 @PageTitle("Catalogos")
 @Route(value = "catalogos", layout = MainLayout.class)
@@ -86,28 +84,28 @@ public class CatalogosView extends VerticalLayout{
 
     SignaturePad signature = new SignaturePad();
 
-    private UsuarioSoporteService usuarioSoporteService;
-    private UnidadService unidadService;
-    private AreaService areaService;
-    private IncidenciaService incidenciaService;
-    private BienService bienService;
+    private UsuariosSoporteService usuariosSoporteService;
+    private UnidadesService unidadesService;
+    private AreasService areasService;
+    private IncidenciasService incidenciasService;
+    private BienesService bienesService;
 
     private UsuarioSoporteEntity usuarioSoporteEntity;
 
     @Autowired
     SecurityConfiguration securityConfiguration;
 
-    public CatalogosView(UsuarioSoporteService usuarioSoporteService,
-                         UnidadService unidadService,
-                         AreaService areaService,
-                         IncidenciaService incidenciaService,
-                         BienService bienService) {
+    public CatalogosView(UsuariosSoporteService usuariosSoporteService,
+                         UnidadesService unidadesService,
+                         AreasService areasService,
+                         IncidenciasService incidenciasService,
+                         BienesService bienesService) {
 
-        this.usuarioSoporteService = usuarioSoporteService;
-        this.unidadService = unidadService;
-        this.areaService = areaService;
-        this.incidenciaService = incidenciaService;
-        this.bienService = bienService;
+        this.usuariosSoporteService = usuariosSoporteService;
+        this.unidadesService = unidadesService;
+        this.areasService = areasService;
+        this.incidenciasService = incidenciasService;
+        this.bienesService = bienesService;
 
         //layoutCatalogousuario();
         layoutCatalogousuario2();
@@ -131,7 +129,7 @@ public class CatalogosView extends VerticalLayout{
         CB_incidencia.clear();
         CB_Bien.clear();
 
-        CB_incidencia.setItems(incidenciaService.findAll());
+        CB_incidencia.setItems(incidenciasService.findAll());
     }
 
     private void layoutCatalogoIncidenciaBien(){
@@ -145,13 +143,13 @@ public class CatalogosView extends VerticalLayout{
                 new FormLayout.ResponsiveStep("500px", 2));
 
         CB_incidencia.setItemLabelGenerator(IncidenciaEntity::getNombre);
-        CB_incidencia.setItems(incidenciaService.findAll());
+        CB_incidencia.setItems(incidenciasService.findAll());
         CB_incidencia.addValueChangeListener(e ->{
             if(e != null){
                 IncidenciaEntity incidenciaEntity = e.getValue();
                 if(incidenciaEntity != null) {
                     TF_nombreIncidencia.setValue(e.getValue().getNombre());
-                    CB_Bien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(incidenciaEntity.getId()));
+                    CB_Bien.setItems(bienesService.findByIdTipoIncidenciaOrderByNombreAsc(incidenciaEntity.getId()));
                 }
             }
         });
@@ -167,7 +165,7 @@ public class CatalogosView extends VerticalLayout{
                 if(nombreIncidencia != null){
                     if(!incidenciaEntity.getNombre().equals(nombreIncidencia) && nombreIncidencia.length() > 0){
                         incidenciaEntity.setNombre(nombreIncidencia.toUpperCase());
-                        incidenciaService.save(incidenciaEntity);
+                        incidenciasService.save(incidenciaEntity);
 
                         limpiarlayoutCatalogoIncidenciaBien();
 
@@ -184,7 +182,7 @@ public class CatalogosView extends VerticalLayout{
                     if(nombreIncidencia.length() > 0){
                         IncidenciaEntity newIncidenciaEntity = new IncidenciaEntity();
                         newIncidenciaEntity.setNombre(nombreIncidencia.toUpperCase());
-                        incidenciaService.save(newIncidenciaEntity);
+                        incidenciasService.save(newIncidenciaEntity);
 
                         limpiarlayoutCatalogoIncidenciaBien();
 
@@ -230,7 +228,7 @@ public class CatalogosView extends VerticalLayout{
                     if(!bienEntity.getNombre().equals(nombreBienValue)){
                         if(nombreBienValue.length() > 0){
                             bienEntity.setNombre(nombreBienValue.toUpperCase());
-                            bienService.save(bienEntity);
+                            bienesService.save(bienEntity);
 
                             limpiarlayoutCatalogoIncidenciaBien();
 
@@ -251,7 +249,7 @@ public class CatalogosView extends VerticalLayout{
                         BienEntity bienEntitynuevo = new BienEntity();
                         bienEntitynuevo.setIdTipoIncidencia(CB_incidencia.getValue().getId());
                         bienEntitynuevo.setNombre(nombreBienValue.toUpperCase());
-                        bienService.save(bienEntitynuevo);
+                        bienesService.save(bienEntitynuevo);
 
                         limpiarlayoutCatalogoIncidenciaBien();
 
@@ -281,7 +279,7 @@ public class CatalogosView extends VerticalLayout{
         CB_unidad.clear();
         CB_area.clear();
 
-        CB_unidad.setItems(unidadService.findAll());
+        CB_unidad.setItems(unidadesService.findAll());
     }
 
     private void layoutCatalogoUnidadArea(){
@@ -294,12 +292,12 @@ public class CatalogosView extends VerticalLayout{
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 2));
 
-        CB_unidad.setItems(unidadService.findAll());
+        CB_unidad.setItems(unidadesService.findAll());
         CB_unidad.setItemLabelGenerator(UnidadEntity::getNombre);
         CB_unidad.addValueChangeListener(e -> {
             if(e.getValue() != null){
                 CB_unidad.setValue(e.getValue());
-                CB_area.setItems(areaService.findByidUnidad(CB_unidad.getValue().getId()));
+                CB_area.setItems(areasService.findByidUnidad(CB_unidad.getValue().getId()));
                 TF_nombreUnidad.setValue(CB_unidad.getValue().getNombre());
             }
         });
@@ -316,7 +314,7 @@ public class CatalogosView extends VerticalLayout{
                     if(!unidadEntity.getNombre().equals(nombreUnidad) && nombreUnidad.length() > 0){
                         unidadEntity.setNombre(nombreUnidad.toUpperCase());
 
-                        unidadEntity = unidadService.save(unidadEntity);
+                        unidadEntity = unidadesService.save(unidadEntity);
 
                         limpiarlayoutCatalogoUnidadArea();
                         UIutils.notificacionSUCCESS("Se modifico el nombre de la Unidad").open();
@@ -333,7 +331,7 @@ public class CatalogosView extends VerticalLayout{
                         unidadEntity = new UnidadEntity();
                         unidadEntity.setNombre(nombreUnidad.toUpperCase());
 
-                        unidadEntity = unidadService.save(unidadEntity);
+                        unidadEntity = unidadesService.save(unidadEntity);
 
                         limpiarlayoutCatalogoUnidadArea();
                         UIutils.notificacionSUCCESS("Se agrega el nombre de la Unidad").open();
@@ -374,7 +372,7 @@ public class CatalogosView extends VerticalLayout{
                     if(!areaEntity.getNombre().equals(nombreArea) && nombreArea.length() > 0){
                         areaEntity.setNombre(nombreArea.toUpperCase());
                         areaEntity.setIdUnidad(CB_unidad.getValue().getId());
-                        areaEntity = areaService.save(areaEntity);
+                        areaEntity = areasService.save(areaEntity);
 
                         limpiarlayoutCatalogoUnidadArea();
                         UIutils.notificacionSUCCESS("Se modifico el nombre del Area").open();
@@ -392,7 +390,7 @@ public class CatalogosView extends VerticalLayout{
                         areaEntity.setNombre(nombreArea.toUpperCase());
                         areaEntity.setIdUnidad(CB_unidad.getValue().getId());
 
-                        areaEntity = areaService.save(areaEntity);
+                        areaEntity = areasService.save(areaEntity);
 
                         limpiarlayoutCatalogoUnidadArea();
                         UIutils.notificacionSUCCESS("Se agrega el nombre del Area").open();
@@ -442,7 +440,7 @@ public class CatalogosView extends VerticalLayout{
         signature.setPenColor("#000000");
         signature.setVisible(true);
 
-        CB_usuario.setItems(usuarioSoporteService.findByOrderBynombreUsuarioAsc());
+        CB_usuario.setItems(usuariosSoporteService.findByOrderBynombreUsuarioAsc());
         CB_usuario.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
         CB_usuario.addValueChangeListener(e -> {
 
@@ -519,7 +517,7 @@ public class CatalogosView extends VerticalLayout{
                     if(resetPassword)
                         usuarioSoporteEntity.setPassword(securityConfiguration.passwordEncoder().encode(userName));
 
-                    usuarioSoporteService.save(usuarioSoporteEntity);
+                    usuariosSoporteService.save(usuarioSoporteEntity);
 
                     UIutils.notificacionSUCCESS("Se modifico el usuario").open();
                 }
@@ -534,7 +532,7 @@ public class CatalogosView extends VerticalLayout{
                     usuarioSoporteEntity.setCorreo("NO ESPECIFICAOO");
                     usuarioSoporteEntity.setEsAdministrador(false);
 
-                    usuarioSoporteEntity = usuarioSoporteService.save(usuarioSoporteEntity);
+                    usuarioSoporteEntity = usuariosSoporteService.save(usuarioSoporteEntity);
 
                     if(usuarioSoporteEntity.getId() > 0)
                         UIutils.notificacionSUCCESS("Se agrego el usuario").open();
@@ -559,7 +557,7 @@ public class CatalogosView extends VerticalLayout{
 
     private Boolean verificarExisteUsername(String userName){
         log.info("userName:"+userName);
-        UsuarioSoporteEntity usuario = usuarioSoporteService.findByNombreUsuario(userName);
+        UsuarioSoporteEntity usuario = usuariosSoporteService.findByNombreUsuario(userName);
 
         if(usuario != null)
             return true;

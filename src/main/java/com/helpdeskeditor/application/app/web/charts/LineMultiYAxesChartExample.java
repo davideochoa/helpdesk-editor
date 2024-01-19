@@ -1,8 +1,6 @@
 package com.helpdeskeditor.application.app.web.charts;
 
-import com.helpdeskeditor.application.app.service.FolioService;
 import com.helpdeskeditor.application.util.ApexCharts.ApexChartsBuilder;
-import com.helpdeskeditor.application.util.ApexCharts.config.XAxis;
 import com.helpdeskeditor.application.util.ApexCharts.config.builder.*;
 import com.helpdeskeditor.application.util.ApexCharts.config.chart.Type;
 import com.helpdeskeditor.application.util.ApexCharts.config.chart.builder.ZoomBuilder;
@@ -12,9 +10,6 @@ import com.helpdeskeditor.application.util.ApexCharts.config.yaxis.builder.AxisB
 import com.helpdeskeditor.application.util.ApexCharts.config.yaxis.builder.TitleBuilder;
 import com.helpdeskeditor.application.util.ApexCharts.helper.Series;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class LineMultiYAxesChartExample extends ApexChartsBuilder {

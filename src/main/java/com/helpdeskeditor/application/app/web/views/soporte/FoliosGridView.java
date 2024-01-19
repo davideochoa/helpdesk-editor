@@ -1,10 +1,9 @@
 package com.helpdeskeditor.application.app.web.views.soporte;
 
 import com.helpdeskeditor.application.app.data.DAO.FolioDAO;
-import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.service.FolioService;
-import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.service.FoliosService;
+import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.vaadin.flow.component.button.Button;
@@ -39,25 +38,25 @@ public class FoliosGridView extends VerticalLayout{
 
     private ComboBox<UsuarioSoporteEntity> CB_UsuarioSoporte = new ComboBox<UsuarioSoporteEntity>("Soporte");
 
-    private final FolioService folioService;
+    private final FoliosService foliosService;
 
     @Value("${server.servlet.context-path}")
     private String context;
 
-    public FoliosGridView(FolioService folioService, AuthenticatedUser authenticatedUser, UsuarioSoporteService usuarioSoporteService) {
-        this.folioService = folioService;
+    public FoliosGridView(FoliosService foliosService, AuthenticatedUser authenticatedUser, UsuariosSoporteService usuariosSoporteService) {
+        this.foliosService = foliosService;
 
         grid = new Grid<>(FolioDAO.class, false);
 
         if(authenticatedUser.get().get().getRol().equals("ADMIN")){
-            List<UsuarioSoporteEntity> usuarioSoporteEntities = usuarioSoporteService.findAll();
+            List<UsuarioSoporteEntity> usuarioSoporteEntities = usuariosSoporteService.findAll();
             CB_UsuarioSoporte.setItems(usuarioSoporteEntities);
-            grid.setItems(folioService.getAll());
+            grid.setItems(foliosService.getAll());
         }
         else{
             CB_UsuarioSoporte.setItems(authenticatedUser.get().get());
             CB_UsuarioSoporte.setValue(authenticatedUser.get().get());
-            grid.setItems(folioService.getByIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId()));
+            grid.setItems(foliosService.getByIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId()));
         }
 
         CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
@@ -77,7 +76,7 @@ public class FoliosGridView extends VerticalLayout{
                 unidadFilter.clear();
 
                 Integer Id = e.getValue().getId();
-                grid.setItems(folioService.getByIdUsuarioSoporteAsignado(Id));
+                grid.setItems(foliosService.getByIdUsuarioSoporteAsignado(Id));
             }
         });
 
@@ -94,7 +93,7 @@ public class FoliosGridView extends VerticalLayout{
             estadoFilter.clear();
             unidadFilter.clear();
 
-            grid.setItems(folioService.getAll());
+            grid.setItems(foliosService.getAll());
             CB_UsuarioSoporte.clear();
         });
 

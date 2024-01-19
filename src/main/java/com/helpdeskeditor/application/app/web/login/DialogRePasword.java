@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.web.login;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.service.UsuarioSoporteService;
+import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
 import com.helpdeskeditor.application.util.UIutils;
@@ -17,16 +17,16 @@ public class DialogRePasword extends Dialog {
     private PasswordField passwordField1 = new PasswordField();
     private PasswordField passwordField2 = new PasswordField();
 
-    private UsuarioSoporteService usuarioSoporteService;
+    private UsuariosSoporteService usuariosSoporteService;
     private SecurityConfiguration securityConfiguration;
     private AuthenticatedUser authenticatedUser;
     public DialogRePasword(SecurityConfiguration securityConfiguration,
                            AuthenticatedUser authenticatedUser,
-                           UsuarioSoporteService usuarioSoporteService) {
+                           UsuariosSoporteService usuariosSoporteService) {
         super.setModal(false);
         this.setModal(false);
 
-        this.usuarioSoporteService = usuarioSoporteService;
+        this.usuariosSoporteService = usuariosSoporteService;
 
         this.securityConfiguration = securityConfiguration;
         this.authenticatedUser = authenticatedUser;
@@ -61,7 +61,7 @@ public class DialogRePasword extends Dialog {
                         usuarioSoporteEntity.setPassword(passwordEncoder.encode(password1));
                         usuarioSoporteEntity.setEsReseteadoPassword(false);
 
-                        usuarioSoporteService.save(usuarioSoporteEntity);
+                        usuariosSoporteService.save(usuarioSoporteEntity);
 
                         authenticatedUser.logout();
                     }

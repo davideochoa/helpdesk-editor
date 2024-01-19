@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FolioService {
+public class FoliosService {
 
     private final FoliosFacade foliosFacade;
 
     @Autowired
-    public FolioService(FoliosFacade foliosFacade) {
+    public FoliosService(FoliosFacade foliosFacade) {
         this.foliosFacade = foliosFacade;
     }
 

@@ -8,11 +8,11 @@ import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.data.repository.SolicitudesRepository;
-import com.helpdeskeditor.application.app.service.AreaService;
-import com.helpdeskeditor.application.app.service.BienService;
-import com.helpdeskeditor.application.app.service.FolioService;
-import com.helpdeskeditor.application.app.service.IncidenciaService;
-import com.helpdeskeditor.application.app.service.UnidadService;
+import com.helpdeskeditor.application.app.service.AreasService;
+import com.helpdeskeditor.application.app.service.BienesService;
+import com.helpdeskeditor.application.app.service.FoliosService;
+import com.helpdeskeditor.application.app.service.IncidenciasService;
+import com.helpdeskeditor.application.app.service.UnidadesService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.UIutils;
@@ -69,30 +69,30 @@ public class PortalUsuarioView extends VerticalLayout {
     private TextArea TA_Motivo = new TextArea("Motivo");
 
     private AuthenticatedUser authenticatedUser;
-    private UnidadService unidadService;
-    private AreaService areaService;
-    private IncidenciaService incidenciaService;
-    private BienService bienService;
-    private FolioService folioService;
+    private UnidadesService unidadesService;
+    private AreasService areasService;
+    private IncidenciasService incidenciasService;
+    private BienesService bienesService;
+    private FoliosService foliosService;
     private UnidadEntity unidadEntity;
     private UsuarioSoporteEntity usuarioSoporte;
 
     private SolicitudesRepository solicitudesRepository;
 
     public PortalUsuarioView(AuthenticatedUser authenticatedUser,
-                             UnidadService unidadService,
-                             AreaService areaService,
-                             IncidenciaService incidenciaService,
-                             BienService bienService,
-                             FolioService folioService,
+                             UnidadesService unidadesService,
+                             AreasService areasService,
+                             IncidenciasService incidenciasService,
+                             BienesService bienesService,
+                             FoliosService foliosService,
                              SolicitudesRepository solicitudesRepository){
 
         this.authenticatedUser = authenticatedUser;
-        this.unidadService = unidadService;
-        this.areaService = areaService;
-        this.incidenciaService = incidenciaService;
-        this.bienService = bienService;
-        this.folioService = folioService;
+        this.unidadesService = unidadesService;
+        this.areasService = areasService;
+        this.incidenciasService = incidenciasService;
+        this.bienesService = bienesService;
+        this.foliosService = foliosService;
         this.solicitudesRepository = solicitudesRepository;
 
         usuarioSoporte = authenticatedUser.get().get();
@@ -116,11 +116,11 @@ public class PortalUsuarioView extends VerticalLayout {
 
     private VerticalLayout layoutDatosSolicitud(){
 
-        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
+        unidadEntity = unidadesService.findById(usuarioSoporte.getIdUnidad()).get();
 
-        CB_Area.setItems(areaService.findByidUnidad(unidadEntity.getId()));
+        CB_Area.setItems(areasService.findByidUnidad(unidadEntity.getId()));
 
-        CB_TipoIncidencia.setItems(incidenciaService.findAll());
+        CB_TipoIncidencia.setItems(incidenciasService.findAll());
 
         FormLayout FL_principal = new FormLayout();
         FormLayout FL_principal2 = new FormLayout();
@@ -218,7 +218,7 @@ public class PortalUsuarioView extends VerticalLayout {
         CB_TipoIncidencia.setLabel("Tipo Incidencia");
         CB_TipoIncidencia.addValueChangeListener(e ->{
             if(e.getValue() != null){
-                CB_TipoBien.setItems(bienService.findByIdTipoIncidenciaOrderByNombreAsc(e.getValue().getId()));
+                CB_TipoBien.setItems(bienesService.findByIdTipoIncidenciaOrderByNombreAsc(e.getValue().getId()));
 
                 CB_Marca.clear();
                 CB_Modelo.clear();
@@ -231,7 +231,7 @@ public class PortalUsuarioView extends VerticalLayout {
         CB_TipoBien.setLabel("Tipo Bien");
         CB_TipoBien.addValueChangeListener(e ->{
             if(e.getValue() != null){
-                CB_Marca.setItems(folioService.findMarcaByIdIncidenciaAndIdBien(
+                CB_Marca.setItems(foliosService.findMarcaByIdIncidenciaAndIdBien(
                         CB_TipoIncidencia.getValue().getId(),
                         e.getValue().getId()));
 
@@ -244,7 +244,7 @@ public class PortalUsuarioView extends VerticalLayout {
 
         CB_Marca.addValueChangeListener(e ->{
             if (e.getValue() != null) {
-                CB_Modelo.setItems(folioService.findModeloByIdIncidenciaAndIdBienAndMarca(
+                CB_Modelo.setItems(foliosService.findModeloByIdIncidenciaAndIdBienAndMarca(
                         CB_TipoIncidencia.getValue().getId(),
                         CB_TipoBien.getValue().getId(),
                         CB_Marca.getValue()));
@@ -269,7 +269,7 @@ public class PortalUsuarioView extends VerticalLayout {
 
         CB_Modelo.addValueChangeListener(e ->{
             if (e.getValue() != null) {
-                CB_NumeroSerie.setItems(folioService.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(
+                CB_NumeroSerie.setItems(foliosService.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(
                         CB_TipoIncidencia.getValue().getId(),
                         CB_TipoBien.getValue().getId(),
                         CB_Marca.getValue(),
@@ -294,7 +294,7 @@ public class PortalUsuarioView extends VerticalLayout {
 
         CB_NumeroSerie.addValueChangeListener(e ->{
             if (e.getValue() != null) {
-                CB_NumeroInventaro.setItems(folioService.findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(
+                CB_NumeroInventaro.setItems(foliosService.findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(
                         CB_TipoIncidencia.getValue().getId(),
                         CB_TipoBien.getValue().getId(),
                         CB_Marca.getValue(),
@@ -429,7 +429,7 @@ public class PortalUsuarioView extends VerticalLayout {
                     unidadEntity.setNombreTitular(nombreTitular.toUpperCase());
                     unidadEntity.setFirmaTitular(firma);
 
-                    unidadEntity = unidadService.save(unidadEntity);
+                    unidadEntity = unidadesService.save(unidadEntity);
 
                     if(unidadEntity.getId() > 0)
                         UIutils.notificacionSUCCESS("Los datos se guardaron con exito").open();
@@ -447,7 +447,7 @@ public class PortalUsuarioView extends VerticalLayout {
     }
 
     private void cargarDatosUnidad(){
-        unidadEntity = unidadService.findById(usuarioSoporte.getIdUnidad()).get();
+        unidadEntity = unidadesService.findById(usuarioSoporte.getIdUnidad()).get();
 
         TF_Unidad.setValue(unidadEntity.getNombre());
 
@@ -464,7 +464,7 @@ public class PortalUsuarioView extends VerticalLayout {
             SP_Firma.setImage(SP_Firma.getImagen642URI(unidadEntity.getFirmaTitular()));
 
 
-        List<AreaEntity> areaEntityList = areaService.findByidUnidad(unidadEntity.getId());
+        List<AreaEntity> areaEntityList = areasService.findByidUnidad(unidadEntity.getId());
 
     }
 

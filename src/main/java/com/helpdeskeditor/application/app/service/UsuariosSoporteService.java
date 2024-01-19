@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioSoporteService {
+public class UsuariosSoporteService {
     private final UsuariosSoporteFacade usuariosSoporteFacade;
-    public UsuarioSoporteService(UsuariosSoporteFacade usuariosSoporteFacade) {
+    public UsuariosSoporteService(UsuariosSoporteFacade usuariosSoporteFacade) {
         this.usuariosSoporteFacade = usuariosSoporteFacade;
     }
 

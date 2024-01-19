@@ -2,7 +2,7 @@ package com.helpdeskeditor.application.app.web.graficas.Dasboard1;
 
 import com.helpdeskeditor.application.app.data.DAO.FoliosxUnidadDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
-import com.helpdeskeditor.application.app.service.FolioService;
+import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.util.ApexCharts.ApexCharts;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class GraficasIntegralesXUnidad extends FormLayout {
 
-    public GraficasIntegralesXUnidad(FolioService folioService, Date LDfechaInicio, Date LDfechaFin) {
+    public GraficasIntegralesXUnidad(FoliosService foliosService, Date LDfechaInicio, Date LDfechaFin) {
         this.setResponsiveSteps(
                 // Use one column by default
                 new ResponsiveStep("0", 1),
@@ -24,7 +24,7 @@ public class GraficasIntegralesXUnidad extends FormLayout {
 
         this.add(new H2("INCIDENCIAS POR UNIDAD"));
 
-        List<IncidenciaXUnidad> incidenciaXUnidadList = folioService.getFoliosIncidenciaXUnidad(LDfechaInicio, LDfechaFin);
+        List<IncidenciaXUnidad> incidenciaXUnidadList = foliosService.getFoliosIncidenciaXUnidad(LDfechaInicio, LDfechaFin);
 
         for(IncidenciaXUnidad incidenciaXUnidad : incidenciaXUnidadList)
             log.info(incidenciaXUnidad.getUnidad()+" : "+incidenciaXUnidad.getBien()+" : "+incidenciaXUnidad.getCantidadFolios());
