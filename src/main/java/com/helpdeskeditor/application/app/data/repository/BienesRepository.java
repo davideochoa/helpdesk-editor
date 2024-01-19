@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BienRepository extends JpaRepository<BienEntity, Integer> {
+public interface BienesRepository extends JpaRepository<BienEntity, Integer> {
 
     List<BienEntity> findByIdTipoIncidenciaOrderByNombreAsc(Integer IdTipoIncidencia);
 

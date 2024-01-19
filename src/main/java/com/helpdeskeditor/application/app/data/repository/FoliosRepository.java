@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface FolioRepository extends CrudRepository<FolioEntity, Integer> {
+public interface FoliosRepository extends CrudRepository<FolioEntity, Integer> {
 
     @Query("SELECT CFI.usuarioReporta "+
             "FROM FolioEntity CFI "+
