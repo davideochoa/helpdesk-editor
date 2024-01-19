@@ -7,7 +7,7 @@ import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.data.repository.SolicitudRepository;
+import com.helpdeskeditor.application.app.data.repository.SolicitudesRepository;
 import com.helpdeskeditor.application.app.service.AreaService;
 import com.helpdeskeditor.application.app.service.BienService;
 import com.helpdeskeditor.application.app.service.FolioService;
@@ -77,7 +77,7 @@ public class PortalUsuarioView extends VerticalLayout {
     private UnidadEntity unidadEntity;
     private UsuarioSoporteEntity usuarioSoporte;
 
-    private SolicitudRepository solicitudRepository;
+    private SolicitudesRepository solicitudesRepository;
 
     public PortalUsuarioView(AuthenticatedUser authenticatedUser,
                              UnidadService unidadService,
@@ -85,7 +85,7 @@ public class PortalUsuarioView extends VerticalLayout {
                              IncidenciaService incidenciaService,
                              BienService bienService,
                              FolioService folioService,
-                             SolicitudRepository solicitudRepository){
+                             SolicitudesRepository solicitudesRepository){
 
         this.authenticatedUser = authenticatedUser;
         this.unidadService = unidadService;
@@ -93,7 +93,7 @@ public class PortalUsuarioView extends VerticalLayout {
         this.incidenciaService = incidenciaService;
         this.bienService = bienService;
         this.folioService = folioService;
-        this.solicitudRepository = solicitudRepository;
+        this.solicitudesRepository = solicitudesRepository;
 
         usuarioSoporte = authenticatedUser.get().get();
 
@@ -174,7 +174,7 @@ public class PortalUsuarioView extends VerticalLayout {
                 solicitudEntity.setNumeroInventario(numeroInventaro);
                 solicitudEntity.setMotivo(motivo);
 
-                solicitudEntity = solicitudRepository.save(solicitudEntity);
+                solicitudEntity = solicitudesRepository.save(solicitudEntity);
 
                 if(solicitudEntity.getId() > 0) {
                     UIutils.notificacionSUCCESS("Se agrego la solicitud").open();

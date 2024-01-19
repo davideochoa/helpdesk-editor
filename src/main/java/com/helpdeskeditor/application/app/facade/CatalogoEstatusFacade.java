@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.entity.CatalogoEstatusEntity;
-import com.helpdeskeditor.application.app.data.repository.CatalogoEstatusRepository;
+import com.helpdeskeditor.application.app.data.repository.CatalogosEstatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,14 +11,14 @@ import java.util.List;
 @Component
 @Transactional(readOnly = true)
 public class CatalogoEstatusFacade {
-    private CatalogoEstatusRepository catalogoEstatusRepository;
+    private CatalogosEstatusRepository catalogosEstatusRepository;
 
     @Autowired
-    public CatalogoEstatusFacade(CatalogoEstatusRepository catalogoEstatusRepository) {
-        this.catalogoEstatusRepository = catalogoEstatusRepository;
+    public CatalogoEstatusFacade(CatalogosEstatusRepository catalogosEstatusRepository) {
+        this.catalogosEstatusRepository = catalogosEstatusRepository;
     }
 
     public List<CatalogoEstatusEntity> findAll(){
-        return catalogoEstatusRepository.findAll();
+        return catalogosEstatusRepository.findAll();
     }
 }

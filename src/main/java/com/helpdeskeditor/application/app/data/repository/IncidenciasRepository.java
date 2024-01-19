@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IncidenciaRepository extends JpaRepository<IncidenciaEntity, Integer> {
+public interface IncidenciasRepository extends JpaRepository<IncidenciaEntity, Integer> {
     List<IncidenciaEntity> findAll(Sort sort);
 
 }

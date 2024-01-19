@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
-import com.helpdeskeditor.application.app.data.repository.PrioridadRepository;
+import com.helpdeskeditor.application.app.data.repository.PrioridadesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,18 +12,18 @@ import java.util.Optional;
 @Component
 @Transactional(readOnly = true)
 public class PrioridadFacade {
-    private PrioridadRepository prioridadRepository;
+    private PrioridadesRepository prioridadesRepository;
 
     @Autowired
-    public PrioridadFacade(PrioridadRepository prioridadRepository) {
-        this.prioridadRepository = prioridadRepository;
+    public PrioridadFacade(PrioridadesRepository prioridadesRepository) {
+        this.prioridadesRepository = prioridadesRepository;
     }
 
     public List<PrioridadEntity> findAll(){
-        return prioridadRepository.findAll();
+        return prioridadesRepository.findAll();
     }
 
     public Optional<PrioridadEntity> findById(Integer Id){
-        return prioridadRepository.findById(Id);
+        return prioridadesRepository.findById(Id);
     }
 }

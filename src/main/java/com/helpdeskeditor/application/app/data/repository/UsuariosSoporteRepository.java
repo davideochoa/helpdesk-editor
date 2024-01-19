@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UsuarioSoporteRepository extends CrudRepository<UsuarioSoporteEntity, Integer> {
+public interface UsuariosSoporteRepository extends CrudRepository<UsuarioSoporteEntity, Integer> {
     List<UsuarioSoporteEntity> findAll(Sort sort);
 
     List<UsuarioSoporteEntity> findAll();

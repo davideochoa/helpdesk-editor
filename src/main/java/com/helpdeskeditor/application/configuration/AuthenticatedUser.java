@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.configuration;
 
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
-import com.helpdeskeditor.application.app.data.repository.UsuarioSoporteRepository;
+import com.helpdeskeditor.application.app.data.repository.UsuariosSoporteRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import java.util.Optional;
@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticatedUser {
 
-    private final UsuarioSoporteRepository userRepository;
+    private final UsuariosSoporteRepository userRepository;
 
     @Value("${server.servlet.context-path}")
     private String context;
 
     @Autowired
-    public AuthenticatedUser(UsuarioSoporteRepository userRepository) {
+    public AuthenticatedUser(UsuariosSoporteRepository userRepository) {
         this.userRepository = userRepository;
     }
 

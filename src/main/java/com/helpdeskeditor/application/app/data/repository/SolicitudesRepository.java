@@ -1,8 +1,6 @@
 package com.helpdeskeditor.application.app.data.repository;
 
 import com.helpdeskeditor.application.app.data.DAO.SolicitudDAO;
-import com.helpdeskeditor.application.app.data.DAO.SolicitudDAO2;
-import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Integer> {
+public interface SolicitudesRepository extends JpaRepository<SolicitudEntity, Integer> {
 
     @Query("select new com.helpdeskeditor.application.app.data.DAO.SolicitudDAO("+
             "se.id, "+

@@ -1,7 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
-import com.helpdeskeditor.application.app.data.repository.IncidenciaRepository;
+import com.helpdeskeditor.application.app.data.repository.IncidenciasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -13,25 +13,25 @@ import java.util.Optional;
 @Component
 @Transactional(readOnly = true)
 public class IncidenciaFacade {
-    private IncidenciaRepository incidenciaRepository;
+    private IncidenciasRepository incidenciasRepository;
 
     @Autowired
-    public IncidenciaFacade(IncidenciaRepository incidenciaRepository) {
-        this.incidenciaRepository = incidenciaRepository;
+    public IncidenciaFacade(IncidenciasRepository incidenciasRepository) {
+        this.incidenciasRepository = incidenciasRepository;
     }
 
     @Transactional(readOnly = true)
     public List<IncidenciaEntity> findAll(){
-        return incidenciaRepository.findAll(Sort.by(Sort.Direction.ASC,"Nombre"));
+        return incidenciasRepository.findAll(Sort.by(Sort.Direction.ASC,"Nombre"));
     }
 
     @Transactional(readOnly = true)
     public Optional<IncidenciaEntity> findById(Integer Id){
-        return incidenciaRepository.findById(Id);
+        return incidenciasRepository.findById(Id);
     }
 
     @Transactional
     public IncidenciaEntity save(IncidenciaEntity incidenciaEntity){
-        return incidenciaRepository.save(incidenciaEntity);
+        return incidenciasRepository.save(incidenciaEntity);
     }
 }
