@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -40,15 +41,16 @@ public class SolicitudEntity {
     private String modelo;
 
     @Column(name = "NumeroSerie")
-    private String NumeroSerie;
+    private String numeroSerie;
 
     @Column(name = "NumeroInventario")
-    private String NumeroInventario;
+    private String numeroInventario;
 
     @Column(name = "Motivo")
     private String motivo;
 
-
+    @Column(name = "Fecha")
+    private Date fecha = new Date();
 
     public void setMarca(String marca) {
         this.marca = marca.toUpperCase();
@@ -59,11 +61,11 @@ public class SolicitudEntity {
     }
 
     public void setNumeroSerie(String numeroSerie) {
-        NumeroSerie = numeroSerie.toUpperCase();
+        numeroSerie = numeroSerie.toUpperCase();
     }
 
     public void setNumeroInventario(String numeroInventario) {
-        NumeroInventario = numeroInventario.toUpperCase();
+        numeroInventario = numeroInventario.toUpperCase();
     }
 
     public void setMotivo(String motivo) {

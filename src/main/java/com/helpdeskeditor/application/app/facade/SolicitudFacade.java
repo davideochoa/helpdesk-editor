@@ -1,8 +1,7 @@
 package com.helpdeskeditor.application.app.facade;
 
-import com.helpdeskeditor.application.app.data.entity.AreaEntity;
+import com.helpdeskeditor.application.app.data.DAO.SolicitudDAO;
 import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
-import com.helpdeskeditor.application.app.data.repository.AreaRepository;
 import com.helpdeskeditor.application.app.data.repository.SolicitudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,4 +23,6 @@ public class SolicitudFacade {
         return solicitudRepository.save(solicitudEntity);
     }
 
+    @Transactional(readOnly = true)
+    public List<SolicitudDAO> findAllByIdUnidad(Integer idUnidad){ return solicitudRepository.findAllByIdUnidad(idUnidad); }
 }

@@ -50,10 +50,12 @@ public class FolioFacade {
         return  folioRepository.findModeloByMarca(marca);
     }
 
+    @Transactional(readOnly = true)
     public List<String> findModeloByIdIncidenciaAndIdBienAndMarca(Integer idIncidencia, Integer idBien,String marca){
         return  folioRepository.findModeloByIdIncidenciaAndIdBienAndMarca(idIncidencia, idBien, marca);
     }
 
+    @Transactional(readOnly = true)
     public List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(Integer idIncidencia,
                                                                           Integer idBien,
                                                                           String marca,
@@ -61,6 +63,7 @@ public class FolioFacade {
         return  folioRepository.findSerieByIdIncidenciaAndIdBienAndMarcaAndModelo(idIncidencia, idBien, marca, modelo);
     }
 
+    @Transactional(readOnly = true)
     public List<String> findSerieByIdIncidenciaAndIdBienAndMarcaAndModeloAndNumeroSerie(Integer idIncidencia,
                                                                                         Integer idBien,
                                                                                         String marca,
@@ -90,26 +93,32 @@ public class FolioFacade {
         return folioRepository.getByIdUsuarioSoporteAsignado(idUsuarioSoporteAsignado);
     }
 
+    @Transactional(readOnly = true)
     public List<FoliosxUnidadDTO> getFoliosXUnidad(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosXUnidad(LDfechaInicio, LDfechaFin);
     }
 
+    @Transactional(readOnly = true)
     public List<FolioxIncidenciaDTO> getFoliosXIncidencia(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosXIncidencia(LDfechaInicio, LDfechaFin);
     }
 
+    @Transactional(readOnly = true)
     public List<IncidenciaXUnidad> getFoliosIncidenciaXUnidad(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosIncidenciaXUnidad(LDfechaInicio,LDfechaFin);
     }
 
+    @Transactional(readOnly = true)
     public List<IncidenciaXUnidad> getFoliosIncidenciaXBien(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getFoliosIncidenciaXBien(LDfechaInicio,LDfechaFin);
     }
 
+    @Transactional(readOnly = true)
     public List<DatosCategoriasSeriesDAO> getCantidadFoliosGeneradosXMes(Date LDfechaInicio, Date LDfechaFin){
         return folioRepository.getCantidadFoliosGeneradosXMes(LDfechaInicio,LDfechaFin);
     }
 
+    @Transactional(readOnly = true)
     public List<DatosParaGraficaLineal> getDatosGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
         List<Tuple> tupla = folioRepository.getDatosGraficaLineal(LDfechaInicio,LDfechaFin);
 
@@ -125,6 +134,7 @@ public class FolioFacade {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ValoresParaGraficaLineal> getValoresGraficaLineal(Date LDfechaInicio, Date LDfechaFin){
         /*List<Tuple> tupla = folioRepository.getValoresGraficaLineal(LDfechaInicio,LDfechaFin);
 

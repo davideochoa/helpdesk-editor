@@ -1,4 +1,4 @@
-package com.helpdeskeditor.application.app.web.views;
+package com.helpdeskeditor.application.app.web.views.soporte;
 
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.DatosXYGrafica;

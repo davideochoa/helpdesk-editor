@@ -1,5 +1,6 @@
-package com.helpdeskeditor.application.app.web.views;
+package com.helpdeskeditor.application.app.web.views.usuario_final;
 
+import com.helpdeskeditor.application.app.data.DAO.SolicitudDAO;
 import com.helpdeskeditor.application.app.data.entity.AreaEntity;
 import com.helpdeskeditor.application.app.data.entity.BienEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
@@ -33,9 +34,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
@@ -350,18 +349,19 @@ public class PortalUsuarioView extends VerticalLayout {
                 // Use two columns, if layout's width exceeds 500px
                 new FormLayout.ResponsiveStep("500px", 1));
 
-        Grid<SolicitudEntity> grid = new Grid<>(SolicitudEntity.class, false);
-        grid.addColumn(SolicitudEntity::getIdArea).setHeader("Area");
-        grid.addColumn(SolicitudEntity::getIdTipoIncidencia).setHeader("Incidencia");
-        grid.addColumn(SolicitudEntity::getIdTipoBien).setHeader("Bien");
-        grid.addColumn(SolicitudEntity::getMarca).setHeader("Marca");
-        grid.addColumn(SolicitudEntity::getModelo).setHeader("Modelo");
-        grid.addColumn(SolicitudEntity::getNumeroSerie).setHeader("Serie");
-        grid.addColumn(SolicitudEntity::getNumeroInventario).setHeader("Inventario");
-        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Motivo");
-        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Estatus");
-        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Hoja Servicio");
-        grid.addColumn(SolicitudEntity::getMotivo).setHeader("Oficio Baja");
+        Grid<SolicitudDAO> grid = new Grid<>(SolicitudDAO.class, false);
+        grid.addColumn(SolicitudDAO::getId).setHeader("Solicitud");
+        grid.addColumn(SolicitudDAO::getArea).setHeader("Area");
+        grid.addColumn(SolicitudDAO::getTipoBien).setHeader("Bien");
+        grid.addColumn(SolicitudDAO::getMarca).setHeader("Marca");
+        grid.addColumn(SolicitudDAO::getModelo).setHeader("Modelo");
+        grid.addColumn(SolicitudDAO::getNumeroSerie).setHeader("Serie");
+        grid.addColumn(SolicitudDAO::getNumeroInventario).setHeader("Inventario");
+        grid.addColumn(SolicitudDAO::getMotivo).setHeader("Motivo");
+        grid.addColumn(SolicitudDAO::getMotivo).setHeader("Fecha");
+        grid.addColumn(SolicitudDAO::getMotivo).setHeader("Estatus");
+        grid.addColumn(SolicitudDAO::getMotivo).setHeader("Hoja Servicio");
+        grid.addColumn(SolicitudDAO::getMotivo).setHeader("Oficio Baja");
 
         //List<SolicitudEntity> people = DataService.getPeople();
         //grid.setItems(people);
