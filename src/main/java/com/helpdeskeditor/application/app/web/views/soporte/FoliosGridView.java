@@ -85,31 +85,31 @@ public class FoliosGridView extends VerticalLayout{
         });
 
         panelPaginacion.getButtonBT_Izq().addClickListener(e -> {
-            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getNumber()-1, TAMAÑO_PAGINA));
+            int pagina = folioDAOPage.getNumber()-1;
 
-            if(folioDAOPage.hasNext()){
-                panelPaginacion.setTextoPaginacionL(folioDAOPage.getNumber()+1, folioDAOPage.getTotalPages());
+            if(pagina >= 0){
+                folioDAOPage = foliosService.getAllPageable(PageRequest.of(pagina, TAMAÑO_PAGINA));
+                panelPaginacion.setTextoPaginacionL(pagina+1, folioDAOPage.getTotalPages());
                 grid.setItems(folioDAOPage.get().toList());
             }
         });
 
 
         panelPaginacion.getButtonBT_Der().addClickListener(e -> {
-            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getNumber()+1, TAMAÑO_PAGINA));
+            int pagina = folioDAOPage.getNumber()+1;
 
-            if(folioDAOPage.hasNext()){
-                panelPaginacion.setTextoPaginacionL(folioDAOPage.getNumber()+1, folioDAOPage.getTotalPages());
+            if(pagina <= (folioDAOPage.getTotalPages() -1)){
+                folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getNumber()+1, TAMAÑO_PAGINA));
+                panelPaginacion.setTextoPaginacionL(pagina+1, folioDAOPage.getTotalPages());
                 grid.setItems(folioDAOPage.get().toList());
             }
         });
 
         panelPaginacion.getButtonBT_DerMax().addClickListener(e -> {
-            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getTotalPages(), TAMAÑO_PAGINA));
+            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getTotalPages()-1, TAMAÑO_PAGINA));
 
-            if(folioDAOPage.isLast()){
-                panelPaginacion.setTextoPaginacionL(folioDAOPage.getTotalPages()+1, folioDAOPage.getTotalPages());
-                grid.setItems(folioDAOPage.get().toList());
-            }
+            panelPaginacion.setTextoPaginacionL(folioDAOPage.getTotalPages(), folioDAOPage.getTotalPages());
+            grid.setItems(folioDAOPage.get().toList());
         });
 
         CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
