@@ -5,12 +5,12 @@ import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import com.helpdeskeditor.application.app.data.repository.SolicitudesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class SolicitudesFacade {
@@ -35,4 +35,7 @@ public class SolicitudesFacade {
     }
 
 
+    public Optional<SolicitudEntity> findById(Integer id) {
+        return solicitudesRepository.findById(id);
+    }
 }

@@ -11,6 +11,7 @@ import com.helpdeskeditor.application.app.web.views.soporte.DashBoard1View;
 import com.helpdeskeditor.application.app.web.views.soporte.DashBoard2View;
 import com.helpdeskeditor.application.app.web.views.soporte.FolioView;
 import com.helpdeskeditor.application.app.web.views.soporte.FoliosGridView;
+import com.helpdeskeditor.application.app.web.views.soporte.Prueba;
 import com.helpdeskeditor.application.app.web.views.usuario_final.PortalUsuarioView;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.configuration.SecurityConfiguration;
@@ -117,7 +118,11 @@ public class MainLayout extends AppLayout {
         if (accessChecker.hasAccess(Bienvenido.class)) {
             nav.addItem(new AppNavItem("Bienvenido", Bienvenido.class, "la la-file"));
         }
-
+        /*
+        if (accessChecker.hasAccess(Prueba.class)) {
+            nav.addItem(new AppNavItem("Prueba", Prueba.class, "la la-file"));
+        }
+        */
         return nav;
     }
 

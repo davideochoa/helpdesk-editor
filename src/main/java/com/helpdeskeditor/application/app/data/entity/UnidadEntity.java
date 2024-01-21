@@ -28,6 +28,9 @@ public class UnidadEntity {
     @Column(name = "Nombretitular")
     private String nombreTitular;
 
+    @Column(name = "TelefonoContacto")
+    private String telefonoContacto;
+
     @Lob
     @Column(name = "firmaTitular")
     private byte[] firmaTitular;

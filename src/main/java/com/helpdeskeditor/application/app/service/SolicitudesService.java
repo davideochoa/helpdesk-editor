@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SolicitudesService {
@@ -26,5 +27,9 @@ public class SolicitudesService {
 
     public SolicitudEntity save(SolicitudEntity solicitudEntity) {
         return solicitudesFacade.save(solicitudEntity);
+    }
+
+    public Optional<SolicitudEntity> findById(Integer id) {
+        return solicitudesFacade.findById(id);
     }
 }

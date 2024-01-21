@@ -28,6 +28,12 @@ public class SolicitudEntity {
     @Column(name = "IdArea")
     private Integer idArea;
 
+    @Column(name = "UsuarioReporta")
+    private String usuarioReporta;
+
+    @Column(name = "TelefonoContacto")
+    private String telefonoContacto;
+
     @Column(name = "IdTipoIncidencia")
     private Integer idTipoIncidencia;
 
@@ -52,23 +58,77 @@ public class SolicitudEntity {
     @Column(name = "Fecha")
     private Date fecha = new Date();
 
+    public String getUsuarioReporta() {
+        if(usuarioReporta == null)
+            usuarioReporta = "NO ESPECIFICADO";
+
+        if(usuarioReporta.length() == 0)
+            usuarioReporta = "NO ESPECIFICADO";
+
+        this.usuarioReporta = usuarioReporta.toUpperCase();
+
+        return usuarioReporta;
+    }
+
+    public String getTelefonoContacto() {
+        if(telefonoContacto == null)
+            telefonoContacto = "NO ESPECIFICADO";
+
+        if(telefonoContacto.length() == 0)
+            telefonoContacto = "NO ESPECIFICADO";
+
+        this.telefonoContacto = telefonoContacto.toUpperCase();
+
+        return telefonoContacto;
+    }
+
     public void setMarca(String marca) {
+        if(marca == null)
+            marca = "NO ESPECIFICADO";
+
+        if(marca.length() == 0)
+            marca = "NO ESPECIFICADO";
+
         this.marca = marca.toUpperCase();
     }
 
     public void setModelo(String modelo) {
+        if(modelo == null)
+            modelo = "NO ESPECIFICADO";
+
+        if(modelo.length() == 0)
+            modelo = "NO ESPECIFICADO";
+
         this.modelo = modelo.toUpperCase();
     }
 
     public void setNumeroSerie(String numeroSerie) {
-        numeroSerie = numeroSerie.toUpperCase();
+        if(numeroSerie == null)
+            numeroSerie = "NO ESPECIFICADO";
+
+        if(numeroSerie.length() == 0)
+            numeroSerie = "NO ESPECIFICADO";
+
+        this.numeroSerie = numeroSerie.toUpperCase();
     }
 
     public void setNumeroInventario(String numeroInventario) {
-        numeroInventario = numeroInventario.toUpperCase();
+        if(numeroInventario == null)
+            numeroInventario = "NO ESPECIFICADO";
+
+        if(numeroInventario.length() == 0)
+            numeroInventario = "NO ESPECIFICADO";
+
+        this.numeroInventario = numeroInventario.toUpperCase();
     }
 
     public void setMotivo(String motivo) {
+        if(motivo == null)
+            motivo = "NO ESPECIFICADO";
+
+        if(motivo.length() == 0)
+            motivo = "NO ESPECIFICADO";
+
         this.motivo = motivo.toUpperCase();
     }
 }

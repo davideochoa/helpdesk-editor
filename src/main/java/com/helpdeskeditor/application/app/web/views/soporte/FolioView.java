@@ -8,6 +8,7 @@ import com.helpdeskeditor.application.app.data.entity.EstatusEntity;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.data.entity.IncidenciaEntity;
 import com.helpdeskeditor.application.app.data.entity.PrioridadEntity;
+import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import com.helpdeskeditor.application.app.data.entity.UnidadEntity;
 import com.helpdeskeditor.application.app.data.entity.UsuarioSoporteEntity;
 import com.helpdeskeditor.application.app.service.AreasService;
@@ -17,6 +18,7 @@ import com.helpdeskeditor.application.app.service.EstatusService;
 import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.app.service.IncidenciasService;
 import com.helpdeskeditor.application.app.service.PrioridadesService;
+import com.helpdeskeditor.application.app.service.SolicitudesService;
 import com.helpdeskeditor.application.app.service.UnidadesService;
 import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.app.web.MainLayout;
@@ -153,7 +155,8 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
     private final EstatusService estatusService;
     private CatalogosEstatusService catalogosEstatusService;
     private UsuariosSoporteService usuariosSoporteService;
-    AuthenticatedUser authenticatedUser;
+    private AuthenticatedUser authenticatedUser;
+    private SolicitudesService solicitudesService;
 
     @Value("${charLimit}")
     private int charLimit;
@@ -191,7 +194,8 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                      CatalogosEstatusService catalogosEstatusService,
                      UsuariosSoporteService usuariosSoporteService,
                      IncidenciasService incidenciasServiceFinal,
-                     AuthenticatedUser authenticatedUser) {
+                     AuthenticatedUser authenticatedUser,
+                     SolicitudesService solicitudesService) {
 
         this.unidadesService = unidadesService;
         this.areasService = areasService;
@@ -204,6 +208,7 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         this.usuariosSoporteService = usuariosSoporteService;
         this.incidenciasServiceFinal = incidenciasServiceFinal;
         this.authenticatedUser = authenticatedUser;
+        this.solicitudesService = solicitudesService;
 
         folioEntity = new FolioEntity();
 
@@ -219,6 +224,40 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         this.add(tabs, contenidoTab);
 
         borrar();
+    }
+
+    private HorizontalLayout panelCargaSolicitud(){
+
+        IntegerField IF_Solicitud = new IntegerField();
+        IF_Solicitud.setLabel("Solicitud");
+        IF_Solicitud.setHelperText("Solicitud a cargar");
+
+        Button Btt_CargaSolicitud = new Button("Carga Solicitud");
+        Btt_CargaSolicitud.addClickListener( evento ->{
+            Optional<SolicitudEntity> solicitudEntity = solicitudesService.findById(IF_Solicitud.getValue());
+
+            if(solicitudEntity.isPresent()){
+                SolicitudEntity solicitud = solicitudEntity.get();
+
+                CB_Unidad.setValue(unidadesService.findById(solicitud.getIdUnidad()).get());
+                CB_Area.setValue(   areasService.findByIdAndIdUnidad(solicitud.getIdArea(),
+                                    unidadesService.findById(solicitud.getIdUnidad()).get().getId()));
+                CB_UsuarioReporta.setValue(solicitud.getUsuarioReporta());
+            }
+            else{
+                UIutils.notificacionERROR("No se encontro la solicitud");
+            }
+        });
+
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setMargin(false);
+        horizontalLayout.setPadding(false);
+        horizontalLayout.setWidthFull();
+        horizontalLayout.setVerticalComponentAlignment(Alignment.BASELINE,IF_Solicitud,Btt_CargaSolicitud);
+
+        horizontalLayout.add(IF_Solicitud,Btt_CargaSolicitud);
+
+        return horizontalLayout;
     }
 
     private void layoutFirma(){
@@ -722,13 +761,16 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         FL_Unidad.add(TF_ReferenciaDocumental);
         FL_Unidad.add(DtePikr_fechaApertura);
 
-        VL_Unidad.add(HL_Folio_BotnoCargar,
-                    new H5("UNIDAD"),
-                    FL_Unidad,UIutils.lineaDivision(),
-                    new H5("INCIDENCIA"),
-                    FL_Incidencia,UIutils.lineaDivision(),
-                    new H5("MOTIVO"),
-                    FL_Motivo,Btt_SalvarUnidad);
+        VL_Unidad.add(  new H5("SOLICITUD"),
+                        panelCargaSolicitud(),
+                        new H5("FOLIO"),
+                        HL_Folio_BotnoCargar,
+                        new H5("UNIDAD"),
+                        FL_Unidad,UIutils.lineaDivision(),
+                        new H5("INCIDENCIA"),
+                        FL_Incidencia,UIutils.lineaDivision(),
+                        new H5("MOTIVO"),
+                        FL_Motivo,Btt_SalvarUnidad);
     }
 
     private void layoutIncidencia(){

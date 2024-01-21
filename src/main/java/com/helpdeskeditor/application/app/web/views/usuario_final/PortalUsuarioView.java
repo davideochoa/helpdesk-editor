@@ -35,6 +35,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -64,6 +65,7 @@ public class PortalUsuarioView extends VerticalLayout {
     private TextField TF_Cargo = new TextField("Cargo");
     private TextField TF_InicialesTitulo = new TextField("Iniciales Titulo");
     private TextField TF_Nombre = new TextField("Nombre Completo");
+    private TextField NF_NumeroTelefonico = new TextField("Numero de Telefono");
     private SignaturePad SP_Firma = new SignaturePad();
 
     private Select<AreaEntity> CB_Area = new Select<>();
@@ -145,35 +147,12 @@ public class PortalUsuarioView extends VerticalLayout {
             String numeroInventaro = CB_NumeroInventaro.getValue();
             String motivo = TA_Motivo.getValue();
 
-            if(marca == null)
-                marca = "NO ESPECIFICADO";
-
-            if(modelo == null)
-                modelo = "NO ESPECIFICADO";
-
-            if(numeroSerie == null)
-                numeroSerie = "NO ESPECIFICADO";
-
-            if(numeroInventaro == null)
-                numeroInventaro = "NO ESPECIFICADO";
-
             if(areaEntity != null && incidenciaEntity != null && bienEntity != null && motivo != null && motivo.length() > 0){
-
-                if(marca.length() == 0)
-                    marca = "NO ESPECIFICADO";
-
-                if(modelo.length() == 0)
-                    modelo = "NO ESPECIFICADO";
-
-                if(numeroSerie.length() == 0)
-                    numeroSerie = "NO ESPECIFICADO";
-
-                if(numeroInventaro.length() == 0)
-                    numeroInventaro = "NO ESPECIFICADO";
 
                 SolicitudEntity solicitudEntity = new SolicitudEntity();
                 solicitudEntity.setIdUnidad(unidadEntity.getId());
                 solicitudEntity.setIdArea(areaEntity.getId());
+                solicitudEntity.setUsuarioReporta(authenticatedUser.get().get().getNombreUsuario());
                 solicitudEntity.setIdTipoIncidencia(incidenciaEntity.getId());
                 solicitudEntity.setIdTipoBien(bienEntity.getId());
                 solicitudEntity.setMarca(marca);
@@ -420,7 +399,16 @@ public class PortalUsuarioView extends VerticalLayout {
         SP_Firma.setPenColor("#000000");
         SP_Firma.setVisible(true);
 
-        FL_principal.add(TF_Unidad,TF_Cargo,TF_InicialesTitulo,TF_Nombre,HL_TextoFirma,SP_Firma);
+        FL_principal.add(TF_Unidad,TF_Cargo,TF_InicialesTitulo,TF_Nombre,NF_NumeroTelefonico);
+
+        FormLayout FL_Firmal = new FormLayout();
+        FL_Firmal.setResponsiveSteps(
+                // Use one column by default
+                new FormLayout.ResponsiveStep("0", 1),
+                // Use two columns, if layout's width exceeds 500px
+                new FormLayout.ResponsiveStep("500px", 2));
+
+        FL_Firmal.add(HL_TextoFirma,SP_Firma);
 
         Btt_borrarFirma.addClickListener(e -> {
             SP_Firma.clear();
@@ -439,22 +427,20 @@ public class PortalUsuarioView extends VerticalLayout {
                     unidadEntity.setInicialesTitular(inicialesTitular.toUpperCase());
                     unidadEntity.setNombreTitular(nombreTitular.toUpperCase());
                     unidadEntity.setFirmaTitular(firma);
-
+                    unidadEntity.setTelefonoContacto(NF_NumeroTelefonico.getValue());
                     unidadEntity = unidadesService.save(unidadEntity);
 
                     if(unidadEntity.getId() > 0)
                         UIutils.notificacionSUCCESS("Los datos se guardaron con exito").open();
                     else
                         UIutils.notificacionERROR("No se realizo el guardado de los datos").open();
-
                 }
             }
-
         });
 
         cargarDatosUnidad();
 
-        return new VerticalLayout(FL_principal,HL_BotonBorrarFirma,HL_BotonGrabar);
+        return new VerticalLayout(FL_principal,FL_Firmal,HL_BotonBorrarFirma,HL_BotonGrabar);
     }
 
     private void cargarDatosUnidad(){
