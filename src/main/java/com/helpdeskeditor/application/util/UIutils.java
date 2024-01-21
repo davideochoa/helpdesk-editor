@@ -1,11 +1,16 @@
 package com.helpdeskeditor.application.util;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 
 public class UIutils {
 
@@ -66,5 +71,57 @@ public class UIutils {
         dialog.setConfirmText("OK");
 
         return dialog;
+    }
+
+
+
+    public static class PanelPaginacion extends HorizontalLayout{
+
+        private Integer TOTAL_PAGINAS = 0;
+
+        private Integer PAGINA_ACTUAL = 0;
+
+        private H4 textoPaginacion = new H4(PAGINA_ACTUAL+" de "+TOTAL_PAGINAS);
+
+        Button BT_IzqMax = new Button(LumoIcon.CHEVRON_LEFT.create());
+        Button BT_Izq = new Button(LumoIcon.ANGLE_LEFT.create());
+        Button BT_Der = new Button(LumoIcon.ANGLE_RIGHT.create());
+        Button BT_DerMax = new Button(LumoIcon.CHEVRON_RIGHT.create());
+
+        public PanelPaginacion() {
+
+            this.setPadding(false);
+            this.setMargin(false);
+            this.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+            this.setAlignItems(FlexComponent.Alignment.CENTER);
+            this.setWidthFull();
+
+            textoPaginacion.getStyle().set("border","0px");
+            textoPaginacion.getStyle().set("padding","0px");
+            textoPaginacion.getStyle().set("margin","0px");
+
+            this.add(BT_IzqMax);
+            this.add(BT_Izq);
+            this.add(textoPaginacion);
+            this.add(BT_Der);
+            this.add(BT_DerMax);
+
+        }
+
+        public Button getButtonBT_IzqMax(){ return BT_IzqMax; }
+
+        public Button getButtonBT_Izq(){ return BT_Izq; }
+
+        public Button getButtonBT_Der(){ return BT_Der; }
+
+        public Button getButtonBT_DerMax(){ return BT_DerMax; }
+
+
+        public void setTextoPaginacionL(Integer paginaActual, Integer totalPaginas){
+            PAGINA_ACTUAL = paginaActual;
+            TOTAL_PAGINAS = totalPaginas;
+
+            textoPaginacion.setText(PAGINA_ACTUAL+" de "+TOTAL_PAGINAS);
+        }
     }
 }

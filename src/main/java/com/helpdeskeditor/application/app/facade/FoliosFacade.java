@@ -8,6 +8,8 @@ import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,6 +88,11 @@ public class FoliosFacade {
     @Transactional(readOnly = true)
     public List<FolioDAO> getAll(){
         return foliosRepository.getAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<FolioDAO> getAllPageable(Pageable paginacion){
+        return foliosRepository.getAllPageable(paginacion);
     }
 
     @Transactional(readOnly = true)

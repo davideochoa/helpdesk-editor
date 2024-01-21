@@ -6,6 +6,7 @@ import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.app.service.UsuariosSoporteService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
+import com.helpdeskeditor.application.util.UIutils.PanelPaginacion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -22,6 +23,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
@@ -42,22 +46,71 @@ public class FoliosGridView extends VerticalLayout{
 
     @Value("${server.servlet.context-path}")
     private String context;
+    private Integer PAGINA_ACTUAL = 0;
+    private Integer TAMAÑO_PAGINA = 100;
+    private Integer TOTAL_PAGINAS = 0;
+    private Page<FolioDAO> folioDAOPage;
 
     public FoliosGridView(FoliosService foliosService, AuthenticatedUser authenticatedUser, UsuariosSoporteService usuariosSoporteService) {
         this.foliosService = foliosService;
+
+        PanelPaginacion panelPaginacion = new PanelPaginacion();
 
         grid = new Grid<>(FolioDAO.class, false);
 
         if(authenticatedUser.get().get().getRol().equals("ADMIN")){
             List<UsuarioSoporteEntity> usuarioSoporteEntities = usuariosSoporteService.findAll();
             CB_UsuarioSoporte.setItems(usuarioSoporteEntities);
-            grid.setItems(foliosService.getAll());
+
+            folioDAOPage = foliosService.getAllPageable(PageRequest.of(0, TAMAÑO_PAGINA));
+
+            if(folioDAOPage.hasNext()){
+                panelPaginacion.setTextoPaginacionL(folioDAOPage.getNumber()+1, folioDAOPage.getTotalPages());
+                grid.setItems(folioDAOPage.get().toList());
+            }
         }
         else{
             CB_UsuarioSoporte.setItems(authenticatedUser.get().get());
             CB_UsuarioSoporte.setValue(authenticatedUser.get().get());
             grid.setItems(foliosService.getByIdUsuarioSoporteAsignado(authenticatedUser.get().get().getId()));
         }
+
+        panelPaginacion.getButtonBT_IzqMax().addClickListener(e -> {
+            folioDAOPage = foliosService.getAllPageable(PageRequest.of(0, TAMAÑO_PAGINA));
+
+            if(folioDAOPage.hasNext()){
+                panelPaginacion.setTextoPaginacionL(folioDAOPage.getNumber()+1, folioDAOPage.getTotalPages());
+                grid.setItems(folioDAOPage.get().toList());
+            }
+        });
+
+        panelPaginacion.getButtonBT_Izq().addClickListener(e -> {
+            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getNumber()-1, TAMAÑO_PAGINA));
+
+            if(folioDAOPage.hasNext()){
+                panelPaginacion.setTextoPaginacionL(folioDAOPage.getNumber()+1, folioDAOPage.getTotalPages());
+                grid.setItems(folioDAOPage.get().toList());
+            }
+        });
+
+
+        panelPaginacion.getButtonBT_Der().addClickListener(e -> {
+            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getNumber()+1, TAMAÑO_PAGINA));
+
+            if(folioDAOPage.hasNext()){
+                panelPaginacion.setTextoPaginacionL(folioDAOPage.getNumber()+1, folioDAOPage.getTotalPages());
+                grid.setItems(folioDAOPage.get().toList());
+            }
+        });
+
+        panelPaginacion.getButtonBT_DerMax().addClickListener(e -> {
+            folioDAOPage = foliosService.getAllPageable(PageRequest.of(folioDAOPage.getTotalPages(), TAMAÑO_PAGINA));
+
+            if(folioDAOPage.isLast()){
+                panelPaginacion.setTextoPaginacionL(folioDAOPage.getTotalPages()+1, folioDAOPage.getTotalPages());
+                grid.setItems(folioDAOPage.get().toList());
+            }
+        });
 
         CB_UsuarioSoporte.setItemLabelGenerator(UsuarioSoporteEntity::getNombrePropio);
         CB_UsuarioSoporte.setWidth("400px");
@@ -135,11 +188,12 @@ public class FoliosGridView extends VerticalLayout{
         prepareFilterFields();
 
         add(horizontalLayoutComboTecnicos);
-
         add(grid);
+        add(panelPaginacion);
 
         this.setHeight("100%");
     }
+
     private void prepareFilterFields() {
         HeaderRow headerRow = grid.appendHeaderRow();
 

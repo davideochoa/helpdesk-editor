@@ -10,6 +10,8 @@ import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraf
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
 import com.helpdeskeditor.application.app.facade.FoliosFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -72,6 +74,10 @@ public class FoliosService {
 
     public List<FolioDAO> getAll(){
         return foliosFacade.getAll();
+    }
+
+    public Page<FolioDAO> getAllPageable(Pageable paginacion){
+        return foliosFacade.getAllPageable(paginacion);
     }
 
     public List<FolioDAO> getByIdUsuarioSoporteAsignado(Integer idUsuarioSoporteAsignado){

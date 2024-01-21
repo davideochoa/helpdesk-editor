@@ -12,17 +12,23 @@ import com.helpdeskeditor.application.app.service.AreasService;
 import com.helpdeskeditor.application.app.service.BienesService;
 import com.helpdeskeditor.application.app.service.FoliosService;
 import com.helpdeskeditor.application.app.service.IncidenciasService;
+import com.helpdeskeditor.application.app.service.SolicitudesService;
 import com.helpdeskeditor.application.app.service.UnidadesService;
 import com.helpdeskeditor.application.app.web.MainLayout;
 import com.helpdeskeditor.application.configuration.AuthenticatedUser;
 import com.helpdeskeditor.application.util.UIutils;
+import com.helpdeskeditor.application.util.UIutils.PanelPaginacion;
 import com.helpdeskeditor.application.util.signaturepad.SignaturePad;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -34,6 +40,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.security.RolesAllowed;
@@ -77,7 +84,7 @@ public class PortalUsuarioView extends VerticalLayout {
     private UnidadEntity unidadEntity;
     private UsuarioSoporteEntity usuarioSoporte;
 
-    private SolicitudesRepository solicitudesRepository;
+    private SolicitudesService solicitudesService;
 
     public PortalUsuarioView(AuthenticatedUser authenticatedUser,
                              UnidadesService unidadesService,
@@ -85,7 +92,7 @@ public class PortalUsuarioView extends VerticalLayout {
                              IncidenciasService incidenciasService,
                              BienesService bienesService,
                              FoliosService foliosService,
-                             SolicitudesRepository solicitudesRepository){
+                             SolicitudesService solicitudesService){
 
         this.authenticatedUser = authenticatedUser;
         this.unidadesService = unidadesService;
@@ -93,13 +100,16 @@ public class PortalUsuarioView extends VerticalLayout {
         this.incidenciasService = incidenciasService;
         this.bienesService = bienesService;
         this.foliosService = foliosService;
-        this.solicitudesRepository = solicitudesRepository;
+        this.solicitudesService = solicitudesService;
 
         usuarioSoporte = authenticatedUser.get().get();
+
+        unidadEntity = unidadesService.findById(usuarioSoporte.getIdUnidad()).get();
 
         layoutTabs();
 
         this.add(tabs, contenidoTab);
+
 
     }
 
@@ -115,8 +125,6 @@ public class PortalUsuarioView extends VerticalLayout {
     }
 
     private VerticalLayout layoutDatosSolicitud(){
-
-        unidadEntity = unidadesService.findById(usuarioSoporte.getIdUnidad()).get();
 
         CB_Area.setItems(areasService.findByidUnidad(unidadEntity.getId()));
 
@@ -174,7 +182,7 @@ public class PortalUsuarioView extends VerticalLayout {
                 solicitudEntity.setNumeroInventario(numeroInventaro);
                 solicitudEntity.setMotivo(motivo);
 
-                solicitudEntity = solicitudesRepository.save(solicitudEntity);
+                solicitudEntity = solicitudesService.save(solicitudEntity);
 
                 if(solicitudEntity.getId() > 0) {
                     UIutils.notificacionSUCCESS("Se agrego la solicitud").open();
@@ -358,17 +366,20 @@ public class PortalUsuarioView extends VerticalLayout {
         grid.addColumn(SolicitudDAO::getNumeroSerie).setHeader("Serie");
         grid.addColumn(SolicitudDAO::getNumeroInventario).setHeader("Inventario");
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Motivo");
-        grid.addColumn(SolicitudDAO::getMotivo).setHeader("Fecha");
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Estatus");
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Hoja Servicio");
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Oficio Baja");
 
-        //List<SolicitudEntity> people = DataService.getPeople();
-        //grid.setItems(people);
+        grid.setItems(solicitudesService.findAllByIdUnidad(unidadEntity.getId()));
+
+
+        PanelPaginacion panelPaginacion = new PanelPaginacion();
+
+
 
         FL_principal.add(grid);
 
-        VL_Principal.add(grid);
+        VL_Principal.add(grid,panelPaginacion);
 
         return VL_Principal;
     }

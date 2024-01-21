@@ -7,6 +7,8 @@ import com.helpdeskeditor.application.app.data.DAO.FolioxIncidenciaDTO;
 import com.helpdeskeditor.application.app.data.DAO.IncidenciaXUnidad;
 import com.helpdeskeditor.application.app.data.DAO.GraficaLineal.ValoresParaGraficaLineal;
 import com.helpdeskeditor.application.app.data.entity.FolioEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -88,6 +90,20 @@ public interface FoliosRepository extends CrudRepository<FolioEntity, Integer> {
             "ORDER BY estado,fe.id DESC", nativeQuery=false)
     List<FolioDAO> getAll();
 
+    @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO("+
+            "fe.id,"+
+            "fe.fecha,"+
+            "ue.nombre AS unidad,"+
+            "fe.usuarioReporta, "+
+            "be.nombre AS bien,"+
+            "fe.marca, fe.modelo, fe.numeroSerie, fe.numeroInventario,"+
+            "CASE fe.activo WHEN 0 THEN 'CERRADO' ELSE 'ABIERTO' END AS estado"+
+            ") " +
+            "FROM FolioEntity fe,UnidadEntity ue, BienEntity be "+
+            "WHERE fe.idUnidad = ue.id "+
+            "AND fe.idBien = be.id "+
+            "ORDER BY estado,fe.id DESC", nativeQuery=false)
+    Page<FolioDAO> getAllPageable(Pageable paginacion);
 
     @Query(value="SELECT new com.helpdeskeditor.application.app.data.DAO.FolioDAO("+
             "fe.id,"+

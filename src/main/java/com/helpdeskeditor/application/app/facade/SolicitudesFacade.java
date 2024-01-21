@@ -4,6 +4,9 @@ import com.helpdeskeditor.application.app.data.DAO.SolicitudDAO;
 import com.helpdeskeditor.application.app.data.entity.SolicitudEntity;
 import com.helpdeskeditor.application.app.data.repository.SolicitudesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,4 +28,11 @@ public class SolicitudesFacade {
 
     @Transactional(readOnly = true)
     public List<SolicitudDAO> findAllByIdUnidad(Integer idUnidad){ return solicitudesRepository.findAllByIdUnidad(idUnidad); }
+
+    @Transactional(readOnly = true)
+    public Page<SolicitudDAO> findAllByIdUnidadPageable(Integer idUnidad, Pageable paginacion){
+        return solicitudesRepository.findAllByIdUnidadPageable(idUnidad, paginacion);
+    }
+
+
 }
