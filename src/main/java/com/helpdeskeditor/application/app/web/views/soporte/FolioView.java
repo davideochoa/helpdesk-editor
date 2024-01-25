@@ -243,6 +243,25 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
                 CB_Area.setValue(   areasService.findByIdAndIdUnidad(solicitud.getIdArea(),
                                     unidadesService.findById(solicitud.getIdUnidad()).get().getId()));
                 CB_UsuarioReporta.setValue(solicitud.getUsuarioReporta());
+                TF_Telefono.setValue(solicitud.getTelefonoContacto());
+
+                CB_Incidencia.setValue(incidenciasService.findById(solicitud.getIdTipoIncidencia()).get());
+
+                CB_Bien.setValue(
+                        bienesService.findByIdAndIdTipoIncidencia(
+                                solicitud.getIdTipoBien(),
+                                incidenciasService.findById(solicitud.getIdTipoIncidencia()).get().getId()
+                        )
+                );
+
+                CB_Marca.setValue(solicitud.getMarca());
+                CB_Modelo.setValue(solicitud.getModelo());
+
+                TF_NumeroSerie.setValue(solicitud.getNumeroSerie());
+                TF_NumeroInventario.setValue(solicitud.getNumeroInventario());
+
+                TA_MotivoReporte.setValue(solicitud.getMotivo());
+
             }
             else{
                 UIutils.notificacionERROR("No se encontro la solicitud");
@@ -811,7 +830,8 @@ public class FolioView extends VerticalLayout implements HasUrlParameter<String>
         });
 
         CB_Marca.addValueChangeListener(e -> {
-            if (e.getValue() != null) {
+            if (e.getValue() != null && CB_Incidencia.getValue() != null &&
+                    CB_Bien.getValue() != null && CB_Marca.getValue() != null) {
                 //CB_Marca.setValue(e.getValue());
 
                 CB_Modelo.setItems(foliosService.findModeloByIdIncidenciaAndIdBienAndMarca(

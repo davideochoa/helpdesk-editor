@@ -152,7 +152,8 @@ public class PortalUsuarioView extends VerticalLayout {
                 SolicitudEntity solicitudEntity = new SolicitudEntity();
                 solicitudEntity.setIdUnidad(unidadEntity.getId());
                 solicitudEntity.setIdArea(areaEntity.getId());
-                solicitudEntity.setUsuarioReporta(authenticatedUser.get().get().getNombreUsuario());
+                solicitudEntity.setUsuarioReporta(authenticatedUser.get().get().getNombrePropio());
+                solicitudEntity.setTelefonoContacto(unidadEntity.getTelefonoContacto());
                 solicitudEntity.setIdTipoIncidencia(incidenciaEntity.getId());
                 solicitudEntity.setIdTipoBien(bienEntity.getId());
                 solicitudEntity.setMarca(marca);
