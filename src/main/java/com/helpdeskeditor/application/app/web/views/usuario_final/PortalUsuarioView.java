@@ -24,10 +24,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.H5;
-import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -39,6 +36,9 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.function.SerializableBiConsumer;
+import com.vaadin.flow.function.SerializableSupplier;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoIcon;
@@ -346,9 +346,18 @@ public class PortalUsuarioView extends VerticalLayout {
         grid.addColumn(SolicitudDAO::getNumeroSerie).setHeader("Serie");
         grid.addColumn(SolicitudDAO::getNumeroInventario).setHeader("Inventario");
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Motivo");
+
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Estatus");
+        /*
+        grid.addColumn(new ComponentRenderer<>(Span::new, (span, folioDAO) -> {
+            boolean isAvailable = "Available".equals(folioDAO.getStatus());
+            String theme = String.format(folioDAO.getStatus()+" %s",isAvailable ? "success" : "error");
+            span.getElement().setAttribute("theme", theme);
+        })).setHeader("FOLIO").setKey("id").setResizable(true);
+*/
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Hoja Servicio");
         grid.addColumn(SolicitudDAO::getMotivo).setHeader("Oficio Baja");
+
 
         grid.setItems(solicitudesService.findAllByIdUnidad(unidadEntity.getId()));
 

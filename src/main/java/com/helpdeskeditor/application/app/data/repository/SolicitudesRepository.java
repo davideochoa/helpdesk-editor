@@ -22,7 +22,7 @@ public interface SolicitudesRepository extends JpaRepository<SolicitudEntity, In
             "se.numeroSerie, "+
             "se.numeroInventario, "+
             "se.motivo, "+
-            "se.fecha) "+
+            "se.fecha,'ESTATUS AS status') "+
 
             "from SolicitudEntity se, AreaEntity ae, BienEntity be "+
 

@@ -29,4 +29,6 @@ public class SolicitudDAO {
 
     private Date fecha;
 
+    private String status;
+
 }
