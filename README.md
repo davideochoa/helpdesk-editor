@@ -1,7 +1,12 @@
 # HelpDesk Editor
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+Purpose and Scope
+
+The HelpDesk application is an IT incident management system that enables organizations to collect, track, and resolve technical support requests. The system provides a web-based interface for end users to submit incident reports (SolicitudEntity), support personnel to manage tickets (FolioEntity), and administrators to configure system catalogs and generate reports.
+
+This document provides a high-level overview of the system architecture, core business workflows, and technology stack. For detailed information about specific components, see Getting Started for setup instructions, Core Domain Model for business entities, User Interface for frontend components, and Reporting and Analytics for dashboard and reporting features.
+System Overview
+The HelpDesk application follows a layered architecture pattern built on Spring Boot with a Vaadin frontend. The system manages the complete lifecycle of IT incidents from initial user request submission to resolution and reporting.
 
 ## Running the application
 
