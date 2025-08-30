@@ -8,7 +8,12 @@ This document provides a high-level overview of the system architecture, core bu
 System Overview
 The HelpDesk application follows a layered architecture pattern built on Spring Boot with a Vaadin frontend. The system manages the complete lifecycle of IT incidents from initial user request submission to resolution and reporting.
 
-![Listado de Tickets](/screenshot/SystemOverview.png)
+![System Overview](/screenshot/SystemOverview.png)
+
+## Core Business Workflow
+The system implements a two-stage workflow where user requests (SolicitudEntity) are converted into managed tickets (FolioEntity) by support staff. This separation allows for request validation and proper ticket assignment before formal incident tracking begins.
+
+![Core Business Workflow](/screenshot/CoreBusinessWorkflow.png)
 
 ## Running the application
 
