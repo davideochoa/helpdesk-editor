@@ -41,6 +41,27 @@ Debug Configuration: JVM debug port 5757 for development
 
 ![Application Entry Point and Configuration](/screenshot/ApplicationEntryPointandConfiguration.png)
 
+## Role-Based Access Control
+The system implements three distinct user roles that determine access to different parts of the application:
+
+| Role   | Access Level   | Primary Views                             | Capabilities                                           |
+|--------|---------------|--------------------------------------------|-------------------------------------------------------|
+| PORTAL | End User       | `PortalUsuarioView`                       | Submit incident requests, track submissions           |
+| USER   | Support Staff  | `FolioView`, `FoliosGridView`             | Manage tickets, update status, view reports           |
+| ADMIN  | Administrator  | All views including `CatalogosView`, Dashboard views | System configuration, analytics, user management |
+
+The role-based navigation is implemented through the MainLayout component with conditional view rendering based on user permissions.
+
+
+## Core Data Entities
+The system centers around two primary entities that represent the incident management workflow:
+
+SolicitudEntity: Initial user-submitted requests stored in solicitudes_soporte table
+FolioEntity: Formal incident tickets managed by support staff in concentrado_folios_incidencias table
+The FolioEntity includes comprehensive tracking fields including equipment details, priority assignment, support staff assignment, and digital signature capabilities through the SignaturePad component.
+
+![Core Data Entities](/screenshot/CoreDataEntities.png)
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
