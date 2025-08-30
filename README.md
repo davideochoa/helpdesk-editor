@@ -15,6 +15,32 @@ The system implements a two-stage workflow where user requests (SolicitudEntity)
 
 ![Core Business Workflow](/screenshot/CoreBusinessWorkflow.png)
 
+## Technology Stack
+The application is built using modern Java web technologies with a comprehensive frontend and backend stack:
+
+| Component          | Technology     | Version | Purpose                                           |
+|--------------------|---------------|---------|---------------------------------------------------|
+| Backend Framework  | Spring Boot   | 2.7.5   | Application foundation and dependency injection   |
+| Frontend Framework | Vaadin        | 23.2.8  | Web UI components and server-side rendering       |
+| Database           | SQL Server    | 11.2.1  | Data persistence with MSSQL JDBC driver           |
+| ORM                | JPA/Hibernate | -       | Object-relational mapping via Spring Data JPA     |
+| Security           | Spring Security | -     | Authentication and role-based access control      |
+| Reporting          | JasperReports | 6.20.0  | PDF report generation                             |
+| Charts             | ApexCharts    | 3.35.0  | Interactive data visualization                    |
+| Digital Signatures | signature_pad | 4.0.4   | Canvas-based signature capture                    |
+| Email              | Spring Mail   | -       | SMTP email integration                            |
+| Build Tool         | Maven         | -       | Dependency management and build automation        |
+
+## Application Entry Point and Configuration
+The main application class Application extends SpringBootServletInitializer and implements AppShellConfigurator to configure the Spring Boot application with Vaadin integration. Key configuration includes:
+
+PWA Support: Configured as "HelpDesk" progressive web application
+Theme: Custom "helpdeskeditor" theme
+NPM Packages: Line Awesome icons and VCF navigation components
+Debug Configuration: JVM debug port 5757 for development
+
+![Application Entry Point and Configuration](/screenshot/ApplicationEntryPointandConfiguration.png)
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
