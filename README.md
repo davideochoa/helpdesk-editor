@@ -8,6 +8,8 @@ This document provides a high-level overview of the system architecture, core bu
 System Overview
 The HelpDesk application follows a layered architecture pattern built on Spring Boot with a Vaadin frontend. The system manages the complete lifecycle of IT incidents from initial user request submission to resolution and reporting.
 
+![Listado de Tickets](screenshot/System Overview.png)
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
